@@ -76,7 +76,7 @@ Sebelum membuat layout, pastikan Anda telah menginstal Android Studio di kompute
 
 Android Studio menyediakan berbagai jenis layout yang dapat digunakan untuk membuat antarmuka pengguna. Berikut adalah 5 jenis layout yang paling umum digunakan:
 
-### 1. Linear Layout
+> ### 1. Linear Layout
 
 Linear Layout adalah jenis layout paling sederhana di Android. Layout ini mengatur komponen-komponen UI dalam satu baris (horizontal) atau satu kolom (vertikal).
 
@@ -172,7 +172,7 @@ Linear Layout adalah jenis layout paling sederhana di Android. Layout ini mengat
 - Sulit membuat tata letak yang responsif untuk berbagai ukuran layar
 - Banyak nested layout dapat mengurangi kinerja aplikasi
 
-### 2. Relative Layout
+> ### 2. Relative Layout
 
 Relative Layout adalah jenis layout yang memungkinkan Anda menentukan posisi komponen relatif terhadap komponen lain atau terhadap induk layout.
 
@@ -267,7 +267,7 @@ Relative Layout adalah jenis layout yang memungkinkan Anda menentukan posisi kom
 - Sulit untuk dipelihara jika layout menjadi terlalu kompleks
 - Kinerja bisa menurun jika ada terlalu banyak hubungan relatif
 
-### 3. Table Layout
+> ### 3. Table Layout
 
 Table Layout adalah jenis layout yang mengatur komponen-komponen UI dalam bentuk baris dan kolom, mirip dengan tabel HTML.
 
@@ -356,7 +356,7 @@ Table Layout adalah jenis layout yang mengatur komponen-komponen UI dalam bentuk
 - Sulit untuk membuat desain yang responsif
 - Tidak direkomendasikan untuk tata letak yang kompleks
 
-### 4. Frame Layout
+> ### 4. Frame Layout
 
 Frame Layout adalah jenis layout paling sederhana di Android. Layout ini dirancang untuk menampilkan satu item atau beberapa item yang ditumpuk di atas satu sama lain.
 
@@ -445,7 +445,7 @@ Frame Layout adalah jenis layout paling sederhana di Android. Layout ini diranca
 - Tidak cocok untuk tata letak yang kompleks
 - Sulit untuk membuat antarmuka yang responsif
 
-### 5. Constraint Layout
+> ### 5. Constraint Layout
 
 Constraint Layout adalah jenis layout yang paling fleksibel dan kuat di Android. Layout ini memungkinkan Anda membuat tata letak yang kompleks dengan hierarki yang datar (flat).
 
