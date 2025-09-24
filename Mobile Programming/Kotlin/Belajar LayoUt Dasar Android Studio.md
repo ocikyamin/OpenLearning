@@ -70,8 +70,9 @@ Sebelum membuat layout, pastikan Anda telah menginstal Android Studio di kompute
    - Beri nama file layout baru
    - Pilih jenis layout yang ingin Anda gunakan
    - Klik "Finish"
+   <div class="page"/>
 
-## 5 Macam Layout pada Android Studio untuk Membuat Aplikasi
+> ## 5 Macam Layout pada Android Studio untuk Membuat Aplikasi
 
 Android Studio menyediakan berbagai jenis layout yang dapat digunakan untuk membuat antarmuka pengguna. Berikut adalah 5 jenis layout yang paling umum digunakan:
 
