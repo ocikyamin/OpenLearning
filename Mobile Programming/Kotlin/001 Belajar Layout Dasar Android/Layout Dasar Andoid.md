@@ -1,6 +1,7 @@
 
+<img src="img/cover.png">
 
-# Belajar Menggunakan 5 Jenis Layout di Android Studio
+# 003 - Menggunakan 5 Jenis Layout di Android Studio
 
 ## Daftar Isi
 - [Memahami Layout dan Fungsinya pada Aplikasi Android](#memahami-layout-dan-fungsinya-pada-aplikasi-android)
@@ -40,12 +41,17 @@ Sebelum membuat layout, pastikan Anda telah menginstal Android Studio di kompute
 
 1. **Buat Proyek Baru**
    - Buka Android Studio
+<img src="img/1.png">
    - Klik "New Project"
-   - Pilih template yang sesuai (misalnya "Empty Activity")
+   <img src="img/2.png">
+   - Pilih template yang sesuai (misalnya "Empty Views Activity")
+   <img src="img/3.png">
    - Konfigurasi nama aplikasi, paket, lokasi penyimpanan, dan bahasa pemrograman (Java/Kotlin)
    - Klik "Finish"
 
 2. **Memahami Struktur Folder**
+<img src="img/4.png">
+
    - Setelah proyek dibuat, buka folder `app/res/layout`
    - Di sini Anda akan menemukan file `activity_main.xml` yang merupakan layout utama untuk aktivitas pertama
 
@@ -54,6 +60,7 @@ Sebelum membuat layout, pastikan Anda telah menginstal Android Studio di kompute
    - Anda akan melihat dua mode: "Design" dan "Code"
    - Mode "Design" memungkinkan Anda untuk membuat layout dengan drag-and-drop
    - Mode "Code" memungkinkan Anda untuk menulis kode XML secara manual
+   <img src="img/4.png">
 
 4. **Menggunakan Palette**
    - Pada mode "Design", Anda akan melihat panel "Palette" di sebelah kiri
@@ -65,18 +72,19 @@ Sebelum membuat layout, pastikan Anda telah menginstal Android Studio di kompute
    - Di sini Anda dapat mengatur ID, ukuran, warna, teks, dan properti lainnya
 
 6. **Membuat File Layout Baru**
+<img src="img/5.png">
    - Klik kanan pada folder `layout`
    - Pilih "New" > "Layout Resource File"
    - Beri nama file layout baru
+   <img src="img/6.png">
    - Pilih jenis layout yang ingin Anda gunakan
-   - Klik "Finish"
-   <div class="page"/>
+   - Klik "OK"
 
-> ## 5 Macam Layout pada Android Studio untuk Membuat Aplikasi
+## 5 Macam Layout pada Android Studio untuk Membuat Aplikasi
 
 Android Studio menyediakan berbagai jenis layout yang dapat digunakan untuk membuat antarmuka pengguna. Berikut adalah 5 jenis layout yang paling umum digunakan:
 
-> ### 1. Linear Layout
+### 1. Linear Layout
 
 Linear Layout adalah jenis layout paling sederhana di Android. Layout ini mengatur komponen-komponen UI dalam satu baris (horizontal) atau satu kolom (vertikal).
 
@@ -132,6 +140,8 @@ Linear Layout adalah jenis layout paling sederhana di Android. Layout ini mengat
 </LinearLayout>
 ```
 
+<img src="img/view_linear_layout.png">
+
 **Contoh Kode Linear Layout Horizontal:**
 ```xml
 
@@ -161,6 +171,7 @@ Linear Layout adalah jenis layout paling sederhana di Android. Layout ini mengat
 
 </LinearLayout>
 ```
+<img src="img/view_linear_layout_horizontal.png">
 
 **Kelebihan Linear Layout:**
 - Mudah digunakan dan dipahami
@@ -172,7 +183,7 @@ Linear Layout adalah jenis layout paling sederhana di Android. Layout ini mengat
 - Sulit membuat tata letak yang responsif untuk berbagai ukuran layar
 - Banyak nested layout dapat mengurangi kinerja aplikasi
 
-> ### 2. Relative Layout
+### 2. Relative Layout
 
 Relative Layout adalah jenis layout yang memungkinkan Anda menentukan posisi komponen relatif terhadap komponen lain atau terhadap induk layout.
 
@@ -256,6 +267,7 @@ Relative Layout adalah jenis layout yang memungkinkan Anda menentukan posisi kom
 
 </RelativeLayout>
 ```
+<img src="img/view_relative.png">
 
 **Kelebihan Relative Layout:**
 - Fleksibel untuk membuat tata letak yang kompleks
@@ -267,7 +279,7 @@ Relative Layout adalah jenis layout yang memungkinkan Anda menentukan posisi kom
 - Sulit untuk dipelihara jika layout menjadi terlalu kompleks
 - Kinerja bisa menurun jika ada terlalu banyak hubungan relatif
 
-> ### 3. Table Layout
+### 3. Table Layout
 
 Table Layout adalah jenis layout yang mengatur komponen-komponen UI dalam bentuk baris dan kolom, mirip dengan tabel HTML.
 
@@ -345,6 +357,7 @@ Table Layout adalah jenis layout yang mengatur komponen-komponen UI dalam bentuk
 
 </TableLayout>
 ```
+<img src="img/view_table.png">
 
 **Kelebihan Table Layout:**
 - Cocok untuk menampilkan data dalam bentuk tabel
@@ -356,7 +369,7 @@ Table Layout adalah jenis layout yang mengatur komponen-komponen UI dalam bentuk
 - Sulit untuk membuat desain yang responsif
 - Tidak direkomendasikan untuk tata letak yang kompleks
 
-> ### 4. Frame Layout
+### 4. Frame Layout
 
 Frame Layout adalah jenis layout paling sederhana di Android. Layout ini dirancang untuk menampilkan satu item atau beberapa item yang ditumpuk di atas satu sama lain.
 
@@ -434,6 +447,7 @@ Frame Layout adalah jenis layout paling sederhana di Android. Layout ini diranca
 
 </FrameLayout>
 ```
+<img src="img/view_frame.png">
 
 **Kelebihan Frame Layout:**
 - Sangat sederhana dan mudah digunakan
@@ -445,7 +459,7 @@ Frame Layout adalah jenis layout paling sederhana di Android. Layout ini diranca
 - Tidak cocok untuk tata letak yang kompleks
 - Sulit untuk membuat antarmuka yang responsif
 
-> ### 5. Constraint Layout
+### 5. Constraint Layout
 
 Constraint Layout adalah jenis layout yang paling fleksibel dan kuat di Android. Layout ini memungkinkan Anda membuat tata letak yang kompleks dengan hierarki yang datar (flat).
 
@@ -547,6 +561,7 @@ Constraint Layout adalah jenis layout yang paling fleksibel dan kuat di Android.
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
+<img src="img/view_constrain.png">
 
 **Kelebihan Constraint Layout:**
 - Sangat fleksibel untuk membuat tata letak yang kompleks
@@ -666,8 +681,9 @@ Dalam pengembangan aplikasi Android, terkadang satu jenis layout tidak cukup unt
 
 </LinearLayout>
 ```
+<img src="img/view_gabungan.png">
 
-**Tips untuk Menghindari Nested Layout yang Terlalu Dalam:**
+**Cara untuk Menghindari Nested Layout yang Terlalu Dalam:**
 1. **Gunakan Constraint Layout**: Constraint Layout dirancang untuk mengurangi kebutuhan akan nested layout yang dalam.
 
 2. **Gunakan `<include>` Tag**: Jika Anda memiliki bagian layout yang digunakan berulang kali, pisahkan ke file XML terpisah dan gunakan tag `<include>` untuk menyertakannya.
@@ -700,5 +716,3 @@ Dalam pengembangan aplikasi Android, pemahaman tentang berbagai jenis layout san
 3. **Gunakan Dimensi dan Warna yang Konsisten**: Definisikan dimensi dan warna di file resources terpisah.
 4. **Uji di Berbagai Ukuran Layar**: Pastikan layout Anda terlihat baik di berbagai ukuran layar dan orientasi.
 5. **Optimalkan Kinerja Layout**: Gunakan tools seperti Layout Inspector untuk menganalisis dan mengoptimalkan kinerja layout.
-
-<!-- https://chat.z.ai/s/2827bca6-1299-4a30-a93e-0cea8a95e419 -->
