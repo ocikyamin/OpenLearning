@@ -1,382 +1,469 @@
-# **BAB 11 – CRUD DASAR (Create, Read, Update, Delete)**
 
----
 
-## **Tujuan Pembelajaran**
+# BAB 11: IMPLEMENTASI SISTEM AUTENTIKASI PENGGUNA DENGAN CODEIGNITER 4 DAN BOOTSTRAP
 
-Setelah mengikuti pertemuan ini, mahasiswa mampu:
+## Tujuan Pembelajaran
 
-1. Membuat tabel database dan model yang sesuai.
-2. Membuat form input data menggunakan Bootstrap.
-3. Menampilkan data dari database dalam bentuk tabel.
-4. Mengedit dan menghapus data menggunakan Controller.
-5. Memahami alur kerja CRUD (Create, Read, Update, Delete) di CodeIgniter 4.
+Setelah mempelajari bab ini, mahasiswa diharapkan mampu:
+1.  Merancang dan membuat skema database yang sesuai untuk menyimpan data pengguna dengan menerapkan prinsip keamanan, khususnya dalam penyimpanan kredensial.
+2.  Membangun Model dalam CodeIgniter 4 yang berfungsi sebagai lapisan abstraksi untuk interaksi dengan tabel pengguna di database.
+3.  Mengembangkan Controller yang mengelola logika bisnis terkait proses pendaftaran, autentikasi, dan terminasi sesi pengguna.
+4.  Menerapkan aturan validasi input yang komprehensif pada sisi server untuk menjaga integritas data dan keamanan aplikasi.
+5.  Merancang antarmuka pengguna (view) yang responsif dan interaktif untuk form pendaftaran dan login dengan memanfaatkan framework Bootstrap.
+6.  Mengelola state pengguna (sesi) untuk mempertahankan status autentikasi di berbagai halaman aplikasi.
+7.  Memahami dan menerapkan teknik hashing password yang aman menggunakan fungsi bawaan PHP.
+8.  Mengintegrasikan mekanisme perlindungan Cross-Site Request Forgery (CSRF) yang disediakan oleh CodeIgniter 4 untuk mengamankan form submission.
 
----
+## Materi Singkat
 
-## **Konsep Dasar CRUD**
+Autentikasi pengguna merupakan salah satu pilar fundamental dalam pengembangan aplikasi web modern yang memiliki sifat interaktif dan personal. Sistem ini berfungsi sebagai gerbang utama yang memverifikasi identitas individu yang mencoba mengakses suatu sumber daya atau layanan dalam aplikasi. Implementasi autentikasi yang robust tidak hanya membatasi akses berdasarkan peran, tetapi juga melindungi data sensitif pengguna dan memastikan bahwa interaksi dalam aplikasi terjadi secara terkendali. Pada intinya, proses autentikasi melibatkan verifikasi kredensial yang disajikan oleh pengguna—biasanya berupa kombinasi pengenal unik (seperti alamat email atau nama pengguna) dan sebuah rahasia (password)—terhadap data yang telah disimpan secara aman dalam database.
 
-CRUD adalah singkatan dari empat operasi utama dalam pengelolaan data:
+Dalam konteks pengembangan web, keamanan password adalah aspek yang paling kritis. Penyimpanan password dalam bentuk teks biasa (plaintext) adalah praktik yang sangat berbahaya dan tidak dapat ditoleransi, karena pelanggaran keamanan database dapat langsung mengakibatkan tersebarnya informasi pribadi pengguna secara massal. Untuk mengatasi ini, digunakan teknik *hashing*, sebuah fungsi kriptografis satu arah yang mengubah password menjadi string karakter acak dengan panjang tetap. Fungsi seperti `password_hash()` di PHP menggunakan algoritma modern seperti bcrypt, yang secara inheren dirancang untuk lambat dan *salted* (penambahan data acak unik untuk setiap password), membuatnya sangat resisten terhadap serangan *rainbow table* dan *brute-force*. CodeIgniter 4, sebagai framework PHP yang mengikuti pola arsitektur Model-View-Controller (MVC), menyediakan struktur yang ideal untuk memisahkan logika bisnis, presentasi, dan akses data, sehingga mempermudah pembangunan sistem autentikasi yang terorganisir, mudah dikelola, dan aman. Model akan menangani komunikasi dengan database `users`, Controller akan mengatur alur logika untuk registrasi, login, dan logout, sementara View akan bertanggung jawab untuk merender form-form yang dibutuhkan pengguna. Framework seperti Bootstrap digunakan untuk mempercepat pengembangan antarmuka pengguna yang responsif dan estetis tanpa perlu menulis banyak kode CSS dari awal.
 
-* **Create** → Menambah data baru ke database.
-* **Read** → Menampilkan data dari database.
-* **Update** → Mengubah data yang sudah ada.
-* **Delete** → Menghapus data dari database.
+Bab ini membangun fondasi autentikasi untuk sebuah studi kasus yang lebih luas: **Aplikasi Komplain Pelanggan**. Dalam aplikasi tersebut, fitur login dan registrasi adalah prasyarat utama sebelum pelanggan dapat membuat tiket pengaduan, melampirkan bukti, dan memantau status penyelesaian masalah mereka. Oleh karena itu, database dan struktur tabel yang dibuat dalam bab ini akan dirancang untuk mendukung pengembangan aplikasi tersebut di bab-bab selanjutnya.
 
-Di CodeIgniter 4, operasi CRUD biasanya dilakukan melalui **Model** yang berinteraksi dengan database, sedangkan **Controller** berperan mengatur alur logika, dan **View** menampilkan hasil ke pengguna.
+## Langkah-langkah Praktikum
 
----
+Praktikum ini akan memandu pembuatan sistem autentikasi dasar yang terdiri dari fungsionalitas pendaftaran pengguna baru, login untuk pengguna terdaftar, dan logout. Diasumsikan lingkungan pengembangan CodeIgniter 4 telah siap dan konsep dasar MVC telah dipahami.
 
-## **Langkah-Langkah Praktikum**
+### Langkah 1: Persiapan Database dan Struktur Tabel
 
-### 1. Membuat Tabel Database
+Langkah awal adalah menyiapkan infrastruktur data yang akan menyimpan informasi pengguna. Ini melibatkan pembuatan database dan tabel dengan struktur yang dirancang untuk keamanan dan efisiensi, serta penamaan yang sesuai dengan studi kasus aplikasi komplain pelanggan.
 
-Buka **phpMyAdmin**, lalu buat database dengan nama:
+1.  **Pembuatan Database:**
+    Buat sebuah database baru pada server MySQL dengan nama yang mencerminkan proyek, misalnya `db_komplain_pelanggan`.
 
-```sql
+2.  **Pembuatan Tabel `users`:**
+    Eksekusi query SQL berikut di dalam database `db_komplain_pelanggan` untuk membuat tabel `users`. Tabel ini tidak hanya berfungsi untuk autentikasi, tetapi juga akan menjadi referensi utama untuk data pelanggan dalam aplikasi komplain.
 
-CREATE DATABASE ci4_mahasiswa;
-USE ci4_mahasiswa;
+    ```sql
 
-CREATE TABLE mahasiswa (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nama VARCHAR(100) NOT NULL,
-  nim VARCHAR(20) NOT NULL UNIQUE,
-  jurusan VARCHAR(100) NOT NULL,
-  alamat TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+    CREATE TABLE `users` (
+      `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `username` VARCHAR(50) NOT NULL,
+      `email` VARCHAR(100) NOT NULL,
+      `password_hash` VARCHAR(255) NOT NULL,
+      `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `uniq_email` (`email`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ```
+    **Penjelasan Struktur Tabel:**
+    *   `id`: Primary key bertipe integer yang akan bertambah secara otomatis (auto-increment). Akan menjadi ID unik setiap pelanggan.
+    *   `username`: Kolom untuk menyimpan nama pengguna (pelanggan).
+    *   `email`: Kolom untuk menyimpan alamat email pelanggan, yang diberi constraint `UNIQUE` untuk memastikan setiap email hanya terdaftar sekali.
+    *   `password_hash`: Kolom terpenting untuk keamanan. Akan menyimpan hasil hashing dari password pelanggan, bukan password aslinya.
+    *   `created_at`, `updated_at`: Kolom timestamp yang secara otomatis mencatat waktu pembuatan dan pembaruan record.
 
----
+3.  **Konfigurasi Koneksi Database CodeIgniter 4:**
+    Buka file `app/Config/Database.php` dan sesuaikan parameter koneksi pada bagian `public $default` dengan detail koneksi ke database `db_komplain_pelanggan`.
 
-### 2. Mengatur Koneksi Database
+    ```php
 
-Buka file:
+    // app/Config/Database.php
 
-```
+    public $default = [
+        'DSN'      => '',
+        'hostname' => 'localhost',
+        'username' => 'root',      // Sesuaikan dengan username database
+        'password' => '',          // Sesuaikan dengan password database
+        'database' => 'db_komplain_pelanggan', // Nama database untuk aplikasi komplain
+        'DBDriver' => 'MySQLi',
+        'DBPrefix' => '',
+        'pConnect' => false,
+        'DBDebug'  => (ENVIRONMENT !== 'production'),
+        'charset'  => 'utf8mb4',
+        'DBCollat' => 'utf8mb4_unicode_ci',
+        'swapPre'  => '',
+        'encrypt'  => false,
+        'compress' => false,
+        'strictOn' => false,
+        'failover' => [],
+        'port'     => 3306,
+    ];
+    ```
 
-app/Config/Database.php
-```
+### Langkah 2: Pembuatan Model untuk Interaksi Data
 
-Cari bagian:
+Model berfungsi sebagai perantara antara aplikasi dan tabel `users`. Model ini akan menangani semua operasi database terkait pengguna (pelanggan), seperti mengambil data berdasarkan email atau menyimpan data pengguna baru.
 
-```php
-
-public $default = [
-    'DSN'      => '',
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => '',
-    'database' => 'ci4_mahasiswa',
-    'DBDriver' => 'MySQLi',
-    'DBPrefix' => '',
-    'pConnect' => false,
-    'DBDebug'  => (ENVIRONMENT !== 'production'),
-    'charset'  => 'utf8',
-    'DBCollat' => 'utf8_general_ci',
-    'swapPre'  => '',
-    'encrypt'  => false,
-    'compress' => false,
-    'strictOn' => false,
-    'failover' => [],
-    'port'     => 3306,
-];
-```
-
----
-
-### 3. Membuat Model
-
-Buat file baru:
-
-```
-
-app/Models/MahasiswaModel.php
-```
-
-Isi dengan kode berikut:
+Buat file baru bernama `UserModel.php` di dalam direktori `app/Models/` dan tambahkan kode berikut:
 
 ```php
 
-<?php
+<?php namespace App\Models;
 
-namespace App\Models;
 use CodeIgniter\Model;
 
-class MahasiswaModel extends Model
+class UserModel extends Model
 {
-    protected $table = 'mahasiswa';
-    protected $primaryKey = 'id';
-    protected $allowedFields = ['nama', 'nim', 'jurusan', 'alamat'];
-}
-```
+    protected $table            = 'users';
+    protected $primaryKey       = 'id';
+    protected $useAutoIncrement = true;
+    protected $returnType       = 'array'; // Mengembalikan hasil sebagai array
+    protected $useSoftDeletes   = false;
+    protected $protectFields    = true;
+    protected $allowedFields    = ['username', 'email', 'password_hash'];
 
-Model ini akan digunakan untuk berinteraksi dengan tabel `mahasiswa`.
+    // Mengaktifkan fitur timestamp otomatis
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
 
----
-
-### 4. Membuat Controller
-
-Buat file baru:
-
-```
-app/Controllers/Mahasiswa.php
-```
-
-Isi dengan kode:
-
-```php
-
-<?php
-
-namespace App\Controllers;
-use App\Models\MahasiswaModel;
-
-class Mahasiswa extends BaseController
-{
-    protected $mahasiswa;
-
-    public function __construct()
+    /**
+     * Mengambil data pengguna berdasarkan alamat email.
+     *
+     * @param string $email Alamat email yang akan dicari.
+     * @return array|null Data pengguna jika ditemukan, null jika tidak.
+     */
+    public function findByEmail(string $email): ?array
     {
-        $this->mahasiswa = new MahasiswaModel();
-    }
-
-    public function index()
-    {
-        $data['mahasiswa'] = $this->mahasiswa->findAll();
-        return view('mahasiswa/index', $data);
-    }
-
-    public function create()
-    {
-        return view('mahasiswa/create');
-    }
-
-    public function store()
-    {
-        $this->mahasiswa->insert([
-            'nama' => $this->request->getPost('nama'),
-            'nim' => $this->request->getPost('nim'),
-            'jurusan' => $this->request->getPost('jurusan'),
-            'alamat' => $this->request->getPost('alamat'),
-        ]);
-        return redirect()->to('/mahasiswa')->with('success', 'Data berhasil ditambahkan!');
-    }
-
-    public function edit($id)
-    {
-        $data['mahasiswa'] = $this->mahasiswa->find($id);
-        return view('mahasiswa/edit', $data);
-    }
-
-    public function update($id)
-    {
-        $this->mahasiswa->update($id, [
-            'nama' => $this->request->getPost('nama'),
-            'nim' => $this->request->getPost('nim'),
-            'jurusan' => $this->request->getPost('jurusan'),
-            'alamat' => $this->request->getPost('alamat'),
-        ]);
-        return redirect()->to('/mahasiswa')->with('success', 'Data berhasil diperbarui!');
-    }
-
-    public function delete($id)
-    {
-        $this->mahasiswa->delete($id);
-        return redirect()->to('/mahasiswa')->with('success', 'Data berhasil dihapus!');
+        return $this->where('email', $email)->first();
     }
 }
 ```
+**Penjelasan Kode:**
+*   `$table`: Menentukan nama tabel yang akan digunakan oleh model ini.
+*   `$allowedFields`: Daftar kolom yang diizinkan untuk diisi secara massal. Ini adalah fitur keamanan penting untuk mencegah *Mass Assignment*.
+*   `$useTimestamps`: Jika diatur `true`, CodeIgniter akan secara otomatis mengisi kolom `created_at` dan `updated_at`.
+*   `findByEmail()`: Metode kustom untuk mencari satu baris data pengguna berdasarkan kolom `email`.
 
----
+### Langkah 3: Pembuatan Controller untuk Logika Autentikasi
 
-### 5. Menambahkan Routing
+Controller adalah otak dari sistem autentikasi. Controller ini akan berisi logika untuk menampilkan form, memvalidasi input, berinteraksi dengan model, dan mengelola sesi pengguna (pelanggan).
 
-Buka file:
-
-```
-app/Config/Routes.php
-```
-
-Tambahkan baris berikut di dalam `$routes`:
-
-```php
-
-$routes->get('/mahasiswa', 'Mahasiswa::index');
-$routes->get('/mahasiswa/create', 'Mahasiswa::create');
-$routes->post('/mahasiswa/store', 'Mahasiswa::store');
-$routes->get('/mahasiswa/edit/(:num)', 'Mahasiswa::edit/$1');
-$routes->post('/mahasiswa/update/(:num)', 'Mahasiswa::update/$1');
-$routes->get('/mahasiswa/delete/(:num)', 'Mahasiswa::delete/$1');
-```
-
----
-
-### 6. Membuat View
-
-#### 📄 File: `app/Views/layouts/header.php`
-
-```html
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>CRUD Mahasiswa</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div class="container mt-4">
-```
-
-#### 📄 File: `app/Views/layouts/footer.php`
-
-```html
-
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-```
-
----
-
-#### 📄 File: `app/Views/mahasiswa/index.php`
+Buat file baru bernama `Auth.php` di dalam direktori `app/Controllers/` dan tambahkan kode berikut:
 
 ```php
 
-<?= $this->include('layouts/header') ?>
+<?php namespace App\Controllers;
 
-<h2>Data Mahasiswa</h2>
+use App\Models\UserModel;
 
-<a href="/mahasiswa/create" class="btn btn-primary mb-3">+ Tambah Data</a>
+class Auth extends BaseController
+{
+    /**
+     * Menampilkan halaman pendaftaran dan memproses data pendaftaran.
+     */
+    public function register()
+    {
+        helper(['form', 'url']); // Memuat helper form dan url
 
-<?php if (session()->getFlashdata('success')) : ?>
-  <div class="alert alert-success">
-    <?= session()->getFlashdata('success') ?>
-  </div>
-<?php endif; ?>
+        $data = [];
+        $userModel = new UserModel();
 
-<table class="table table-bordered table-striped">
-  <thead class="table-dark">
-    <tr>
-      <th>No</th>
-      <th>Nama</th>
-      <th>NIM</th>
-      <th>Jurusan</th>
-      <th>Alamat</th>
-      <th>Aksi</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php $no = 1; foreach ($mahasiswa as $m): ?>
-      <tr>
-        <td><?= $no++ ?></td>
-        <td><?= $m['nama'] ?></td>
-        <td><?= $m['nim'] ?></td>
-        <td><?= $m['jurusan'] ?></td>
-        <td><?= $m['alamat'] ?></td>
-        <td>
-          <a href="/mahasiswa/edit/<?= $m['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
-          <a href="/mahasiswa/delete/<?= $m['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus data ini?')">Hapus</a>
-        </td>
-      </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+        if ($this->request->getMethod() === 'post') {
+            // Aturan validasi untuk form pendaftaran
+            $rules = [
+                'username' => 'required|min_length[3]|max_length[50]',
+                'email'    => 'required|valid_email|is_unique[users.email]',
+                'password' => 'required|min_length[8]',
+                'confirm_password' => 'required|matches[password]',
+            ];
 
-<?= $this->include('layouts/footer') ?>
+            if ($this->validate($rules)) {
+                // Hash password sebelum disimpan ke database
+                $passwordHash = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+
+                $userData = [
+                    'username'     => $this->request->getPost('username'),
+                    'email'        => $this->request->getPost('email'),
+                    'password_hash'=> $passwordHash,
+                ];
+
+                $userModel->save($userData);
+
+                // Set flashdata untuk pesan sukses
+                session()->setFlashdata('success', 'Pendaftaran berhasil. Silakan masuk menggunakan akun yang baru dibuat.');
+                return redirect()->to('/auth/login');
+            } else {
+                // Jika validasi gagal, kirimkan error ke view
+                $data['validation'] = $this->validator;
+            }
+        }
+
+        return view('auth/register_view', $data);
+    }
+
+    /**
+     * Menampilkan halaman login dan memproses data login.
+     */
+    public function login()
+    {
+        helper(['form', 'url']);
+
+        $data = [];
+        $userModel = new UserModel();
+
+        if ($this->request->getMethod() === 'post') {
+            $rules = [
+                'email'    => 'required|valid_email',
+                'password' => 'required',
+            ];
+
+            if ($this->validate($rules)) {
+                $email = $this->request->getPost('email');
+                $password = $this->request->getPost('password');
+                $user = $userModel->findByEmail($email);
+
+                // Verifikasi apakah user ada dan password cocok
+                if ($user && password_verify($password, $user['password_hash'])) {
+                    // Set data sesi untuk menandai pengguna telah login
+                    $sessionData = [
+                        'user_id'  => $user['id'],
+                        'username' => $user['username'],
+                        'email'    => $user['email'],
+                        'isLoggedIn' => true,
+                    ];
+                    session()->set($sessionData);
+
+                    session()->setFlashdata('success', 'Login berhasil.');
+                    // Arahkan ke dashboard pelanggan
+                    return redirect()->to('/pelanggan/dashboard');
+                } else {
+                    $data['error'] = 'Email atau password yang dimasukkan tidak valid.';
+                }
+            } else {
+                $data['validation'] = $this->validator;
+            }
+        }
+
+        return view('auth/login_view', $data);
+    }
+
+    /**
+     * Menghancurkan sesi dan mengalihkan pengguna ke halaman login.
+     */
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/auth/login')->with('success', 'Anda telah keluar dari sistem.');
+    }
+}
 ```
+**Penjelasan Kode:**
+*   **Metode `register()`:**
+    *   Memeriksa apakah request datang dari metode POST.
+    *   Mendefinisikan aturan validasi, termasuk `is_unique[users.email]`.
+    *   Jika validasi berhasil, password di-hash menggunakan `password_hash()`.
+    *   `session()->setFlashdata()` digunakan untuk menyimpan pesan sukses.
+*   **Metode `login()`:**
+    *   Memvalidasi input email dan password.
+    *   Mengambil data pengguna dari database menggunakan `UserModel`.
+    *   Fungsi `password_verify()` digunakan untuk memverifikasi password.
+    *   Jika kredensial valid, data pengguna disimpan dalam sesi.
+    *   Pengguna diarahkan ke `/pelanggan/dashboard` sebagai contoh halaman setelah login.
+*   **Metode `logout()`:**
+    *   `session()->destroy()` menghapus semua data sesi.
 
----
+### Langkah 4: Pembuatan View untuk Antarmuka Pengguna
 
-#### 📄 File: `app/Views/mahasiswa/create.php`
+View adalah bagian yang bertanggung jawab atas tampilan yang dilihat oleh pengguna. Kita akan membuat tiga view: pendaftaran, login, dan halaman dashboard pelanggan.
+
+1.  **Persiapan Direktori dan Bootstrap:**
+    *   Buat direktori baru bernama `auth` di dalam `app/Views/`.
+    *   Sertakan CSS Bootstrap di dalam setiap view.
+
+2.  **View Pendaftaran (`app/Views/auth/register_view.php`)**
+    ```html
+
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pendaftaran Akun Pelanggan</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container mt-5" style="max-width: 500px;">
+            <h2 class="text-center mb-4">Buat Akun Pelanggan Baru</h2>
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+            <?php endif; ?>
+            <?php if (isset($validation)): ?>
+                <div class="alert alert-danger"><?= $validation->listErrors() ?></div>
+            <?php endif; ?>
+            <form action="<?= site_url('/auth/register') ?>" method="post">
+                <?= csrf_field() ?>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-control" id="username" name="username" value="<?= set_value('username') ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?= set_value('email') ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Konfirmasi Password</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Daftar</button>
+            </form>
+            <p class="text-center mt-3">Sudah punya akun? <a href="<?= site_url('/auth/login') ?>">Masuk di sini</a></p>
+        </div>
+    </body>
+    </html>
+    ```
+
+3.  **View Login (`app/Views/auth/login_view.php`)**
+    ```html
+
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Masuk ke Akun Pelanggan</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container mt-5" style="max-width: 500px;">
+            <h2 class="text-center mb-4">Masuk Akun Pelanggan</h2>
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+            <?php endif; ?>
+            <?php if (isset($validation)): ?>
+                <div class="alert alert-danger"><?= $validation->listErrors() ?></div>
+            <?php endif; ?>
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger"><?= $error ?></div>
+            <?php endif; ?>
+            <form action="<?= site_url('/auth/login') ?>" method="post">
+                <?= csrf_field() ?>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?= set_value('email') ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Masuk</button>
+            </form>
+            <p class="text-center mt-3">Belum punya akun? <a href="<?= site_url('/auth/register') ?>">Daftar di sini</a></p>
+        </div>
+    </body>
+    </html>
+    ```
+
+4.  **View Dashboard Pelanggan (`app/Views/pelanggan/dashboard_view.php`)**
+    Buat direktori `pelanggan` di `app/Views/`. Kemudian buat file `dashboard_view.php` di dalamnya.
+    ```html
+
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard Pelanggan</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Sistem Komplain Pelanggan</a>
+                <div class="d-flex">
+                    <span class="navbar-text me-3">
+                        Selamat datang, <strong><?= session()->get('username') ?></strong>!
+                    </span>
+                    <a class="btn btn-outline-danger" href="<?= site_url('/auth/logout') ?>" role="button">Keluar</a>
+                </div>
+            </div>
+        </nav>
+        <div class="container mt-4">
+            <h3>Dashboard Pelanggan</h3>
+            <p>Selamat datang di halaman utama pelanggan. Dari sini, Anda dapat mengelola pengaduan Anda.</p>
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="alert alert-info"><?= session()->getFlashdata('success') ?></div>
+            <?php endif; ?>
+            <!-- Konten dashboard pelanggan akan ditambahkan di bab berikutnya -->
+        </div>
+    </body>
+    </html>
+    ```
+    **Penjelasan Kode View:**
+    *   `site_url()`: Fungsi helper CodeIgniter untuk menghasilkan URL absolut.
+    *   `csrf_field()`: Menghasilkan input field tersembunyi yang berisi token CSRF [[24](https://codeigniter4.github.io/userguide/tutorial/create_news_items.html)].
+    *   `set_value()`: Fungsi helper form untuk mengisi kembali nilai input jika validasi gagal.
+    *   `session()->getFlashdata()`: Menampilkan pesan yang telah diset pada controller.
+    *   `session()->get()`: Mengambil data yang disimpan dalam sesi, seperti `username`.
+
+### Langkah 5: Konfigurasi Routing
+
+Routing memetakan URL ke controller dan metode tertentu. Buka file `app/Config/Routes.php` dan tambahkan rute berikut:
 
 ```php
 
-<?= $this->include('layouts/header') ?>
+// app/Config/Routes.php
 
-<h3>Tambah Data Mahasiswa</h3>
+$routes->get('/', 'Home::index'); // Rute default
 
-<form action="/mahasiswa/store" method="post">
-  <div class="mb-3">
-    <label>Nama</label>
-    <input type="text" name="nama" class="form-control" required>
-  </div>
-  <div class="mb-3">
-    <label>NIM</label>
-    <input type="text" name="nim" class="form-control" required>
-  </div>
-  <div class="mb-3">
-    <label>Jurusan</label>
-    <input type="text" name="jurusan" class="form-control" required>
-  </div>
-  <div class="mb-3">
-    <label>Alamat</label>
-    <textarea name="alamat" class="form-control"></textarea>
-  </div>
-  <button class="btn btn-success">Simpan</button>
-  <a href="/mahasiswa" class="btn btn-secondary">Kembali</a>
-</form>
+// Grup rute untuk autentikasi
+$routes->group('auth', ['namespace' => 'App\Controllers'], function($routes) {
+    $routes->match(['get', 'post'], 'register', 'Auth::register');
+    $routes->match(['get', 'post'], 'login', 'Auth::login');
+    $routes->get('logout', 'Auth::logout');
+});
 
-<?= $this->include('layouts/footer') ?>
+// Rute untuk dashboard pelanggan, dilindungi oleh filter di BaseController
+$routes->get('pelanggan/dashboard', 'Pelanggan::dashboard');
 ```
+**Penjelasan Kode:**
+*   `$routes->group()`: Mengelompokkan beberapa rute dengan awalan yang sama (`auth`).
+*   `$routes->match()`: Membuat rute yang merespons baik metode GET maupun POST.
+*   Rute untuk `pelanggan/dashboard` diasumsikan akan menuju ke controller `Pelanggan`.
 
----
+### Langkah 6: Membuat Controller Pelanggan dan Filter Login
 
-#### 📄 File: `app/Views/mahasiswa/edit.php`
+Agar halaman dashboard hanya dapat diakses oleh pengguna yang sudah login, diperlukan mekanisme proteksi.
 
-```php
+1.  **Buat Controller `Pelanggan.php` di `app/Controllers/`:**
+    ```php
 
-<?= $this->include('layouts/header') ?>
+    <?php namespace App\Controllers;
 
-<h3>Edit Data Mahasiswa</h3>
+    class Pelanggan extends BaseController
+    {
+        public function dashboard()
+        {
+            // Cek apakah pengguna sudah login
+            if (!session()->get('isLoggedIn')) {
+                return redirect()->to('/auth/login');
+            }
 
-<form action="/mahasiswa/update/<?= $mahasiswa['id'] ?>" method="post">
-  <div class="mb-3">
-    <label>Nama</label>
-    <input type="text" name="nama" class="form-control" value="<?= $mahasiswa['nama'] ?>" required>
-  </div>
-  <div class="mb-3">
-    <label>NIM</label>
-    <input type="text" name="nim" class="form-control" value="<?= $mahasiswa['nim'] ?>" required>
-  </div>
-  <div class="mb-3">
-    <label>Jurusan</label>
-    <input type="text" name="jurusan" class="form-control" value="<?= $mahasiswa['jurusan'] ?>" required>
-  </div>
-  <div class="mb-3">
-    <label>Alamat</label>
-    <textarea name="alamat" class="form-control"><?= $mahasiswa['alamat'] ?></textarea>
-  </div>
-  <button class="btn btn-warning">Update</button>
-  <a href="/mahasiswa" class="btn btn-secondary">Kembali</a>
-</form>
+            $data['title'] = 'Dashboard Pelanggan';
+            return view('pelanggan/dashboard_view', $data);
+        }
+    }
+    ```
 
-<?= $this->include('layouts/footer') ?>
-```
+2.  **Pengujian Sistem:**
+    *   Jalankan server pengembangan CodeIgniter 4 (`php spark serve`).
+    *   Akses `http://localhost:8080/auth/register` untuk mendaftarkan pengguna baru.
+    *   Setelah pendaftaran, coba login melalui `http://localhost:8080/auth/login`.
+    *   Jika berhasil, sistem akan mengalihkan ke `http://localhost:8080/pelanggan/dashboard`.
+    *   Coba akses `http://localhost:8080/pelanggan/dashboard` langsung dari browser tanpa login. Pengguna seharusnya diarahkan kembali ke halaman login.
 
----
+## Latihan
 
-## 🧩 **Latihan Mahasiswa**
+1.  **Implementasi Pesan Validasi Kustom:** Ubah pesan validasi default CodeIgniter 4 menjadi Bahasa Indonesia.
+2.  **Penambahan Fitur "Remember Me":** Tambahkan checkbox "Ingat Saya" pada form login. Jika dicentang, sesi pengguna harus memiliki durasi yang lebih lama.
+3.  **Penggunaan Template Layout:** Jika modul sebelumnya membahas tentang template layout, refaktor ketiga file view untuk menggunakan template tersebut.
+4.  **Halaman Profil Pelanggan:** Buat halaman profil (`/pelanggan/profil`) yang menampilkan informasi pelanggan yang sedang login dan memungkinkan pengguna untuk memperbarui username atau email.
 
-1. Ubah kolom `jurusan` menjadi dropdown dengan pilihan seperti:
+## Referensi
 
-   * Informatika
-   * Sistem Informasi
-   * Manajemen Informatika
+[11] Validation — CodeIgniter 4.6.3 documentation. https://codeigniter4.github.io/userguide/libraries/validation.html
 
-2. Tambahkan kolom baru `email` pada tabel `mahasiswa` dan tampilkan di view.
+[20] Security — CodeIgniter 4.6.3 documentation. https://codeigniter.com/user_guide/libraries/security.html
 
-3. Ubah tombol “Hapus” menjadi modal konfirmasi Bootstrap agar tampilan lebih menarik.
+[24] Create News Items — CodeIgniter 4.6.3 documentation. https://codeigniter4.github.io/userguide/tutorial/create_news_items.html
 
----
-
-## **Tugas Individu**
-
-Buat **CRUD Data Dosen** dengan kolom berikut:
-
-* `id`, `nama`, `nidn`, `mata_kuliah`, `no_hp`
-
-Gunakan konsep yang sama seperti modul ini dan tampilkan dalam tampilan tabel Bootstrap.
+[30] Session Library — CodeIgniter 4.6.3 documentation. https://codeigniter.com/user_guide/libraries/sessions.html
