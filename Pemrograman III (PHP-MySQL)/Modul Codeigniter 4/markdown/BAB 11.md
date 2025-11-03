@@ -149,42 +149,7 @@ class Auth extends BaseController
      */
     public function register()
     {
-        helper(['form', 'url']); // Memuat helper form dan url
-
-        $data = [];
-        $userModel = new UserModel();
-
-        if ($this->request->getMethod() === 'post') {
-            // Aturan validasi untuk form pendaftaran
-            $rules = [
-                'username' => 'required|min_length[3]|max_length[50]',
-                'email'    => 'required|valid_email|is_unique[users.email]',
-                'password' => 'required|min_length[8]',
-                'confirm_password' => 'required|matches[password]',
-            ];
-
-            if ($this->validate($rules)) {
-                // Hash password sebelum disimpan ke database
-                $passwordHash = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
-
-                $userData = [
-                    'username'     => $this->request->getPost('username'),
-                    'email'        => $this->request->getPost('email'),
-                    'password_hash'=> $passwordHash,
-                ];
-
-                $userModel->save($userData);
-
-                // Set flashdata untuk pesan sukses
-                session()->setFlashdata('success', 'Pendaftaran berhasil. Silakan masuk menggunakan akun yang baru dibuat.');
-                return redirect()->to('/auth/login');
-            } else {
-                // Jika validasi gagal, kirimkan error ke view
-                $data['validation'] = $this->validator;
-            }
-        }
-
-        return view('auth/register_view', $data);
+        return view('auth/register_view');
     }
 
     /**
@@ -192,45 +157,9 @@ class Auth extends BaseController
      */
     public function login()
     {
-        helper(['form', 'url']);
+        
 
-        $data = [];
-        $userModel = new UserModel();
-
-        if ($this->request->getMethod() === 'post') {
-            $rules = [
-                'email'    => 'required|valid_email',
-                'password' => 'required',
-            ];
-
-            if ($this->validate($rules)) {
-                $email = $this->request->getPost('email');
-                $password = $this->request->getPost('password');
-                $user = $userModel->findByEmail($email);
-
-                // Verifikasi apakah user ada dan password cocok
-                if ($user && password_verify($password, $user['password_hash'])) {
-                    // Set data sesi untuk menandai pengguna telah login
-                    $sessionData = [
-                        'user_id'  => $user['id'],
-                        'username' => $user['username'],
-                        'email'    => $user['email'],
-                        'isLoggedIn' => true,
-                    ];
-                    session()->set($sessionData);
-
-                    session()->setFlashdata('success', 'Login berhasil.');
-                    // Arahkan ke dashboard pelanggan
-                    return redirect()->to('/pelanggan/dashboard');
-                } else {
-                    $data['error'] = 'Email atau password yang dimasukkan tidak valid.';
-                }
-            } else {
-                $data['validation'] = $this->validator;
-            }
-        }
-
-        return view('auth/login_view', $data);
+        return view('auth/login_view');
     }
 
     /**
@@ -280,21 +209,16 @@ View adalah bagian yang bertanggung jawab atas tampilan yang dilihat oleh penggu
     <body>
         <div class="container mt-5" style="max-width: 500px;">
             <h2 class="text-center mb-4">Buat Akun Pelanggan Baru</h2>
-            <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
-            <?php endif; ?>
-            <?php if (isset($validation)): ?>
-                <div class="alert alert-danger"><?= $validation->listErrors() ?></div>
-            <?php endif; ?>
+
             <form action="<?= site_url('/auth/register') ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="mb-3">
                     <label for="username" class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" id="username" name="username" value="<?= set_value('username') ?>" required>
+                    <input type="text" class="form-control" id="username" name="username"  required>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<?= set_value('email') ?>" required>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
@@ -326,20 +250,12 @@ View adalah bagian yang bertanggung jawab atas tampilan yang dilihat oleh penggu
     <body>
         <div class="container mt-5" style="max-width: 500px;">
             <h2 class="text-center mb-4">Masuk Akun Pelanggan</h2>
-            <?php if (session()->getFlashdata('success')): ?>
-                <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
-            <?php endif; ?>
-            <?php if (isset($validation)): ?>
-                <div class="alert alert-danger"><?= $validation->listErrors() ?></div>
-            <?php endif; ?>
-            <?php if (isset($error)): ?>
-                <div class="alert alert-danger"><?= $error ?></div>
-            <?php endif; ?>
+    
             <form action="<?= site_url('/auth/login') ?>" method="post">
                 <?= csrf_field() ?>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="<?= set_value('email') ?>" required>
+                    <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
