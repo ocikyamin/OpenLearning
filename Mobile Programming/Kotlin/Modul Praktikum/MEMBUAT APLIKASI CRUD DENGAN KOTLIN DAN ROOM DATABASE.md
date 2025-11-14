@@ -1,38 +1,20 @@
-## 📋 PENDAHULUAN
 
-### Apa itu CRUD?
-CRUD adalah singkatan dari:
-- **C**reate (Membuat data baru)
-- **R**ead (Membaca/menampilkan data)  
-- **U**pdate (Memperbarui data)
-- **D**elete (Menghapus data)
 
-### Apa itu Room Database?
-Room adalah library Android yang menyediakan lapisan abstraksi atas SQLite untuk memudahkan operasi database dengan cara yang lebih aman dan efisien.
+# MODUL CRUD SEDERHANA DENGAN KOTLIN & ROOM DATABASE  
 
 ### Target Pembelajaran
-Setelah mengikuti modul ini, mahasiswa dapat:
-1. Membuat aplikasi Android dengan operasi CRUD lengkap
-2. Menggunakan Room Database untuk penyimpanan data lokal
-3. Menerapkan arsitektur MVVM (Model-View-ViewModel)
-4. Menggunakan Coroutines untuk operasi asynchronous
+1. Membuat aplikasi CRUD sederhana
+2. Menggunakan Room Database
+3. Memahami operasi database dasar
+4. Membuat UI yang interaktif
 
 ---
 
 ## 🛠️ PERSIAPAN
 
 ### Software yang Dibutuhkan:
-1. **Android Studio** (versi 2023.1.1+ atau Android Studio Hedgehog/Flamingo)
-2. **Laptop/PC** dengan spesifikasi minimal:
-   - Prosesor: Core i5 atau setara
-   - RAM: 8 GB
-   - Storage: 10 GB free space
-3. **Android Device** (Physical device atau Emulator dengan API 21+)
-
-### Penyesuaian untuk Android Studio 2023+:
-- Gunakan **Kotlin DSL** untuk build.gradle (opsional)
-- Update dependencies ke versi terbaru
-- Gunakan **View Binding** sebagai pengganti findViewById
+- **Android Studio 2023+** (Hedgehog/Flamingo)
+- **Emulator atau Android device** (API 21+)
 
 ---
 
@@ -41,19 +23,17 @@ Setelah mengikuti modul ini, mahasiswa dapat:
 ### STEP 1: MEMBUAT PROJECT BARU
 
 1. Buka Android Studio
-2. Klik **New Project**
-3. Pilih **Empty Views Activity**
-4. Konfigurasi project:
-   - **Name**: CRUD Room App
-   - **Package name**: com.example.crudroomapp
+2. **New Project** → **Empty Views Activity**
+3. Konfigurasi:
+   - **Name**: Simple CRUD App
+   - **Package**: com.example.simplecrud
    - **Language**: Kotlin
-   - **Minimum SDK**: API 21 (Android 5.0)
-   - **Build configuration language**: Kotlin DSL (rekomendasi) atau Groovy
-5. Klik **Finish**
+   - **Minimum SDK**: API 21
+4. **Finish**
 
 ### STEP 2: SETUP BUILD GRADLE
 
-Buka file `build.gradle.kts` (Module :app) dan tambahkan:
+Buka `build.gradle.kts` (Module :app):
 
 ```kotlin
 plugins {
@@ -63,17 +43,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.crudroomapp"
+    namespace = "com.example.simplecrud"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.crudroomapp"
+        applicationId = "com.example.simplecrud"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -101,25 +79,19 @@ android {
 }
 
 dependencies {
-    // Core Android Libraries
+    // Core Android
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     
-    // Room Database (versi terbaru)
+    // Room Database
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
     
-    // Coroutines
+    // Coroutines untuk operasi database
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    
-    // ViewModel & LiveData
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     
     // Testing
     testImplementation("junit:junit:4.13.2")
@@ -128,20 +100,16 @@ dependencies {
 }
 ```
 
-### STEP 3: MEMBUAT PACKAGE STRUCTURE
+### STEP 3: MEMBUAT PACKAGE
 
-1. Klik kanan pada package utama → **New** → **Package**
-2. Buat package-package berikut:
-   - `data` (untuk Entity, DAO, Database)
-   - `ui` (untuk Activity, Adapter, ViewHolder)
-   - `viewmodel` (untuk ViewModel classes)
+Klik kanan package utama → **New** → **Package** → Beri nama `database`
 
 ### STEP 4: MEMBUAT ENTITY (MODEL DATA)
 
-Buat package `data` → **New** → **Kotlin Class/File** → Beri nama `Note.kt`
+Buat package `database` → **New** → **Kotlin Class** → `Note.kt`
 
 ```kotlin
-package com.example.crudroomapp.data
+package com.example.simplecrud.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -152,52 +120,47 @@ data class Note(
     val id: Int = 0,
     val title: String,
     val content: String,
-    val createdAt: Long = System.currentTimeMillis(),
-    val updatedAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis()
 )
 ```
 
-### STEP 5: MEMBUAT DAO (DATA ACCESS OBJECT)
+### STEP 5: MEMBUAT DAO (DATABASE ACCESS OBJECT)
 
-Buat package `data` → **New** → **Kotlin Interface** → Beri nama `NoteDao.kt`
+Buat package `database` → **New** → **Kotlin Interface** → `NoteDao.kt`
 
 ```kotlin
-package com.example.crudroomapp.data
+package com.example.simplecrud.database
 
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
     @Insert
-    suspend fun insertNote(note: Note): Long
+    suspend fun insert(note: Note): Long
 
     @Update
-    suspend fun updateNote(note: Note): Int
+    suspend fun update(note: Note): Int
 
     @Delete
-    suspend fun deleteNote(note: Note): Int
+    suspend fun delete(note: Note): Int
 
     @Query("SELECT * FROM notes ORDER BY createdAt DESC")
-    fun getAllNotes(): Flow<List<Note>>
+    suspend fun getAllNotes(): List<Note>
 
-    @Query("SELECT * FROM notes WHERE id = :noteId")
-    suspend fun getNoteById(noteId: Int): Note?
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun getNoteById(id: Int): Note?
 
-    @Query("DELETE FROM notes WHERE id = :noteId")
-    suspend fun deleteNoteById(noteId: Int): Int
-
-    @Query("SELECT COUNT(*) FROM notes")
-    fun getNoteCount(): Flow<Int>
+    @Query("DELETE FROM notes WHERE id = :id")
+    suspend fun deleteById(id: Int): Int
 }
 ```
 
 ### STEP 6: MEMBUAT DATABASE CLASS
 
-Buat package `data` → **New** → **Kotlin Class** → Beri nama `AppDatabase.kt`
+Buat package `database` → **New** → **Kotlin Class** → `AppDatabase.kt`
 
 ```kotlin
-package com.example.crudroomapp.data
+package com.example.simplecrud.database
 
 import android.content.Context
 import androidx.room.Database
@@ -221,10 +184,8 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "note_database"
-                )
-                .fallbackToDestructiveMigration()
-                .build()
+                    "simple_crud_database"
+                ).build()
                 INSTANCE = instance
                 instance
             }
@@ -233,85 +194,9 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-### STEP 7: MEMBUAT REPOSITORY
+### STEP 7: MEMBUAT LAYOUT UTAMA
 
-Buat package `data` → **New** → **Kotlin Class** → Beri nama `NoteRepository.kt`
-
-```kotlin
-package com.example.crudroomapp.data
-
-import kotlinx.coroutines.flow.Flow
-
-class NoteRepository(private val noteDao: NoteDao) {
-    
-    val allNotes: Flow<List<Note>> = noteDao.getAllNotes()
-    val noteCount: Flow<Int> = noteDao.getNoteCount()
-
-    suspend fun insert(note: Note) = noteDao.insertNote(note)
-    
-    suspend fun update(note: Note) = noteDao.updateNote(note)
-    
-    suspend fun delete(note: Note) = noteDao.deleteNote(note)
-    
-    suspend fun getNoteById(id: Int): Note? = noteDao.getNoteById(id)
-    
-    suspend fun deleteById(id: Int) = noteDao.deleteNoteById(id)
-}
-```
-
-### STEP 8: MEMBUAT VIEWMODEL
-
-Buat package `viewmodel` → **New** → **Kotlin Class** → Beri nama `NoteViewModel.kt`
-
-```kotlin
-package com.example.crudroomapp.viewmodel
-
-import android.app.Application
-import androidx.lifecycle.*
-import com.example.crudroomapp.data.AppDatabase
-import com.example.crudroomapp.data.Note
-import com.example.crudroomapp.data.NoteRepository
-import kotlinx.coroutines.launch
-
-class NoteViewModel(application: Application) : AndroidViewModel(application) {
-    
-    private val repository: NoteRepository
-    
-    val allNotes: LiveData<List<Note>>
-    val noteCount: LiveData<Int>
-    
-    init {
-        val noteDao = AppDatabase.getDatabase(application).noteDao()
-        repository = NoteRepository(noteDao)
-        allNotes = repository.allNotes.asLiveData()
-        noteCount = repository.noteCount.asLiveData()
-    }
-    
-    fun insert(note: Note) = viewModelScope.launch {
-        repository.insert(note)
-    }
-    
-    fun update(note: Note) = viewModelScope.launch {
-        repository.update(note)
-    }
-    
-    fun delete(note: Note) = viewModelScope.launch {
-        repository.delete(note)
-    }
-    
-    fun getNoteById(id: Int): LiveData<Note?> = liveData {
-        emit(repository.getNoteById(id))
-    }
-    
-    fun deleteById(id: Int) = viewModelScope.launch {
-        repository.deleteById(id)
-    }
-}
-```
-
-### STEP 9: MEMBUAT LAYOUT UTAMA
-
-Buka `res/layout/activity_main.xml` dan ganti isinya:
+Buka `res/layout/activity_main.xml`:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -321,14 +206,14 @@ Buka `res/layout/activity_main.xml` dan ganti isinya:
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewNotes"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/fabAdd"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAdd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -338,7 +223,7 @@ Buka `res/layout/activity_main.xml` dan ganti isinya:
         android:id="@+id/textViewEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tidak ada catatan"
+        android:text="Belum ada catatan"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -356,20 +241,20 @@ Buka `res/layout/activity_main.xml` dan ganti isinya:
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:contentDescription="Tambah Catatan"
-        android:src="@android:drawable/ic_input_add"
+        android:text="Tambah Catatan"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### STEP 10: MEMBUAT ITEM LAYOUT
+### STEP 8: MEMBUAT ITEM LAYOUT
 
 Buat `res/layout/item_note.xml`:
 
@@ -384,222 +269,224 @@ Buat `res/layout/item_note.xml`:
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            app:layout_constraintEnd_toStartOf="@+id/buttonEdit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Judul Catatan" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                tools:text="Judul Catatan" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/buttonEdit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:contentDescription="Edit" />
+
+                <ImageButton
+                    android:id="@+id/buttonDelete"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_delete"
+                    android:contentDescription="Delete" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewContent"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:maxLines="2"
+            android:layout_marginTop="8dp"
+            android:maxLines="3"
             android:ellipsize="end"
-            app:layout_constraintEnd_toStartOf="@+id/buttonEdit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-            tools:text="Isi catatan..." />
+            tools:text="Isi catatan akan muncul di sini..." />
 
         <TextView
             android:id="@+id/textViewDate"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textSize="12sp"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintEnd_toStartOf="@+id/buttonEdit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewContent"
-            tools:text="2024-01-01" />
+            tools:text="2024-01-01 12:00" />
 
-        <ImageButton
-            android:id="@+id/buttonEdit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_edit"
-            app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/buttonDelete"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
 ```
 
-### STEP 11: MEMBUAT ADAPTER
+### STEP 9: MEMBUAT ADAPTER
 
-Buat package `ui` → **New** → **Kotlin Class** → Beri nama `NoteAdapter.kt`
+Buat package utama → **New** → **Kotlin Class** → `NoteAdapter.kt`
 
 ```kotlin
-package com.example.crudroomapp.ui
+package com.example.simplecrud
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.crudroomapp.data.Note
-import com.example.crudroomapp.databinding.ItemNoteBinding
+import com.example.simplecrud.database.Note
 import java.text.SimpleDateFormat
 import java.util.*
 
 class NoteAdapter(
     private val onEditClick: (Note) -> Unit,
     private val onDeleteClick: (Note) -> Unit
-) : ListAdapter<Note, NoteAdapter.NoteViewHolder>(NoteDiffCallback()) {
+) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+
+    private var notes: List<Note> = emptyList()
+
+    fun submitList(newNotes: List<Note>) {
+        notes = newNotes
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val binding = ItemNoteBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return NoteViewHolder(binding)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_note, parent, false)
+        return NoteViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(notes[position])
     }
 
-    inner class NoteViewHolder(private val binding: ItemNoteBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    override fun getItemCount(): Int = notes.size
+
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textViewTitle: TextView = itemView.findViewById(R.id.textViewTitle)
+        private val textViewContent: TextView = itemView.findViewById(R.id.textViewContent)
+        private val textViewDate: TextView = itemView.findViewById(R.id.textViewDate)
+        private val buttonEdit: ImageButton = itemView.findViewById(R.id.buttonEdit)
+        private val buttonDelete: ImageButton = itemView.findViewById(R.id.buttonDelete)
 
         fun bind(note: Note) {
-            binding.textViewTitle.text = note.title
-            binding.textViewContent.text = note.content
+            textViewTitle.text = note.title
+            textViewContent.text = note.content
             
             // Format tanggal
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            binding.textViewDate.text = dateFormat.format(Date(note.createdAt))
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            textViewDate.text = dateFormat.format(Date(note.createdAt))
             
-            binding.buttonEdit.setOnClickListener { onEditClick(note) }
-            binding.buttonDelete.setOnClickListener { onDeleteClick(note) }
-        }
-    }
-
-    class NoteDiffCallback : DiffUtil.ItemCallback<Note>() {
-        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem == newItem
+            buttonEdit.setOnClickListener { onEditClick(note) }
+            buttonDelete.setOnClickListener { onDeleteClick(note) }
         }
     }
 }
 ```
 
-### STEP 12: MEMBUAT ACTIVITY TAMBAH/EDIT
+### STEP 10: MEMBUAT ACTIVITY TAMBAH/EDIT
 
-Buat **New** → **Activity** → **Empty Activity** → Beri nama `AddEditActivity.kt`
+Buat **New** → **Activity** → **Empty Activity** → `AddEditActivity.kt`
 
 Layout `res/layout/activity_add_edit.xml`:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout 
+<LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutTitle"
-        android:layout_width="0dp"
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Judul"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:hint="Judul Catatan"
+        android:inputType="textCapSentences"
+        android:maxLines="1"
+        android:layout_marginBottom="16dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapSentences"
-            android:maxLines="1" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutContent"
-        android:layout_width="0dp"
+    <EditText
+        android:id="@+id/editTextContent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_weight="1"
         android:hint="Isi Catatan"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSave"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutTitle">
+        android:inputType="textMultiLine|textCapSentences"
+        android:gravity="top"
+        android:minHeight="200dp"
+        android:layout_marginBottom="16dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="top"
-            android:inputType="textMultiLine|textCapSentences"
-            android:minHeight="200dp"
-            android:scrollbars="vertical" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/buttonSave"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Simpan"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Simpan"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Batal"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+    </LinearLayout>
+
+</LinearLayout>
 ```
 
-### STEP 13: IMPLEMENTASI MAIN ACTIVITY
+### STEP 11: IMPLEMENTASI MAIN ACTIVITY
 
 Buka `MainActivity.kt` dan ganti isinya:
 
 ```kotlin
-package com.example.crudroomapp.ui
+package com.example.simplecrud
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.crudroomapp.data.Note
-import com.example.crudroomapp.databinding.ActivityMainBinding
-import com.example.crudroomapp.viewmodel.NoteViewModel
+import androidx.recyclerview.widget.RecyclerView
+import com.example.simplecrud.database.AppDatabase
+import com.example.simplecrud.database.Note
+import com.example.simplecrud.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
-    private val viewModel: NoteViewModel by viewModels()
+    private lateinit var database: AppDatabase
     private lateinit var noteAdapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -607,14 +494,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
+        // Inisialisasi database
+        database = AppDatabase.getDatabase(this)
+        
+        // Setup RecyclerView
         setupRecyclerView()
-        setupObservers()
+        
+        // Setup click listeners
         setupClickListeners()
+        
+        // Load data
+        loadNotes()
     }
     
     private fun setupRecyclerView() {
         noteAdapter = NoteAdapter(
             onEditClick = { note ->
+                // Buka activity edit dengan data note
                 val intent = Intent(this, AddEditActivity::class.java).apply {
                     putExtra("NOTE_ID", note.id)
                     putExtra("NOTE_TITLE", note.title)
@@ -623,8 +519,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             },
             onDeleteClick = { note ->
-                viewModel.delete(note)
-                Toast.makeText(this, "Catatan dihapus", Toast.LENGTH_SHORT).show()
+                // Hapus note
+                deleteNote(note)
             }
         )
         
@@ -634,72 +530,129 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
-    private fun setupObservers() {
-        viewModel.allNotes.observe(this) { notes ->
-            noteAdapter.submitList(notes)
-            
-            // Tampilkan/sembunyikan empty state
-            binding.textViewEmpty.visibility = if (notes.isEmpty()) View.VISIBLE else View.GONE
-            binding.recyclerViewNotes.visibility = if (notes.isEmpty()) View.GONE else View.VISIBLE
+    private fun setupClickListeners() {
+        binding.buttonAdd.setOnClickListener {
+            // Buka activity tambah baru
+            val intent = Intent(this, AddEditActivity::class.java)
+            startActivity(intent)
         }
     }
     
-    private fun setupClickListeners() {
-        binding.fabAdd.setOnClickListener {
-            startActivity(Intent(this, AddEditActivity::class.java))
+    private fun loadNotes() {
+        // Tampilkan loading
+        binding.progressBar.visibility = View.VISIBLE
+        binding.textViewEmpty.visibility = View.GONE
+        binding.recyclerViewNotes.visibility = View.GONE
+        
+        // Jalankan di background thread
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val notes = database.noteDao().getAllNotes()
+                
+                // Update UI di main thread
+                withContext(Dispatchers.Main) {
+                    binding.progressBar.visibility = View.GONE
+                    
+                    if (notes.isEmpty()) {
+                        binding.textViewEmpty.visibility = View.VISIBLE
+                        binding.recyclerViewNotes.visibility = View.GONE
+                    } else {
+                        binding.textViewEmpty.visibility = View.GONE
+                        binding.recyclerViewNotes.visibility = View.VISIBLE
+                        noteAdapter.submitList(notes)
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
+    }
+    
+    private fun deleteNote(note: Note) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                database.noteDao().delete(note)
+                
+                // Refresh data
+                loadNotes()
+                
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, "Catatan dihapus", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        // Refresh data saat kembali dari activity lain
+        loadNotes()
     }
 }
 ```
 
-### STEP 14: IMPLEMENTASI ADD/EDIT ACTIVITY
+### STEP 12: IMPLEMENTASI ADD/EDIT ACTIVITY
 
-Buka `AddEditActivity.kt` dan ganti isinya:
+Buka `AddEditActivity.kt`:
 
 ```kotlin
-package com.example.crudroomapp.ui
+package com.example.simplecrud
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.crudroomapp.data.Note
-import com.example.crudroomapp.databinding.ActivityAddEditBinding
-import com.example.crudroomapp.viewmodel.NoteViewModel
+import com.example.simplecrud.database.AppDatabase
+import com.example.simplecrud.database.Note
+import com.example.simplecrud.databinding.ActivityAddEditBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddEditActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityAddEditBinding
-    private val viewModel: NoteViewModel by viewModels()
+    private lateinit var database: AppDatabase
     private var noteId: Int = -1
+    private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
-        setupToolbar()
+        // Inisialisasi database
+        database = AppDatabase.getDatabase(this)
+        
+        // Cek mode edit atau tambah
         checkEditMode()
+        
+        // Setup click listeners
         setupClickListeners()
-    }
-    
-    private fun setupToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
     
     private fun checkEditMode() {
         noteId = intent.getIntExtra("NOTE_ID", -1)
         
         if (noteId != -1) {
-            // Edit mode
-            supportActionBar?.title = "Edit Catatan"
+            // Mode edit
+            isEditMode = true
+            title = "Edit Catatan"
+            
+            // Isi data yang ada
             binding.editTextTitle.setText(intent.getStringExtra("NOTE_TITLE"))
             binding.editTextContent.setText(intent.getStringExtra("NOTE_CONTENT"))
         } else {
-            // Add mode
-            supportActionBar?.title = "Tambah Catatan"
+            // Mode tambah
+            isEditMode = false
+            title = "Tambah Catatan"
         }
     }
     
@@ -707,58 +660,79 @@ class AddEditActivity : AppCompatActivity() {
         binding.buttonSave.setOnClickListener {
             saveNote()
         }
+        
+        binding.buttonCancel.setOnClickListener {
+            finish()
+        }
     }
     
     private fun saveNote() {
         val title = binding.editTextTitle.text.toString().trim()
         val content = binding.editTextContent.text.toString().trim()
         
+        // Validasi input
         if (title.isEmpty()) {
             binding.editTextTitle.error = "Judul tidak boleh kosong"
             return
         }
         
         if (content.isEmpty()) {
-            binding.editTextContent.error = "Isi catatan tidak boleh kosong"
+            binding.editTextContent.error = "Isi tidak boleh kosong"
             return
         }
         
-        if (noteId != -1) {
-            // Update existing note
-            val updatedNote = Note(
-                id = noteId,
-                title = title,
-                content = content,
-                createdAt = System.currentTimeMillis(),
-                updatedAt = System.currentTimeMillis()
-            )
-            viewModel.update(updatedNote)
-            Toast.makeText(this, "Catatan diperbarui", Toast.LENGTH_SHORT).show()
-        } else {
-            // Create new note
-            val newNote = Note(
-                title = title,
-                content = content,
-                createdAt = System.currentTimeMillis(),
-                updatedAt = System.currentTimeMillis()
-            )
-            viewModel.insert(newNote)
-            Toast.makeText(this, "Catatan ditambahkan", Toast.LENGTH_SHORT).show()
-        }
+        // Disable buttons untuk prevent double click
+        binding.buttonSave.isEnabled = false
+        binding.buttonCancel.isEnabled = false
         
-        finish()
-    }
-    
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
+        // Jalankan di background thread
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                if (isEditMode) {
+                    // Update note yang ada
+                    val note = Note(
+                        id = noteId,
+                        title = title,
+                        content = content,
+                        createdAt = System.currentTimeMillis()
+                    )
+                    database.noteDao().update(note)
+                    
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@AddEditActivity, "Catatan diperbarui", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    // Buat note baru
+                    val note = Note(
+                        title = title,
+                        content = content,
+                        createdAt = System.currentTimeMillis()
+                    )
+                    database.noteDao().insert(note)
+                    
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@AddEditActivity, "Catatan ditambahkan", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                
+                // Tutup activity
+                finish()
+                
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    binding.buttonSave.isEnabled = true
+                    binding.buttonCancel.isEnabled = true
+                    Toast.makeText(this@AddEditActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }
 ```
 
-### STEP 15: UPDATE ANDROID MANIFEST
+### STEP 13: UPDATE ANDROID MANIFEST
 
-Buka `AndroidManifest.xml` dan pastikan terlihat seperti ini:
+Buka `AndroidManifest.xml`:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -773,11 +747,11 @@ Buka `AndroidManifest.xml` dan pastikan terlihat seperti ini:
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CRUDRoomApp"
+        android:theme="@style/Theme.SimpleCRUD"
         tools:targetApi="31">
         
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -786,7 +760,7 @@ Buka `AndroidManifest.xml` dan pastikan terlihat seperti ini:
         </activity>
         
         <activity
-            android:name=".ui.AddEditActivity"
+            android:name=".AddEditActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
             
@@ -796,103 +770,128 @@ Buka `AndroidManifest.xml` dan pastikan terlihat seperti ini:
 
 ---
 
-## 🔍 TESTING & TROUBLESHOOTING
+## 🔍 TESTING APLIKASI
 
 ### Cara Testing:
-1. **Build project**: Klik Build → Make Project
-2. **Run app**: Klik Run → Run 'app'
-3. **Test CRUD operations**:
-   - **Create**: Klik FAB (+) untuk menambah catatan baru
-   - **Read**: Lihat daftar catatan di RecyclerView
-   - **Update**: Klik icon edit (pensil) pada item
-   - **Delete**: Klik icon delete (sampah) pada item
+1. **Build & Run**: Klik Run → Run 'app'
+2. **Test Create**: Klik "Tambah Catatan" → Isi form → Klik "Simpan"
+3. **Test Read**: Lihat daftar catatan di MainActivity
+4. **Test Update**: Klik icon edit (pensil) → Ubah data → Klik "Simpan"
+5. **Test Delete**: Klik icon delete (sampah) → Konfirmasi hapus
 
-### Common Issues & Solutions:
+### Expected Results:
+- ✅ Bisa menambah catatan baru
+- ✅ Baca menampilkan daftar catatan
+- ✅ Bisa mengedit catatan yang ada
+- ✅ Bisa menghapus catatan
+- ✅ Data tersimpan meskipun app di-close
+
+---
+
+## 🛠️ TROUBLESHOOTING
+
+### Common Errors & Solutions:
 
 #### 1. Gradle Sync Error
 ```bash
-// Coba solutions:
+Solution:
 - File → Invalidate Caches → Invalidate and Restart
-- Check internet connection
-- Update Android Studio
-- Use Gradle offline mode temporarily
+- Pastikan internet connection stabil
+- Cek versi dependencies yang compatible
 ```
 
 #### 2. Room Database Error
 ```bash
-// Common error: Cannot find setter for field
-// Solution: Make sure all entity fields have proper getters/setters
-// or use data class with val/var properties
+Error: Cannot find setter for field
+Solution: Pastikan entity menggunakan data class dengan var/val yang benar
 ```
 
-#### 3. ViewModelProvider Error
+#### 3. Coroutines Error
 ```bash
-// Make sure you have the correct dependencies:
-implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-implementation("androidx.activity:activity-ktx:1.8.2")
+Error: Suspend function 'insert' should be called only from a coroutine
+Solution: Pastikan operasi database dipanggil dari CoroutineScope
 ```
 
 #### 4. View Binding Error
 ```bash
-// Enable view binding in build.gradle:
-buildFeatures {
-    viewBinding = true
-}
+Error: Unresolved reference 'binding'
+Solution: 
+1. Pastikan viewBinding = true di build.gradle
+2. Import binding yang benar
+3. Clean & Rebuild project
 ```
 
 ---
 
-## 📚 TIPS & BEST PRACTICES
+## 📚 PENJELASAN KODE
 
-### 1. Code Organization
-- Gunakan package structure yang jelas
-- Pisahkan logic antara UI, ViewModel, dan Repository
-- Gunakan dependency injection (bisa mulai dengan manual DI)
+### Konsep Penting:
 
-### 2. Performance Optimization
-- Gunakan DiffUtil di RecyclerView
-- Implementasi pagination untuk data besar
-- Gunakan Flow/LiveData untuk reactive programming
+#### 1. **Coroutines**
+```kotlin
+// Untuk operasi database (background thread)
+CoroutineScope(Dispatchers.IO).launch {
+    // Operasi database di sini
+}
 
-### 3. Error Handling
-- Implementasi proper error handling dengan try-catch
-- Tampilkan user-friendly error messages
-- Log errors untuk debugging
+// Untuk update UI (main thread)
+withContext(Dispatchers.Main) {
+    // Update UI di sini
+}
+```
 
-### 4. Testing
-- Tulis unit tests untuk ViewModel
-- Tulis instrumented tests untuk UI
-- Gunage mocking untuk dependencies
+#### 2. **Room Database**
+```kotlin
+// Entity = Model data
+@Entity(tableName = "notes")
+data class Note(...)
 
----
+// DAO = Interface untuk operasi database
+@Dao
+interface NoteDao { ... }
 
-## 🎯 NEXT STEPS
+// Database = Class untuk koneksi database
+@Database(...)
+abstract class AppDatabase : RoomDatabase() { ... }
+```
 
-### Fitur Tambahan yang Bisa Ditambahkan:
-1. **Search functionality**: Implementasi search bar
-2. **Sorting**: Sort by title, date, etc.
-3. **Filtering**: Filter by category/tags
-4. **Backup/Restore**: Export/Import data
-5. **Cloud Sync**: Sync dengan Firebase atau backend
-6. **Authentication**: User login/register
-7. **Dark Mode**: Support tema gelap
-8. **Animations**: Transisi dan micro-interactions
-
-### Teknologi Lanjutan:
-- **Hilt/Dagger**: Dependency injection
-- **Paging 3**: Untuk pagination yang efisien
-- **DataStore**: Untuk preferences
-- **WorkManager**: Untuk background tasks
+#### 3. **RecyclerView**
+```kotlin
+// Adapter untuk menampilkan data di RecyclerView
+class NoteAdapter(...) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() { ... }
+```
 
 ---
 
-## 📖 SUMMARY
+## 🎯 TIPS UNTUK PEMULA
 
-Dalam modul ini, kita telah mempelajari:
+### 1. **Debugging**
+- Gunakan `Log.d("TAG", "message")` untuk logging
+- Gunakan breakpoints untuk step-by-step debugging
+- Cek Logcat untuk error messages
 
-1. **Room Database Setup**: Konfigurasi database dengan Room
-2. **CRUD Operations**: Implementasi Create, Read, Update, Delete
-3. **MVVM Architecture**: Pemisahan concerns dengan Model-View-ViewModel
-4. **Coroutines**: Asynchronous programming
-5. **RecyclerView**: Efficient list display
-6. **View Binding**: Type-safe view access
+### 2. **Best Practices**
+- Selalu gunakan coroutines untuk operasi database
+- Validasi input sebelum menyimpan ke database
+- Handle errors dengan try-catch
+- Gunakan appropriate dispatchers (IO untuk database, Main untuk UI)
+
+### 3. **Code Organization**
+- Pisahkan database logic dari UI logic
+- Gunakan meaningful variable names
+- Comment kode yang kompleks
+
+---
+
+### Yang Telah Dipelajari:
+- ✅ Room Database setup
+- ✅ CRUD operations (Create, Read, Update, Delete)
+- ✅ Coroutines untuk asynchronous operations
+- ✅ RecyclerView untuk menampilkan data
+- ✅ Basic Android UI components
+
+### Next Steps:
+- Tambahkan fitur search
+- Implementasi sorting
+- Tambahkan kategori/tag
+- Buat UI yang lebih menarik
