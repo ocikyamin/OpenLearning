@@ -1,0 +1,33 @@
+CREATE TABLE `Users`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `email` VARCHAR(255) NOT NULL,
+    `username` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `role` ENUM('admin', 'pelanggan') NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL
+);
+CREATE TABLE `Complaints`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
+    `attachment` VARCHAR(255) NOT NULL,
+    `status` ENUM('baru', 'proses', 'selesai') NOT NULL DEFAULT 'baru',
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL
+);
+CREATE TABLE `Responses`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `complaint_id` INT NOT NULL,
+    `user_id` INT NOT NULL,
+    `message` TEXT NOT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL
+);
+ALTER TABLE
+    `Complaints` ADD CONSTRAINT `complaints_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`id`);
+ALTER TABLE
+    `Responses` ADD CONSTRAINT `responses_user_id_foreign` FOREIGN KEY(`user_id`) REFERENCES `Users`(`id`);
+ALTER TABLE
+    `Responses` ADD CONSTRAINT `responses_complaint_id_foreign` FOREIGN KEY(`complaint_id`) REFERENCES `Complaints`(`id`);
