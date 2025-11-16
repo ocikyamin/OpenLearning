@@ -2,7 +2,6 @@
 
 📚 **Kumpulan e-book & modul ajar pemrograman**  
 Fokus: materi lokal dalam bahasa Indonesia.  
-Santai tapi berkualitas — *kodein aja!* 🚀  
 
 ---
 
@@ -30,25 +29,8 @@ Santai tapi berkualitas — *kodein aja!* 🚀
 
 ---
 
-## 📖 Tentang Modul & E-book
+## 📖 About
 
 Semua materi dalam repo ini ditulis dalam format **Markdown (`.md`)** agar mudah dibaca, dikelola, dan dikembangkan.  
-Setiap modul kemudian diekspor ke **PDF** untuk memudahkan distribusi dan cetak.  
-
-🔎 **Workflow penulisan modul**:  
-1. Menulis materi di file Markdown (lebih ringkas & readable).  
-2. Menambahkan gambar/diagram dalam folder `assets/`.  
-3. Mengekspor ke **PDF** menggunakan *tools* seperti:  
-   - [VS Code Extension – Markdown PDF](https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf)  
-   - [Pandoc](https://pandoc.org/) untuk hasil profesional dengan template.  
-   - Atau editor lain (Typora / Obsidian).  
-
-⚡ **Keuntungan pendekatan ini**:  
-- Konten **versi teks** (Markdown) tetap ada di repo → mudah difork, dikembangkan, & dikolaborasikan.  
-- PDF bisa langsung dipakai untuk pembelajaran offline/online.  
-- Style bisa dikustomisasi dengan CSS agar tampilan rapi & konsisten.  
-
----
-
 
 ✨ Selamat eksplorasi & jangan lupa kasih ⭐ kalau repo ini bermanfaat!
