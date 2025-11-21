@@ -1,10 +1,4 @@
-
-
-Tentu, dengan senang hati. Berikut adalah modul praktikum lengkap yang menggabungkan semua langkah dari dasar hingga lanjutan ke dalam satu alur kerja yang terstruktur. Modul ini dirancang untuk diikuti dari awal hingga akhir, menghasilkan aplikasi cuaca yang modern dan lengkap.
-
----
-
-### **Modul Praktikum Lengkap: Aplikasi Cuaca Modern dengan Fitur Pagination dan Konversi Suhu**
+### **Modul Praktikum: Aplikasi Cuaca dengan Fitur Pagination dan Konversi Suhu**
 
 **Tujuan Pembelajaran:**
 Setelah menyelesaikan modul ini, mahasiswa diharapkan mampu:
@@ -629,5 +623,3 @@ Semua komponen telah terpasang. Saatnya untuk melihat hasil kerja kita.
 3.  Aplikasi akan terbuka, menampilkan 24 data cuaca pertama dengan ikon yang sesuai.
 4.  Tombol **"Muat Lebih Banyak"** akan muncul. Klik untuk menampilkan data berikutnya.
 5.  Klik menu di `Toolbar` untuk beralih antara °C dan °F. Semua suhu di layar akan berubah secara instan.
-
-Selamat! Anda telah berhasil membangun sebuah aplikasi cuaca yang modern, lengkap, dan mengikuti praktik terbaik dalam pengembangan Android.
