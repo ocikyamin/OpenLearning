@@ -1,4 +1,4 @@
-# **Membuat Aplikasi CRUD Menggunakan Roo Database SQLite**
+# **Membuat Aplikasi CRUD Menggunakan Room Database SQLite**
 Oleh **Abdul Yamin**, S.Pd., M.Kom
 
 **Capaian Belajar :**
