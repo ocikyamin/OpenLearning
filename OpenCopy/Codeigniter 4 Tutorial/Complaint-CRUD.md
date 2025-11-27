@@ -1,5 +1,5 @@
 
-> # Coding AJAX Simpan Complaint
+> # AJAX Simpan Complaint
 
 ```javascript
 
@@ -40,7 +40,7 @@ $('#form-complaint').submit(function (e) {
 });
 ```
 
-> # Coding Untuk Simpan Komplaint
+> # Untuk Simpan Komplaint
 
 ```php
 
