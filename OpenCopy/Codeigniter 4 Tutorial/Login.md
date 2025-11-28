@@ -7,8 +7,6 @@ $('.auth-form').submit(function (e) {
         $('#email').removeClass('is-invalid');
         $('#password').removeClass('is-invalid');
         $('.invalid-feedback').remove();
-
-
        $.ajax({
         type: "post",
         url: "<?=base_url('login/proses')?>",
