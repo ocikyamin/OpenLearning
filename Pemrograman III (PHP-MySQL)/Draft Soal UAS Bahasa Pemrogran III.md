@@ -49,6 +49,7 @@ Melalui project ini mahasiswa mampu:
 * Semua file utama (controller, model, migration) **wajib** dibuat dengan CLI:
 
   ```
+
   php spark make:controller ...
   php spark make:model ...
   php spark make:migration ...
@@ -94,6 +95,7 @@ Setiap kelompok wajib:
   Contoh:
 
   ```php
+  
   <?= $this->extend('layout/main'); ?>
   <?= $this->section('content'); ?>
       <!-- Konten CRUD -->
