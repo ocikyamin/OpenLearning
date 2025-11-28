@@ -110,4 +110,6 @@ if ($this->request->isAJAX()) {
  
     return $this->response->setJSON($response);
 
+}
+
 ```
