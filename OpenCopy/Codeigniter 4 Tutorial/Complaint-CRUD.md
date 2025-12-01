@@ -146,3 +146,110 @@ function ComplaintStore()
 
 
 ```
+> # Ajax Hapus Data Komplaint (diperbarui)
+``` javascript
+
+function HapusComplaint(id) {
+
+    Notiflix.Confirm.show(
+        'Konfirmasi Hapus Data',
+        'Apakah Anda yakin ingin menghapus data ini?',
+        'Ya, Hapus',
+        'Batal',
+
+        // ✔ Jika tombol "Ya" ditekan
+        function okCb() {
+
+            $.ajax({
+                type: "POST",
+                url: "<?= base_url('user/komplaint/delete') ?>",
+                data: { id: id },
+                dataType: "json",
+
+                beforeSend: function() {
+                    Notiflix.Loading.circle('Menghapus...');
+                },
+
+                success: function(response) {
+                    Notiflix.Loading.remove();
+
+                    if (response.status === true) {
+                        Notiflix.Notify.success(response.msg);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 800);
+                    } else {
+                        // ✔ Jika gagal
+                        Notiflix.Notify.failure(response.msg || 'Gagal menghapus data');
+                    }
+                },
+
+                error: function(xhr) {
+                    Notiflix.Loading.remove();
+                    Notiflix.Notify.failure('Terjadi kesalahan pada server');
+                }
+            });
+
+        },
+
+        // ❌ Jika klik tombol "Batal"
+        function cancelCb() {
+            Notiflix.Notify.info('Aksi dibatalkan');
+        }
+    );
+}
+
+
+
+```
+
+> # Proses Hapus Data (diperbarui)
+```php
+
+public function ComplainDelete()
+{
+    if ($this->request->isAJAX()) {
+
+        $id = $this->request->getPost('id');
+
+        // Pastikan ID tidak kosong
+        if (!$id) {
+            return $this->response->setJSON([
+                'status' => false,
+                'msg'    => 'ID tidak ditemukan'
+            ]);
+        }
+
+        // Cek apakah data benar-benar ada
+        $data = $this->complaintM->find($id);
+        if (!$data) {
+            return $this->response->setJSON([
+                'status' => false,
+                'msg'    => 'Data tidak ditemukan'
+            ]);
+        }
+
+        // Jika ada lampiran, hapus fisiknya juga
+        if (!empty($data['attachment'])) {
+            $path = ROOTPATH . 'public/uploads/complaints/' . $data['attachment'];
+            if (file_exists($path)) {
+                unlink($path); // hapus file
+            }
+        }
+
+        // Hapus data di database
+        if ($this->complaintM->delete($id)) {
+            return $this->response->setJSON([
+                'status' => true,
+                'msg'    => 'Data berhasil dihapus'
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status' => false,
+            'msg'    => 'Gagal menghapus data'
+        ]);
+    }
+}
+
+```
