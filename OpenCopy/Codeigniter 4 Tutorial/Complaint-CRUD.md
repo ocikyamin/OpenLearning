@@ -40,7 +40,7 @@ $('#form-complaint').submit(function (e) {
 });
 ```
 
-> # Untuk Simpan Komplaint
+> # Untuk Simpan Komplaint (diperbarui)
 
 ```php
 // Simpan & Update Complaint
@@ -144,7 +144,33 @@ function ComplaintStore()
     }
 }
 
+```
 
+> # Tampil Data 
+```html
+<table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>Judul</th>
+                            <th>Waktu</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($list as $d) {?>
+                        <tr>
+                            <td><?=$d['title']?></td>
+                            <td><?=date('d F Y H:i:s', strtotime($d['created_at']))?></td>
+                            <td>
+                                <a href="#" class="btn btn-light btn-sm">Detail</a>
+                                <a href="<?=base_url('user/komplaint/edit/'.$d['id'])?>" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="#" onclick="HapusComplaint(<?=$d['id']?>)" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
 ```
 > # Ajax Hapus Data Komplaint (diperbarui)
 ``` javascript
