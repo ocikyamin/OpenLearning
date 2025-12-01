@@ -43,73 +43,106 @@ $('#form-complaint').submit(function (e) {
 > # Untuk Simpan Komplaint
 
 ```php
+// Simpan & Update Complaint
+function ComplaintStore()
+{
+    if ($this->request->isAJAX()) {
 
-if ($this->request->isAJAX()) {
-    $validation = \Config\Services::validation();
- 
-    // Atur rules validasi
-    $validate = $this->validate([
-        'title' => [
-            'label' => 'Judul Komplain',
-            'rules' => 'required|min_length[5]|max_length[255]',
-            'errors' => [
-                'required'   => '{field} Wajib Diisi',
-                'min_length' => '{field} Minimal 5 Karakter',
-                'max_length' => '{field} Maksimal 255 Karakter',
+        $validation = \Config\Services::validation();
+
+        // ========= PERUBAHAN: Tambah ID untuk deteksi edit =========
+        $id = $this->request->getPost('id'); // Jika ada ID berarti edit
+
+        // Atur rules validasi
+        $validate = $this->validate([
+            'title' => [
+                'label' => 'Judul Komplain',
+                'rules' => 'required|min_length[5]|max_length[255]',
+                'errors' => [
+                    'required'   => '{field} Wajib Diisi',
+                    'min_length' => '{field} Minimal 5 Karakter',
+                    'max_length' => '{field} Maksimal 255 Karakter',
+                ],
             ],
-        ],
-        'description' => [
-            'label' => 'Deskripsi',
-            'rules' => 'required|min_length[10]',
-            'errors' => [
-                'required'   => '{field} Wajib Diisi',
-                'min_length' => '{field} Minimal 10 Karakter',
+            'description' => [
+                'label' => 'Deskripsi',
+                'rules' => 'required|min_length[10]',
+                'errors' => [
+                    'required'   => '{field} Wajib Diisi',
+                    'min_length' => '{field} Minimal 10 Karakter',
+                ],
             ],
-        ],
-        // Lampiran opsional, validasi hanya jika ada file
-        'attachment' => [
-            'label' => 'Lampiran',
-            'rules' => 'permit_empty|max_size[attachment,2048]|ext_in[attachment,png,jpg,jpeg,pdf,doc,docx]',
-            'errors' => [
-                'max_size' => '{field} Maksimal 2MB',
-                'ext_in'   => 'Format {field} Tidak Didukung',
+
+            // ========= PERUBAHAN: Lampiran opsional untuk edit =========
+            // Jika edit, user boleh tidak upload ulang lampiran
+            'attachment' => [
+                'label' => 'Lampiran',
+                'rules' => 'permit_empty|max_size[attachment,2048]|ext_in[attachment,png,jpg,jpeg,pdf,doc,docx]',
+                'errors' => [
+                    'max_size' => '{field} Maksimal 2MB',
+                    'ext_in'   => 'Format {field} Tidak Didukung',
+                ],
             ],
-        ],
-    ]);
- 
-    if (!$validate) {
-        $response = [
-            'status'      => false,
-            'title'       => $validation->getError('title'),
-            'description' => $validation->getError('description'),
-            'attachment'  => $validation->getError('attachment'),
-        ];
-    } else {
-        $attachmentName = null;
-        $attachment = $this->request->getFile('attachment');
-        if ($attachment && $attachment->isValid() && !$attachment->hasMoved()) {
-            $attachmentName = $attachment->getRandomName();
-            $attachment->move(ROOTPATH . 'public/uploads/complaints', $attachmentName);
-        }
- 
-        $this->complaintModel->save([
-            'user_id'     => session()->get('user_id'),
-            'title'       => $this->request->getPost('title'),
-            'description' => $this->request->getPost('description'),
-            'attachment'  => $attachmentName,
-            'status'      => 'baru',
-            'created_at'  => date('Y-m-d H:i:s'),
-            'updated_at'  => date('Y-m-d H:i:s'),
         ]);
- 
-        $response = [
-            'status'  => true,
-            'message' => 'Komplain berhasil dibuat',
-        ];
-    }
- 
-    return $this->response->setJSON($response);
 
+        if (!$validate) {
+            $response = [
+                'status'      => false,
+                'title'       => $validation->getError('title'),
+                'description' => $validation->getError('description'),
+                'attachment'  => $validation->getError('attachment'),
+            ];
+        } else {
+
+            // ========= PERUBAHAN: Ambil data lama jika edit =========
+            $oldData = null;
+            if ($id) {
+                $oldData = $this->complaintM->find($id);
+            }
+
+            // Proses upload lampiran (opsional)
+            $attachmentName = $oldData['attachment'] ?? null; // <-- tetap pakai lampiran lama
+            $attachment = $this->request->getFile('attachment');
+
+            if ($attachment && $attachment->isValid() && !$attachment->hasMoved()) {
+
+                // Jika edit & ada file lama → hapus file lama
+                if ($id && $oldData && !empty($oldData['attachment'])) {
+                    $path = ROOTPATH . 'public/uploads/complaints/' . $oldData['attachment'];
+                    if (file_exists($path)) unlink($path);
+                }
+
+                // Upload file baru
+                $attachmentName = $attachment->getRandomName();
+                $attachment->move(ROOTPATH . 'public/uploads/complaints', $attachmentName);
+            }
+
+            // ========= PERUBAHAN: Gunakan save() untuk insert/update =========
+            $this->complaintM->save([
+                'id'          => $id, // ID kosong = insert | ada ID = update
+                'user_id'     => session()->get('user_id'),
+                'title'       => $this->request->getPost('title'),
+                'description' => $this->request->getPost('description'),
+                'attachment'  => $attachmentName,
+
+                // created_at hanya untuk insert
+                'created_at'  => $id ? $oldData['created_at'] : date('Y-m-d H:i:s'),
+
+                // updated_at selalu diperbarui
+                'updated_at'  => date('Y-m-d H:i:s'),
+            ]);
+
+            $response = [
+                'status'  => true,
+
+                // ========= PERUBAHAN: Pesan sukses disesuaikan =========
+                'message' => $id ? 'Komplain berhasil diperbarui' : 'Komplain berhasil dibuat',
+            ];
+        }
+
+        return $this->response->setJSON($response);
+    }
 }
+
 
 ```
