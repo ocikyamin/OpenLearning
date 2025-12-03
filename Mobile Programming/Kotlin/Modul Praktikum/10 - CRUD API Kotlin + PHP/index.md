@@ -191,8 +191,6 @@ Controller akan menangani logika bisnis dan merespons permintaan HTTP.
 
     ```php
     // app/Controllers/Notes.php
-
-   <?php
 namespace App\Controllers;
 
 use CodeIgniter\API\ResponseTrait;
@@ -312,7 +310,7 @@ class Notes extends BaseController
     }
 }
 
-    ```
+```
 
 #### **3.5. Menambahkan Keamanan Dasar (CORS & API Key)**
 
