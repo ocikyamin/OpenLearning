@@ -193,7 +193,6 @@ Controller akan menangani logika bisnis dan merespons permintaan HTTP.
     // app/Controllers/Notes.php
 
    <?php
-
 namespace App\Controllers;
 
 use CodeIgniter\API\ResponseTrait;
