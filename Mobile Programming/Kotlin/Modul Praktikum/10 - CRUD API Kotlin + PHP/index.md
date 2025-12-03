@@ -1,9 +1,3 @@
-
-
-Tentu, ini adalah tutorial lengkap sesuai spesifikasi yang Anda berikan. Tutorial ini dirancang untuk mahasiswa tingkat pemula hingga menengah dengan bahasa yang mudah dipahami dan langkah-langkah yang dapat diikuti secara langsung.
-
----
-
 ### **Tutorial Lengkap: Membuat Aplikasi CRUD Notes dengan Backend PHP (CodeIgniter 4) dan Client Android (Kotlin)**
 
 ---
