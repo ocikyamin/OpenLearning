@@ -198,127 +198,127 @@ Controller akan menangani logika bisnis dan merespons permintaan HTTP.
     ```php
     // app/Controllers/Notes.php
 
-    <?php
+   <?php
 
-    namespace App\Controllers;
+namespace App\Controllers;
 
-    use CodeIgniter\API\ResponseTrait;
-    use CodeIgniter\HTTP\ResponseInterface;
-    use App\Models\NoteModel;
+use CodeIgniter\API\ResponseTrait;
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\NoteModel;
 
-    class Notes extends BaseController
+class Notes extends BaseController
+{
+    use ResponseTrait;
+
+    public function index()
     {
-        use ResponseTrait;
+        $model = new NoteModel();
+        $data  = $model->findAll();
 
-        public function index()
-        {
-            $model = new NoteModel();
-            $data = $model->findAll();
-            
-            return $this->respond([
-                'status' => 'success',
-                'data' => $data
-            ], ResponseInterface::HTTP_OK);
-        }
-
-        public function show($id = null)
-        {
-            $model = new NoteModel();
-            $data = $model->find($id);
-
-            if ($data) {
-                return $this->respond([
-                    'status' => 'success',
-                    'data' => $data
-                ], ResponseInterface::HTTP_OK);
-            } else {
-                return $this->respond([
-                    'status' => 'error',
-                    'message' => 'Note not found'
-                ], ResponseInterface::HTTP_NOT_FOUND);
-            }
-        }
-
-        public function create()
-        {
-            $rules = [
-                'title' => 'required|max_length[255]',
-                'body'  => 'required',
-            ];
-
-            $input = $this->getRequestInput($this->request);
-
-            if (!$this->validateRequest($input, $rules)) {
-                return $this->getResponse(
-                    $this->validator->getErrors(),
-                    ResponseInterface::HTTP_BAD_REQUEST
-                );
-            }
-
-            $model = new NoteModel();
-            $model->save($input);
-
-            return $this->respond([
-                'status' => 'success',
-                'message' => 'Note created successfully',
-                'data' => ['id' => $model->getInsertID()]
-            ], ResponseInterface::HTTP_CREATED);
-        }
-
-        public function update($id = null)
-        {
-            $model = new NoteModel();
-            $note = $model->find($id);
-
-            if (!$note) {
-                return $this->respond([
-                    'status' => 'error',
-                    'message' => 'Note not found'
-                ], ResponseInterface::HTTP_NOT_FOUND);
-            }
-
-            $rules = [
-                'title' => 'required|max_length[255]',
-                'body'  => 'required',
-            ];
-
-            $input = $this->getRequestInput($this->request);
-
-            if (!$this->validateRequest($input, $rules)) {
-                return $this->getResponse(
-                    $this->validator->getErrors(),
-                    ResponseInterface::HTTP_BAD_REQUEST
-                );
-            }
-
-            $model->update($id, $input);
-
-            return $this->respond([
-                'status' => 'success',
-                'message' => 'Note updated successfully'
-            ], ResponseInterface::HTTP_OK);
-        }
-
-        public function delete($id = null)
-        {
-            $model = new NoteModel();
-            $note = $model->find($id);
-
-            if (!$note) {
-                return $this->respond([
-                    'status' => 'error',
-                    'message' => 'Note not found'
-                ], ResponseInterface::HTTP_NOT_FOUND);
-            }
-
-            $model->delete($id);
-
-            return $this->respond([
-                'status' => 'success',
-                'message' => 'Note deleted successfully'
-            ], ResponseInterface::HTTP_OK);
-        }
+        return $this->respond([
+            'status' => 'success',
+            'data'   => $data
+        ], ResponseInterface::HTTP_OK);
     }
+
+    public function show($id = null)
+    {
+        $model = new NoteModel();
+        $data  = $model->find($id);
+
+        if (!$data) {
+            return $this->failNotFound('Note not found');
+        }
+
+        return $this->respond([
+            'status' => 'success',
+            'data'   => $data
+        ]);
+    }
+
+    public function create()
+    {
+        // ambil JSON body
+        $input = $this->request->getJSON(true);
+
+        $rules = [
+            'title' => 'required|max_length[255]',
+            'body'  => 'required',
+        ];
+
+        if (!$this->validate($rules)) {
+            return $this->respond([
+                'status' => 'error',
+                'errors' => $this->validator->getErrors()
+            ], ResponseInterface::HTTP_BAD_REQUEST);
+        }
+
+        $model = new NoteModel();
+        $model->insert($input);
+
+        return $this->respondCreated([
+            'status'  => 'success',
+            'message' => 'Note created successfully',
+            'data'    => ['id' => $model->getInsertID()]
+        ]);
+    }
+
+    public function update($id = null)
+{
+    $model = new NoteModel();
+    $note  = $model->find($id);
+
+    if (!$note) {
+        return $this->failNotFound('Note not found');
+    }
+
+    // Ambil JSON input
+    $input = $this->request->getJSON(true);
+
+    if (empty($input)) {
+        return $this->fail('No input data received');
+    }
+
+    $rules = [
+        'title' => 'required|max_length[255]',
+        'body'  => 'required',
+    ];
+
+    if (!$this->validate($rules)) {
+        return $this->respond([
+            'status' => 'error',
+            'errors' => $this->validator->getErrors()
+        ], 400);
+    }
+
+    $model->update($id, $input);
+
+    return $this->respond([
+        'status'  => 'success',
+        'message' => 'Note updated successfully'
+    ]);
+}
+
+
+    public function delete($id = null)
+    {
+        $model = new NoteModel();
+        $note  = $model->find($id);
+
+        if (!$note) {
+            return $this->failNotFound('Note not found');
+        }
+
+        $model->delete($id);
+
+        return $this->respondDeleted([
+            'status'  => 'success',
+            'message' => 'Note deleted successfully'
+        ]);
+    }
+}
+
     ```
 
 #### **3.5. Menambahkan Keamanan Dasar (CORS & API Key)**
