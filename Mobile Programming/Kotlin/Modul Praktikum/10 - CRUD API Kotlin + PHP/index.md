@@ -190,9 +190,8 @@ Controller akan menangani logika bisnis dan merespons permintaan HTTP.
 1.  Buat file baru di `app/Controllers/Notes.php`.
 2.  Tambahkan kode berikut. Kode ini mencakup semua endpoint CRUD yang dibutuhkan dengan format respons JSON yang konsisten.
 
-    ```php
+```php
     // app/Controllers/Notes.php
-<?php
 
 namespace App\Controllers;
 
