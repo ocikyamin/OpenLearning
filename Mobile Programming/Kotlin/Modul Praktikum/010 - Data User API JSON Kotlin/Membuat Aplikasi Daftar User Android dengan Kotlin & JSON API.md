@@ -704,21 +704,239 @@ Sekarang, saatnya melihat hasil kerja kita!
 
 ---
 
-### 10. Kesimpulan dan Langkah Selanjutnya
 
-#### Apa yang telah kita pelajari?
-*   **Struktur Proyek**: Cara mengorganisir kode dengan package (`model`, `api`, `repository`, `viewmodel`, `adapter`).
-*   **Arsitektur MVVM**: Memisahkan logika bisnis (Model, ViewModel) dari tampilan (View).
-*   **Networking**: Menggunakan Retrofit untuk mengambil data dari REST API.
-*   **Parsing JSON**: Menggunakan Gson Converter untuk mengubah JSON menjadi objek Kotlin.
-*   **UI Dinamis**: Menggunakan `RecyclerView` dan `Adapter` untuk menampilkan daftar data secara efisien.
-*   **Data Management**: Menggunakan `ViewModel` dan `LiveData` untuk mengelola data UI dengan aman.
-*   **Asynchronous Task**: Menggunakan `Coroutines` untuk operasi di latar belakang.
+### Modul 9: Menambahkan Tombol Refresh
 
-#### Langkah Selanjutnya (Tantangan!)
-Anda bisa mengembangkan aplikasi ini lebih lanjut:
-1.  **Detail Screen**: Ketika salah satu item user diklik, buka halaman baru yang menampilkan detail lengkap user.
-2.  **Pull-to-Refresh**: Tambahkan fitur untuk menarik ke bawah daftar untuk memuat ulang data.
-3.  **Search Bar**: Tambahkan kolom pencarian untuk menyaring user berdasarkan nama atau username.
-4.  **Error Handling**: Tambahkan tombol "Coba Lagi" jika terjadi error.
-5.  **Caching**: Simpan data user yang sudah diambil ke database lokal (misalnya Room) agar aplikasi tetap bisa menampilkan data saat offline.
+Kita akan melakukan perubahan pada tiga file:
+1.  `activity_main.xml`: Untuk menambahkan elemen tombol ke UI.
+2.  `UserViewModel.kt`: Untuk membuat fungsi yang bisa dipanggil saat tombol ditekan.
+3.  `MainActivity.kt`: Untuk menghubungkan aksi klik tombol dengan fungsi di ViewModel.
+
+#### Langkah 1: Ubah Layout Utama (`activity_main.xml`)
+
+Kita akan menambahkan `Button` di atas `RecyclerView`.
+
+1.  Buka file **res > layout > activity_main.xml**.
+2.  Tambahkan kode `Button` berikut sebelum `RecyclerView`. Juga, perbarui constraint dari `RecyclerView` agar berada di bawah tombol ini.
+
+```xml
+<!-- res/layout/activity_main.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- TODO 26: TAMBAHKAN TOMBOL REFRESH -->
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Refresh Data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Perbarui constraint RecyclerView agar berada di bawah tombol -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnRefresh" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvErrorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Error message" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+**Penjelasan Perubahan:**
+*   Kita menambahkan `<Button>` dengan ID `btnRefresh`.
+*   `app:layout_constraintTop_toTopOf="parent"` menempatkan tombol di bagian paling atas layar.
+*   Pada `RecyclerView`, kita mengubah `app:layout_constraintTop_toTopOf="parent"` menjadi `app:layout_constraintTop_toBottomOf="@id/btnRefresh"`. Ini memastikan bahwa daftar user akan dimulai tepat di bawah tombol refresh.
+
+#### Langkah 2: Ubah ViewModel (`UserViewModel.kt`)
+
+Saat ini, fungsi untuk mengambil data (`fetchUsers`) bersifat `private` dan hanya dipanggil saat ViewModel dibuat. Kita perlu membuatnya bisa dipanggil dari luar (dari `MainActivity`).
+
+1.  Buka file **viewmodel > UserViewModel.kt**.
+2.  Ubah fungsi `fetchUsers` menjadi `public` dan ganti namanya menjadi `refreshUsers` agar lebih jelas tujuannya.
+
+```kotlin
+// viewmodel/UserViewModel.kt
+package com.example.userlistapp.viewmodel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.example.userlistapp.model.User
+import com.example.userlistapp.repository.UserRepository
+import kotlinx.coroutines.launch
+
+class UserViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository = UserRepository(application)
+
+    val users: LiveData<List<User>> = repository.users
+    val isLoading: LiveData<Boolean> = repository.isLoading
+    val errorMessage: LiveData<String> = repository.errorMessage
+
+    init {
+        // Panggil refreshUsers() saat pertama kali dibuat agar data langsung dimuat.
+        refreshUsers()
+    }
+
+    // TODO 27: UBAH FUNGSI MENJADI PUBLIC UNTUK DIPANGGIL DARI ACTIVITY
+    // Fungsi ini sebelumnya private dan bernama fetchUsers.
+    // Kita ubah menjadi public dan bernama refreshUsers agar bisa dipanggil dari MainActivity
+    // saat tombol refresh ditekan.
+    fun refreshUsers() {
+        viewModelScope.launch {
+            repository.fetchUsers()
+        }
+    }
+}
+```
+
+**Penjelasan Perubahan:**
+*   Kita mengubah `private fun fetchUsers()` menjadi `fun refreshUsers()`.
+*   `init` block sekarang memanggil `refreshUsers()` untuk mempertahankan perilaku awal (memuat data saat aplikasi dibuka).
+*   Karena `refreshUsers()` sekarang bersifat `public`, `MainActivity` bisa memanggilnya kapan saja.
+
+#### Langkah 3: Ubah MainActivity (`MainActivity.kt`)
+
+Terakhir, kita akan menambahkan logika untuk menjalankan fungsi `refreshUsers()` di ViewModel ketika tombol di `activity_main.xml` diklik.
+
+1.  Buka file **MainActivity.kt**.
+2.  Tambahkan inisialisasi untuk `Button` dan set `onClickListener`-nya.
+
+```kotlin
+// MainActivity.kt
+package com.example.userlistapp
+
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.userlistapp.adapter.UserAdapter
+import com.example.userlistapp.viewmodel.UserViewModel
+
+class MainActivity : AppCompatActivity() {
+
+    private val userViewModel: UserViewModel by viewModels()
+
+    // Deklarasi variabel untuk komponen UI.
+    private lateinit var userAdapter: UserAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var tvErrorMessage: TextView
+    // TODO 28: TAMBAHKAN DEKLARASI UNTUK TOMBOL REFRESH
+    private lateinit var refreshButton: Button
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Inisialisasi View dari XML.
+        recyclerView = findViewById(R.id.recyclerView)
+        progressBar = findViewById(R.id.progressBar)
+        tvErrorMessage = findViewById(R.id.tvErrorMessage)
+        refreshButton = findViewById(R.id.btnRefresh) // Inisialisasi tombol refresh
+
+        setupRecyclerView()
+        setupRefreshListener() // Panggil fungsi baru untuk setup listener
+        observeViewModel()
+    }
+
+    // Fungsi untuk mengatur RecyclerView.
+    private fun setupRecyclerView() {
+        userAdapter = UserAdapter(emptyList())
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = userAdapter
+    }
+
+    // TODO 29: BUAT FUNGSI UNTUK MENANGANI KLIK TOMBOL
+    private fun setupRefreshListener() {
+        refreshButton.setOnClickListener {
+            // Ketika tombol diklik, panggil fungsi refreshUsers() di ViewModel.
+            // ViewModel akan memicu Repository untuk mengambil data lagi,
+            // dan LiveData akan memperbarui UI secara otomatis.
+            userViewModel.refreshUsers()
+        }
+    }
+
+    // Fungsi untuk mengamati perubahan data dari ViewModel.
+    private fun observeViewModel() {
+        userViewModel.users.observe(this) { users ->
+            if (users.isNotEmpty()) {
+                userAdapter.updateUserList(users)
+                recyclerView.visibility = View.VISIBLE
+                tvErrorMessage.visibility = View.GONE
+            }
+        }
+
+        userViewModel.isLoading.observe(this) { isLoading ->
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            if (isLoading) {
+                recyclerView.visibility = View.GONE
+                tvErrorMessage.visibility = View.GONE
+            }
+        }
+
+        userViewModel.errorMessage.observe(this) { errorMessage ->
+            if (errorMessage.isNotEmpty()) {
+                tvErrorMessage.text = errorMessage
+                tvErrorMessage.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            }
+        }
+    }
+}
+```
+
+**Penjelasan Perubahan:**
+*   Kita mendeklarasikan variabel `refreshButton: Button`.
+*   Di dalam `onCreate`, kita menginisialisasinya dengan `findViewById(R.id.btnRefresh)`.
+*   Kita membuat fungsi baru `setupRefreshListener()` untuk membuat kode lebih rapi.
+*   Di dalam `setupRefreshListener()`, kita menggunakan `refreshButton.setOnClickListener { ... }`. Di dalam blok ini, kita hanya perlu memanggil `userViewModel.refreshUsers()`.
+*   Arsitektur yang kita bangun memudahkan penambahan fitur ini. `Activity` tidak perlu tahu cara mengambil data; ia cukup memberi tahu `ViewModel` bahwa data perlu disegarkan, dan sisanya akan berjalan otomatis.
+
+---
+
+### Menjalankan Aplikasi
+
+Sekarang, jalankan kembali aplikasi Anda. Anda akan melihat sebuah tombol "Refresh Data" di bagian atas layar. Jika Anda menekannya, `ProgressBar` akan muncul sejenak, dan aplikasi akan mengambil ulang data dari server.
