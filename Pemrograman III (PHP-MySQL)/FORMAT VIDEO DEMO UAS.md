@@ -1,6 +1,6 @@
-## **FORMAT VIDEO DEMO UAS
+## FORMAT VIDEO DEMO UAS
 
-Proyek Pemrograman III (PHP & MySQL – CI4)**
+Proyek Pemrograman III (PHP & MySQL – CI4)
 
 **Durasi video** : **8–12 menit**
 **Bentuk** : Screen recording + suara penjelasan (wajah boleh tampil di awal/akhir)
