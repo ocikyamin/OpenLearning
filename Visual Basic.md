@@ -28,3 +28,4 @@
 Sumber : 
 - https://drive.google.com/drive/folders/15I1vlSfp9qyNj9kq1waqT5RveDjCSLd1
 - https://www.ismaillowkey.net/2020/06/download-visual-studio-2019-community.html?m=0
+- https://gist.github.com/Chenx221/6f4ed72cd785d80edb0bc50c9921daf7
