@@ -354,3 +354,6 @@ sudo service apache2 reload
 ---
 
 Sekarang Web Server Anda sudah sangat lengkap! Ada **Apache** (Web Server), **MySQL** (Database), **PHP** (Bahasa), dan **phpMyAdmin** (Manager).
+
+# Instal Composer for Linux
+https://share.google/aimode/8rbvt5ydwkS8R0Jhn
