@@ -24,6 +24,7 @@
   - Alternatif : https://drive.google.com/drive/folders/15I1vlSfp9qyNj9kq1waqT5RveDjCSLd1
 ## **Visual Studio 2022**
  - https://drive.google.com/drive/folders/15JLA5MrSPUT4RG2MfYuHealjWeuVK1gY
+ - https://www.canva.com/design/DAHCuABESFo/IIG-Jm-KQ4POczNYGKIwCA/edit?utm_content=DAHCuABESFo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
 Sumber : 
 - https://drive.google.com/drive/folders/15I1vlSfp9qyNj9kq1waqT5RveDjCSLd1
