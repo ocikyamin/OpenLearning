@@ -1,3 +1,171 @@
+> # instalasi Windows Subsystem for Linux (WSL)
+
+Ikuti langkah-langkah simpel ini:
+
+1. **Buka PowerShell sebagai Administrator**
+   Klik tombol Start di Windows.
+   Ketik PowerShell.
+   Klik kanan pada Windows PowerShell dan pilih Run as Administrator.
+
+2. **Jalankan Perintah Instalasi**
+   Ketik perintah berikut di jendela PowerShell yang muncul, lalu tekan Enter:
+
+   ```powershell
+   wsl --install
+   ```
+
+3. **Restart Komputer**
+   Setelah proses di PowerShell selesai, kamu wajib merestart laptop atau PC kamu. Tanpa restart, fitur WSL tidak akan aktif sepenuhnya.
+4. **Cek Hasil Instalasi**
+   Setelah menyala kembali, buka PowerShell lagi dan ketik:
+
+   ```powershell
+   wsl --status
+   ```
+
+   Jika muncul keterangan bahwa WSL sudah terinstal (biasanya WSL 2), artinya kamu sudah sukses melewati tahap pertama!
+
+
+# 🚀 Tutorial Setting Ubuntu 24.04 di WSL (Windows Subsystem for Linux)
+
+Setelah berhasil menginstal WSL dan melakukan restart laptop, langkah berikutnya adalah mengaktifkan “mesin” Linux untuk pertama kali dan melakukan konfigurasi awal.
+
+Tutorial ini akan memandu proses instalasi **Ubuntu 24.04** serta pembuatan user.
+
+---
+
+## 1️⃣ Memulai Instalasi Ubuntu 24.04
+
+Jika sebelumnya hanya menjalankan perintah:
+
+```powershell
+wsl --install
+```
+
+Biasanya Windows akan menginstal versi default Ubuntu. Untuk memastikan menggunakan versi terbaru (**Ubuntu 24.04**), lakukan langkah berikut:
+
+### Langkah-langkah:
+
+1. Buka **PowerShell**.
+2. Jalankan perintah berikut:
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+3. Tunggu hingga proses download dan instalasi selesai.
+4. Setelah selesai, jendela terminal Ubuntu (layar hitam) akan terbuka otomatis.
+
+---
+
+## 2️⃣ Membuat User Baru (UNIX Username)
+
+Saat pertama kali Ubuntu terbuka, akan muncul pesan:
+
+```
+Installing, this may take a few minutes...
+```
+
+Tunggu hingga muncul permintaan berikut:
+
+```
+Enter new UNIX username:
+```
+
+### Aturan pembuatan username:
+
+* Gunakan huruf kecil semua
+* Tidak boleh menggunakan spasi
+* Contoh: `budi`, `mahasiswa`, `rahmat`
+
+Setelah mengisi username, tekan **Enter**.
+
+---
+
+## 3️⃣ Mengatur Password
+
+Selanjutnya sistem akan meminta password:
+
+```
+New password:
+Retype new password:
+```
+
+### Ketentuan password:
+
+* Gunakan password yang mudah diingat tetapi tetap aman
+* Ketik ulang password yang sama saat diminta
+
+⚠ **PENTING**
+Saat mengetik password:
+
+* Kursor tidak akan bergerak
+* Tidak muncul tanda bintang (***)
+* Tidak ada karakter yang terlihat
+
+Ini **normal di Linux**. Tetap ketik password sampai selesai, lalu tekan **Enter**.
+
+---
+
+## 4️⃣ Verifikasi Keberhasilan Instalasi
+
+Jika berhasil, akan muncul tampilan seperti ini:
+
+```bash
+Installation successful!
+username@LAPTOP-NAMA:~$
+```
+
+Contoh:
+
+```bash
+Installation successful!
+budi@LAPTOP-123ABC:~$
+```
+
+Artinya:
+
+✅ Ubuntu 24.04 berhasil terinstal
+✅ User berhasil dibuat
+✅ Linux siap digunakan
+
+Anda sekarang sudah resmi masuk ke sistem operasi Ubuntu di dalam Windows melalui WSL.
+
+---
+
+## 5️⃣ Update Sistem Pertama Kali
+
+Langkah penting setelah instalasi adalah memperbarui sistem agar semua paket berada pada versi terbaru.
+
+Jalankan perintah berikut di terminal Ubuntu:
+
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+### Penjelasan perintah:
+
+* `sudo` → Menjalankan perintah sebagai administrator
+* `apt update` → Memperbarui daftar paket
+* `apt upgrade -y` → Meng-upgrade semua paket ke versi terbaru secara otomatis
+
+Sistem akan meminta password yang dibuat sebelumnya. Masukkan password tersebut, lalu tekan **Enter**.
+
+---
+
+## 🎯 Instalasi Selesai
+
+Sekarang Ubuntu 24.04 di WSL sudah siap digunakan untuk:
+
+* Praktikum pemrograman
+* Instalasi web server (Apache, Nginx)
+* PHP & MySQL
+* Git dan tools development lainnya
+
+Selanjutnya dapat melanjutkan ke tahap instalasi tools development sesuai kebutuhan pembelajaran.
+
+-------
+
 # Modul Tutorial: Instalasi Web Server (LAMP Stack) di WSL Ubuntu
 
 **Tujuan:** Membangun lingkungan server lokal di Ubuntu yang berjalan di atas Windows Subsystem for Linux (WSL) untuk keperluan pengembangan aplikasi web.
@@ -18,7 +186,6 @@ sudo apt update && sudo apt upgrade -y
 * **Penjelasan:** * `sudo`: Menjalankan perintah sebagai administrator (root).
 * `apt update`: Memperbarui daftar aplikasi dari server Ubuntu.
 * `upgrade`: Mengunduh dan menginstal pembaruan aplikasi yang sudah ada.
-
 
 
 ---
@@ -357,3 +524,6 @@ Sekarang Web Server Anda sudah sangat lengkap! Ada **Apache** (Web Server), **My
 
 # Instal Composer for Linux
 https://share.google/aimode/8rbvt5ydwkS8R0Jhn
+
+> # Cara Instal MCP Context7 for Opencode
+https://github.com/upstash/context7
