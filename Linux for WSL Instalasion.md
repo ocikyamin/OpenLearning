@@ -1,529 +1,302 @@
-> # instalasi Windows Subsystem for Linux (WSL)
+# 📘 Panduan Lengkap Setup Lingkungan Development Web di WSL (Ubuntu 24.04)
 
-Ikuti langkah-langkah simpel ini:
+Selamat datang! Panduan ini dirancang khusus untuk mahasiswa yang ingin mempelajari pengembangan web menggunakan lingkungan Linux di atas Windows. Kita akan membangun lingkungan development lengkap (**LAMP Stack + Node.js**) dari nol hingga siap digunakan untuk coding.
 
-1. **Buka PowerShell sebagai Administrator**
-   Klik tombol Start di Windows.
-   Ketik PowerShell.
-   Klik kanan pada Windows PowerShell dan pilih Run as Administrator.
-
-2. **Jalankan Perintah Instalasi**
-   Ketik perintah berikut di jendela PowerShell yang muncul, lalu tekan Enter:
-
-   ```powershell
-   wsl --install
-   ```
-
-3. **Restart Komputer**
-   Setelah proses di PowerShell selesai, kamu wajib merestart laptop atau PC kamu. Tanpa restart, fitur WSL tidak akan aktif sepenuhnya.
-4. **Cek Hasil Instalasi**
-   Setelah menyala kembali, buka PowerShell lagi dan ketik:
-
-   ```powershell
-   wsl --status
-   ```
-
-   Jika muncul keterangan bahwa WSL sudah terinstal (biasanya WSL 2), artinya kamu sudah sukses melewati tahap pertama!
-
-
-# 🚀 Tutorial Setting Ubuntu 24.04 di WSL (Windows Subsystem for Linux)
-
-Setelah berhasil menginstal WSL dan melakukan restart laptop, langkah berikutnya adalah mengaktifkan “mesin” Linux untuk pertama kali dan melakukan konfigurasi awal.
-
-Tutorial ini akan memandu proses instalasi **Ubuntu 24.04** serta pembuatan user.
+Ikuti langkah-langkah berikut secara berurutan. **Jangan melompat langkah** agar tidak terjadi error. Setiap bagian memiliki langkah verifikasi untuk memastikan instalasi berhasil.
 
 ---
 
-## 1️⃣ Memulai Instalasi Ubuntu 24.04
+## 📑 Daftar Isi
+1. [Instalasi Windows Subsystem for Linux (WSL)](#1-instalasi-windows-subsystem-for-linux-wsl)
+2. [Setup Awal Ubuntu 24.04](#2-setup-awal-ubuntu-2404)
+3. [Instalasi Web Server (LAMP Stack)](#3-instalasi-web-server-lamp-stack)
+4. [Instalasi phpMyAdmin (Manajer Database)](#4-instalasi-phpmyadmin-manajer-database)
+5. [Optimasi Izin File & Integrasi VS Code](#5-optimasi-izin-file--integrasi-vs-code)
+6. [Instalasi Composer (Dependency Manager PHP)](#6-instalasi-composer-dependency-manager-php)
+7. [Instalasi Node.js & npm (JavaScript Runtime)](#7-instalasi-nodejs--npm-javascript-runtime)
+8. [Penutup & Langkah Selanjutnya](#8-penutup--langkah-selanjutnya)
 
-Jika sebelumnya hanya menjalankan perintah:
+---
 
-```powershell
-wsl --install
-```
+## 1. Instalasi Windows Subsystem for Linux (WSL)
 
-Biasanya Windows akan menginstal versi default Ubuntu. Untuk memastikan menggunakan versi terbaru (**Ubuntu 24.04**), lakukan langkah berikut:
+Langkah pertama adalah mengaktifkan fitur WSL di Windows Anda.
 
 ### Langkah-langkah:
+1.  **Buka PowerShell sebagai Administrator**
+    *   Klik tombol **Start**.
+    *   Ketik `PowerShell`.
+    *   Klik kanan pada **Windows PowerShell** dan pilih **Run as Administrator**.
+2.  **Jalankan Perintah Instalasi**
+    *   Ketik perintah berikut lalu tekan **Enter**:
+        ```powershell
+        wsl --install
+        ```
+3.  **Restart Komputer**
+    *   Setelah proses selesai, **wajib restart** laptop/PC Anda. Fitur WSL tidak akan aktif sepenuhnya tanpa restart.
+4.  **✅ Verifikasi Instalasi**
+    *   Setelah menyala kembali, buka PowerShell lagi dan ketik:
+        ```powershell
+        wsl --status
+        ```
+    *   **Status Sukses:** Jika muncul keterangan `Default Distribution: Ubuntu` dan `Version: 2`, maka WSL berhasil terinstal.
 
-1. Buka **PowerShell**.
-2. Jalankan perintah berikut:
+---
 
+## 2. Setup Awal Ubuntu 24.04
+
+Secara default, `wsl --install` mungkin menginstal versi Ubuntu lama. Kita akan memastikan menggunakan versi terbaru (24.04).
+
+### 1️⃣ Instalasi Ubuntu Spesifik
+Buka PowerShell dan jalankan perintah:
 ```powershell
 wsl --install -d Ubuntu-24.04
 ```
+*Tunggu hingga proses download dan instalasi selesai. Jendela terminal Ubuntu akan terbuka otomatis.*
 
-3. Tunggu hingga proses download dan instalasi selesai.
-4. Setelah selesai, jendela terminal Ubuntu (layar hitam) akan terbuka otomatis.
-
----
-
-## 2️⃣ Membuat User Baru (UNIX Username)
-
-Saat pertama kali Ubuntu terbuka, akan muncul pesan:
-
-```
-Installing, this may take a few minutes...
-```
-
-Tunggu hingga muncul permintaan berikut:
-
-```
+### 2️⃣ Membuat User Baru
+Saat pertama kali Ubuntu terbuka, tunggu hingga muncul permintaan:
+```text
 Enter new UNIX username:
 ```
+*   **Aturan Username:** Gunakan huruf kecil semua, tanpa spasi (Contoh: `budi`, `mahasiswa`).
+*   Tekan **Enter** setelah mengetik.
 
-### Aturan pembuatan username:
-
-* Gunakan huruf kecil semua
-* Tidak boleh menggunakan spasi
-* Contoh: `budi`, `mahasiswa`, `rahmat`
-
-Setelah mengisi username, tekan **Enter**.
-
----
-
-## 3️⃣ Mengatur Password
-
-Selanjutnya sistem akan meminta password:
-
-```
+### 3️⃣ Mengatur Password
+Sistem akan meminta password:
+```text
 New password:
 Retype new password:
 ```
+*   **⚠ PENTING:** Saat mengetik password, **kursor tidak akan bergerak** dan tidak ada tanda bintang (`***`). Ini normal di Linux.
+*   Ketik password rahasia Anda, tekan **Enter**, lalu ketik ulang untuk konfirmasi.
 
-### Ketentuan password:
-
-* Gunakan password yang mudah diingat tetapi tetap aman
-* Ketik ulang password yang sama saat diminta
-
-⚠ **PENTING**
-Saat mengetik password:
-
-* Kursor tidak akan bergerak
-* Tidak muncul tanda bintang (***)
-* Tidak ada karakter yang terlihat
-
-Ini **normal di Linux**. Tetap ketik password sampai selesai, lalu tekan **Enter**.
-
----
-
-## 4️⃣ Verifikasi Keberhasilan Instalasi
-
-Jika berhasil, akan muncul tampilan seperti ini:
-
-```bash
-Installation successful!
-username@LAPTOP-NAMA:~$
-```
-
-Contoh:
-
-```bash
-Installation successful!
-budi@LAPTOP-123ABC:~$
-```
-
-Artinya:
-
-✅ Ubuntu 24.04 berhasil terinstal
-✅ User berhasil dibuat
-✅ Linux siap digunakan
-
-Anda sekarang sudah resmi masuk ke sistem operasi Ubuntu di dalam Windows melalui WSL.
-
----
-
-## 5️⃣ Update Sistem Pertama Kali
-
-Langkah penting setelah instalasi adalah memperbarui sistem agar semua paket berada pada versi terbaru.
-
-Jalankan perintah berikut di terminal Ubuntu:
-
+### 4️⃣ Update Sistem
+Langkah wajib setelah instalasi adalah memperbarui sistem.
+Jalankan perintah ini di terminal Ubuntu:
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
+*   Masukkan password user yang baru dibuat jika diminta.
+*   Jika diminta konfirmasi `Y/n`, ketik `y` lalu Enter.
 
-### Penjelasan perintah:
-
-* `sudo` → Menjalankan perintah sebagai administrator
-* `apt update` → Memperbarui daftar paket
-* `apt upgrade -y` → Meng-upgrade semua paket ke versi terbaru secara otomatis
-
-Sistem akan meminta password yang dibuat sebelumnya. Masukkan password tersebut, lalu tekan **Enter**.
+### 5️⃣ ✅ Verifikasi Instalasi Ubuntu
+*   **Status Sukses:** Jika muncul tulisan `Installation successful!` dan prompt berubah menjadi `username@LAPTOP-NAMA:~$`, maka Ubuntu siap digunakan.
 
 ---
 
-## 🎯 Instalasi Selesai
+## 3. Instalasi Web Server (LAMP Stack)
 
-Sekarang Ubuntu 24.04 di WSL sudah siap digunakan untuk:
+Kita akan membangun lingkungan server lokal untuk menjalankan aplikasi web.
 
-* Praktikum pemrograman
-* Instalasi web server (Apache, Nginx)
-* PHP & MySQL
-* Git dan tools development lainnya
-
-Selanjutnya dapat melanjutkan ke tahap instalasi tools development sesuai kebutuhan pembelajaran.
-
--------
-
-# Modul Tutorial: Instalasi Web Server (LAMP Stack) di WSL Ubuntu
-
-**Tujuan:** Membangun lingkungan server lokal di Ubuntu yang berjalan di atas Windows Subsystem for Linux (WSL) untuk keperluan pengembangan aplikasi web.
-
----
-
-## 1. Persiapan: Pembaruan Repositori
-
-Sebelum menginstal paket apa pun, kita harus memastikan daftar paket di Ubuntu adalah yang terbaru untuk menghindari konflik versi.
-
-* **Perintah:**
-```bash
-sudo apt update && sudo apt upgrade -y
-
-```
-
-
-* **Penjelasan:** * `sudo`: Menjalankan perintah sebagai administrator (root).
-* `apt update`: Memperbarui daftar aplikasi dari server Ubuntu.
-* `upgrade`: Mengunduh dan menginstal pembaruan aplikasi yang sudah ada.
-
-
----
-
-## 2. Instalasi Web Server (Apache)
-
-Apache adalah perangkat lunak web server yang bertugas menerima permintaan (request) dari browser dan mengirimkan halaman web kembali ke pengguna.
-
-* **Langkah Instalasi:**
+### 1. Instalasi Web Server (Apache)
+Apache bertugas menerima permintaan dari browser.
 ```bash
 sudo apt install apache2 -y
-
 ```
-
-
-* **Menjalankan Service (Penting untuk WSL):**
-Berbeda dengan Ubuntu biasa, di WSL Anda harus menyalakan service secara manual setiap kali membuka terminal baru:
+**Menjalankan Service:**
 ```bash
 sudo service apache2 start
-
 ```
+**✅ Verifikasi Apache:**
+*   Buka browser (Chrome/Edge) di Windows, ketik `localhost`.
+*   **Status Sukses:** Jika muncul halaman "Apache2 Ubuntu Default Page", Apache berhasil.
 
-
-* **Verifikasi:**
-Buka browser di Windows (Chrome/Edge), lalu ketik **`localhost`**. Jika muncul halaman "Apache2 Ubuntu Default Page", instalasi berhasil.
-
----
-
-## 3. Instalasi Database Server (MySQL)
-
-MySQL digunakan untuk menyimpan data aplikasi web Anda secara terorganisir.
-
-* **Langkah Instalasi:**
+### 2. Instalasi Database Server (MySQL)
+MySQL untuk menyimpan data aplikasi.
 ```bash
 sudo apt install mysql-server -y
-
-```
-
-
-* **Menjalankan Service:**
-```bash
 sudo service mysql start
-
 ```
+**✅ Verifikasi MySQL:**
+*   Coba masuk ke terminal MySQL:
+    ```bash
+    sudo mysql
+    ```
+*   **Status Sukses:** Jika prompt berubah menjadi `mysql>`, ketik `EXIT;` untuk keluar.
 
-
-* **Keamanan Dasar (Opsional):**
-Untuk mengatur password root database, jalankan:
-```bash
-sudo mysql_secure_installation
-
-```
-
-
-
----
-
-## 4. Instalasi PHP (Bahasa Pemrograman)
-
-Sesuai permintaan Anda, kita akan menggunakan perintah standar Ubuntu untuk menginstal PHP beserta modul integrasinya.
-
-* **Perintah:**
+### 3. Instalasi PHP
+PHP adalah bahasa pemrograman untuk logika website.
 ```bash
 sudo apt install php libapache2-mod-php php-mysql -y
-
 ```
 
-
-* **Penjelasan Paket:**
-* **`php`**: Inti dari bahasa pemrograman PHP. (Pada Ubuntu 24.04, ini secara otomatis menginstal **PHP 8.3**).
-* **`libapache2-mod-php`**: Modul yang memungkinkan Apache untuk memproses file PHP.
-* **`php-mysql`**: Driver agar PHP bisa terhubung dan berkomunikasi dengan database MySQL.
-
-
-
----
-
-## 5. Pengujian Integrasi (Uji Coba PHP)
-
-Langkah ini sangat penting untuk memastikan bahwa Apache benar-benar bisa menjalankan kode PHP.
-
-1. **Berpindah ke Direktori Web:**
-Secara default, folder website Anda berada di: `/var/www/html/`
-2. **Membuat File Tes:**
-Jalankan perintah ini untuk membuat file bernama `info.php`:
-```bash
-echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
-
-```
-
-
-3. **Restart Web Server:**
-Agar Apache mengenali instalasi PHP yang baru, restart service-nya:
-```bash
-sudo service apache2 restart
-
-```
-
-
-4. **Cek Hasil:**
-Buka browser dan akses: **`localhost/info.php`**. Anda harus melihat tabel informasi versi PHP yang sangat detail.
+### 4. Pengujian Integrasi PHP
+Pastikan Apache bisa menjalankan kode PHP.
+1.  Buat file tes:
+    ```bash
+    echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
+    ```
+2.  Restart Apache:
+    ```bash
+    sudo service apache2 restart
+    ```
+3.  **✅ Verifikasi PHP:**
+    *   Buka browser dan akses `localhost/info.php`.
+    *   **Status Sukses:** Jika muncul tabel informasi versi PHP, instalasi LAMP berhasil.
 
 ---
 
-## 6. Ringkasan Perintah Operasional
+## 4. Instalasi phpMyAdmin (Manajer Database)
 
-Sebagai mahasiswa, Anda akan sering menggunakan perintah-perintah di bawah ini untuk mengelola server Anda:
+phpMyAdmin memberikan antarmuka grafis untuk mengelola database MySQL.
 
-| Tugas | Perintah |
-| --- | --- |
-| Cek status Apache | `sudo service apache2 status` |
-| Menghentikan Apache | `sudo service apache2 stop` |
-| Masuk ke Terminal MySQL | `sudo mysql -u root -p` |
-| Lokasi file web (Root Document) | `/var/www/html/` |
-
----
-
-> **Catatan Tambahan:** > Karena folder `/var/www/html` adalah folder sistem, Anda memerlukan izin `sudo` untuk menambah atau mengedit file di sana. Jika ingin mengedit file menggunakan **VS Code** dari Windows, Anda bisa mengetik `code .` di dalam direktori tersebut pada terminal Ubuntu.
-
-Ini adalah langkah yang sangat krusial. Secara *default*, folder `/var/www/html` dimiliki oleh `root`, sehingga Anda akan sering menemui kendala "Permission Denied" saat ingin membuat atau mengedit file melalui VS Code atau teks editor lainnya.
-
-# Cara mengatur hak akses (permission)
-agar Anda (user **xx**) bisa mengelola file dengan bebas, namun Apache tetap bisa membacanya.
-
----
-
-### Langkah 1: Tambahkan User Anda ke Group `www-data`
-
-Apache berjalan menggunakan user dan group bernama `www-data`. Kita akan memasukkan user Anda ke dalam group tersebut.
-
-* **Perintah:**
-```bash
-sudo usermod -aG www-data $USER
-
-```
-
-
-* **Penjelasan:** `$USER` adalah variabel otomatis yang merujuk pada username Anda (dalam hal ini `ay`).
-
----
-
-### Langkah 2: Ubah Kepemilikan Folder
-
-Kita akan mengubah pemilik folder `/var/www/html` agar menjadi milik Anda, namun tetap dalam group `www-data`.
-
-* **Perintah:**
-```bash
-sudo chown -R $USER:www-data /var/www/html
-
-```
-
-
-* **Penjelasan:** `-R` berarti *Recursive* (berlaku untuk semua sub-folder dan file di dalamnya). Sekarang Anda adalah pemilik sah folder tersebut.
-
----
-
-### Langkah 3: Atur Izin Akses (Permissions)
-
-Kita berikan izin baca, tulis, dan eksekusi yang tepat.
-
-* **Perintah:**
-```bash
-sudo chmod -R 775 /var/www/html
-
-```
-
-
-* **Penjelasan:** * `7` (Pemilik/Anda): Bisa baca, tulis, dan hapus.
-* `7` (Group/Apache): Bisa baca dan tulis (penting jika website Anda perlu mengunggah file).
-* `5` (Publik): Hanya bisa baca dan lihat.
-
-
-
----
-
-### Langkah 4: Terapkan Perubahan (Log Out & Log In)
-
-Agar perubahan group ini terbaca oleh sistem Ubuntu, Anda harus melakukan *refresh* pada sesi user Anda.
-
-* **Cara Tercepat di WSL:**
-Tutup terminal Ubuntu Anda, lalu buka kembali. Atau ketik:
-```bash
-newgrp www-data
-
-```
-
-
-
----
-
-### Tips Pro: Membuka Folder Web di VS Code
-
-Sekarang, karena izin sudah diatur, Anda bisa membuka folder website Anda langsung di Visual Studio Code Windows dengan sangat mudah.
-
-1. Masuk ke folder web: `cd /var/www/html`
-2. Ketik perintah: **`code .`**
-3. VS Code di Windows akan terbuka dan terhubung langsung ke Ubuntu WSL. Anda sekarang bisa membuat file `index.php`, mengeditnya, dan langsung menekan `Ctrl + S` tanpa hambatan izin lagi.
-
----
-
-### Ringkasan Status Izin
-
-| Komponen | Status Sebelum | Status Sesudah |
-| --- | --- | --- |
-| **Pemilik (Owner)** | `root` | `ay` (User Anda) |
-| **Izin Edit** | Harus pakai `sudo` | Bisa langsung simpan |
-| **Akses Browser** | Terbatas | Lancar Jaya |
-
----
-
-Sekarang Web Server Anda sudah benar-benar "nyaman" untuk digunakan coding.
-
-Menginstal **phpMyAdmin** adalah langkah yang sangat cerdas. Ini akan memberikan Anda antarmuka visual (berbasis web) untuk mengelola database MySQL, jadi Anda tidak perlu terus-menerus mengetik perintah SQL yang rumit di terminal.
-
-Berikut adalah panduan modul untuk instalasi phpMyAdmin di WSL Ubuntu 24.04 Anda.
-
----
-
-# Modul Tutorial: Instalasi phpMyAdmin (Database Manager)
-
-**Tujuan:** Memasang antarmuka grafis berbasis web untuk mengelola database MySQL dengan mudah.
-
----
-
-## 1. Instalasi Paket phpMyAdmin
-
-Kita akan mengunduh phpMyAdmin beserta ekstensi PHP tambahan yang dibutuhkannya agar berjalan optimal.
-
-* **Perintah:**
+### 1. Instalasi Paket
 ```bash
 sudo apt update
 sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl -y
-
 ```
 
+### 2. Konfigurasi Instalasi (PENTING!)
+Akan muncul jendela biru selama instalasi. Ikuti panduan ini:
+1.  **Web Server Selection:** Pilih `apache2` (tekan **Spasi** hingga ada tanda `[*]`), lalu tekan **Tab** ke `<OK>` dan **Enter**.
+2.  **Configure database:** Pilih `Yes` dan tekan **Enter**.
+3.  **Password:** Masukkan password untuk aplikasi phpMyAdmin (bisa sama dengan password database agar mudah diingat).
 
+### 3. Konfigurasi Akses MySQL
+User `root` MySQL perlu diubah agar bisa login via phpMyAdmin.
+
+1.  Masuk ke terminal MySQL:
+    ```bash
+    sudo mysql
+    ```
+2.  Jalankan perintah SQL berikut (ganti `password_anda` dengan password yang Anda inginkan):
+    ```sql
+    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password_anda';
+    FLUSH PRIVILEGES;
+    EXIT;
+    ```
+3.  Aktifkan modul PHP dan restart Apache:
+    ```bash
+    sudo phpenmod mbstring
+    sudo service apache2 restart
+    ```
+
+### 4. ✅ Verifikasi phpMyAdmin
+*   Buka browser, akses: `localhost/phpmyadmin`
+*   **Login:** Username `root`, Password: Password yang Anda buat pada langkah konfigurasi SQL di atas.
+*   **Status Sukses:** Jika berhasil masuk ke dashboard phpMyAdmin, instalasi berhasil.
+
+> **⚠ Troubleshooting (Error 404):**
+> Jika halaman tidak ditemukan, jalankan perintah ini:
+> ```bash
+> sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
+> sudo a2enconf phpmyadmin.conf
+> sudo service apache2 reload
+> ```
 
 ---
 
-## 2. Konfigurasi Selama Instalasi (PENTING!)
+## 5. Optimasi Izin File & Integrasi VS Code
 
-Saat proses instalasi berjalan, akan muncul beberapa jendela biru (ncurses). **Jangan asal tekan Enter!** Ikuti instruksi ini:
+Secara default, folder website (`/var/www/html`) dimiliki oleh `root`. Anda akan sering gặp error "Permission Denied" saat ingin menyimpan file dari VS Code. Mari kita perbaiki.
 
-1. **Web Server Selection:**
-* Akan ada pilihan `apache2` dan `lighttpd`.
-* Tekan **[Spasi]** pada pilihan **apache2** hingga muncul tanda bintang (`[*]`).
-* Tekan **[Tab]** untuk pindah ke tombol `<OK>`, lalu tekan **[Enter]**.
+### 1. Atur Hak Akses (Permission)
+Jalankan perintah berikut satu per satu di terminal Ubuntu:
 
+*   **Tambahkan user Anda ke group Apache:**
+    ```bash
+    sudo usermod -aG www-data $USER
+    ```
+*   **Ubah kepemilikan folder web menjadi milik Anda:**
+    ```bash
+    sudo chown -R $USER:www-data /var/www/html
+    ```
+*   **Berikan izin akses yang tepat:**
+    ```bash
+    sudo chmod -R 775 /var/www/html
+    ```
 
-2. **Configure database for phpmyadmin with dbconfig-common?**
-* Pilih **<Yes>** dan tekan **[Enter]**.
-
-
-3. **MySQL application password for phpmyadmin:**
-* Masukkan password untuk aplikasi phpMyAdmin (ini internal, bisa disamakan dengan password database Anda agar mudah diingat).
-* Masukkan lagi untuk konfirmasi.
-
-
-
----
-
-## 3. Konfigurasi Hak Akses MySQL (Penting untuk User Root)
-
-Secara default di Ubuntu baru, user `root` MySQL menggunakan plugin `auth_socket`, yang artinya Anda hanya bisa masuk lewat terminal. Agar bisa login ke phpMyAdmin, kita perlu mengubahnya.
-
-1. **Masuk ke MySQL terminal:**
+### 2. Terapkan Perubahan
+Agar perubahan group terbaca, tutup terminal Ubuntu lalu buka kembali, atau ketik:
 ```bash
-sudo mysql
-
+newgrp www-data
 ```
 
-
-2. **Jalankan perintah SQL ini (Ganti `password_anda` dengan password pilihan Anda):**
-```sql
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password_anda';
-FLUSH PRIVILEGES;
-EXIT;
-
-```
-
-
+### 3. Coding dengan VS Code
+1.  Masuk ke folder web:
+    ```bash
+    cd /var/www/html
+    ```
+2.  Buka di VS Code:
+    ```bash
+    code .
+    ```
+3.  **✅ Verifikasi VS Code:**
+    *   VS Code di Windows akan terbuka terhubung ke Ubuntu.
+    *   Buat file baru `test.html`, ketik "Halo", simpan (`Ctrl + S`).
+    *   **Status Sukses:** Jika file tersimpan tanpa error permission, setup berhasil.
 
 ---
 
-## 4. Mengaktifkan Ekstensi PHP & Restart Apache
+## 6. Instalasi Composer (Dependency Manager PHP)
 
-Kita perlu memastikan modul `mbstring` aktif dan Apache mengetahui adanya phpMyAdmin.
+Composer adalah alat untuk mengelola library atau paket pada PHP (wajib untuk Laravel, dll).
 
-* **Perintah:**
+### 1. Instalasi Dependensi PHP
+Pastikan paket pendukung CLI PHP terinstal:
 ```bash
-sudo phpenmod mbstring
-sudo service apache2 restart
-
+sudo apt install php-cli php-mbstring unzip curl -y
 ```
 
-
-
----
-
-## 5. Verifikasi di Browser
-
-1. Buka browser Anda.
-2. Akses alamat: **`localhost/phpmyadmin`**
-3. **Login:**
-* **Username:** `root`
-* **Password:** (Password yang Anda buat di Langkah 3 tadi)
-
-
-
----
-
-## Troubleshooting: Jika muncul error "404 Not Found"
-
-Terkadang Apache tidak otomatis "mengaitkan" phpMyAdmin. Jika `localhost/phpmyadmin` tidak bisa dibuka, jalankan perintah ini untuk membuat *link* manual:
-
+### 2. Download & Instalasi Composer
+Unduh script installer resmi Composer:
 ```bash
-sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
-sudo a2enconf phpmyadmin.conf
-sudo service apache2 reload
-
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php
+sudo mv composer.phar /usr/local/bin/composer
+php -r "unlink('composer-setup.php');"
 ```
 
----
-
-### Ringkasan Operasional Mahasiswa
-
-| Komponen | Detail |
-| --- | --- |
-| **URL Akses** | `http://localhost/phpmyadmin` |
-| **User Default** | `root` |
-| **Fungsi Utama** | Membuat database, tabel, dan ekspor/impor SQL secara visual |
+### 3. ✅ Verifikasi Composer
+Cek versi Composer untuk memastikan berhasil:
+```bash
+composer --version
+```
+*   **Status Sukses:** Jika muncul versi Composer (contoh: `Composer version 2.x.x...`), maka instalasi berhasil.
 
 ---
 
-Sekarang Web Server Anda sudah sangat lengkap! Ada **Apache** (Web Server), **MySQL** (Database), **PHP** (Bahasa), dan **phpMyAdmin** (Manager).
+## 7. Instalasi Node.js & npm (JavaScript Runtime)
 
-# Instal Composer for Linux
-https://share.google/aimode/8rbvt5ydwkS8R0Jhn
+Node.js memungkinkan Anda menjalankan JavaScript di luar browser (backend) dan menggunakan tools modern seperti React, Vue, atau Vite.
 
-> # Cara Instal MCP Context7 for Opencode
-https://github.com/upstash/context7
+### 1. Instalasi Node.js
+Kita akan menggunakan repositori default Ubuntu untuk kemudahan instalasi.
+```bash
+sudo apt install nodejs npm -y
+```
+
+### 2. ✅ Verifikasi Node.js & npm
+Cek versi yang terinstal:
+```bash
+node -v
+npm -v
+```
+*   **Status Sukses:**
+    *   Jika `node -v` menampilkan versi (contoh: `v18.x.x` atau `v20.x.x`).
+    *   Jika `npm -v` menampilkan versi (contoh: `9.x.x` atau `10.x.x`).
+    *   Maka Node.js siap digunakan.
+
+> **Catatan:** Jika Anda memerlukan versi Node.js yang lebih spesifik atau terbaru di masa depan, Anda dapat menggunakan **NVM (Node Version Manager)**, namun untuk panduan dasar ini, versi `apt` sudah cukup untuk memulai.
+
+---
+
+## 8. Penutup & Langkah Selanjutnya
+
+Selamat! 🎉 Anda sekarang memiliki lingkungan development web yang **LENGKAP**:
+*   ✅ **OS:** Ubuntu 24.04 via WSL
+*   ✅ **Web Server:** Apache
+*   ✅ **Database:** MySQL & phpMyAdmin
+*   ✅ **Bahasa Backend:** PHP & Composer
+*   ✅ **Bahasa Frontend/Tools:** Node.js & npm
+*   ✅ **Editor:** VS Code Terintegrasi
+
+### Langkah Selanjutnya untuk Pembelajaran:
+1.  **Mulai Coding:** Buat file `index.php` di `/var/www/html` dan coba tampilkan "Hello World".
+2.  **Instalasi Framework:**
+    *   PHP: Coba instal Laravel (`composer create-project laravel/laravel contoh-app`).
+    *   JS: Coba instal React/Vite (`npm create vite@latest`).
+3.  **Git:** Instal Git (`sudo apt install git`) untuk version control.
+
+Selamat belajar dan semoga sukses dalam praktikum! 🚀
