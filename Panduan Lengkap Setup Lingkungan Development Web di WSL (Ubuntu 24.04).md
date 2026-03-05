@@ -280,6 +280,58 @@ npm -v
 
 > **Catatan:** Jangan pakai apt install standar karena versinya sering jadul. Kita akan pakai NVM (Node Version Manager) agar kita bisa gonta-ganti versi Node.js dengan mudah sesuai kebutuhan project
 
+> **Jika Mengalami Error** : Command 'nvm' not found, but there are 14 similar ones.
+
+Lakukan Langkah Berikut :
+
+## 1. Muat Ulang Konfigurasi Bash
+Seringkali NVM sudah terinstal tapi terminal belum "sadar". Jalankan perintah ini:
+
+```bash
+source ~/.bashrc
+```
+
+Setelah itu, coba ketik `nvm -v`. Jika muncul angka versi, berarti masalah selesai. 
+## 2. Instal Ulang NVM (Jika Langkah 1 Gagal)
+Jika tetap tidak ditemukan, instal kembali menggunakan script resmi untuk memastikan semua dependensi terpasang: 
+``` bash
+# Update package list
+sudo apt update
+
+# Instal curl jika belum ada
+sudo apt install curl -y
+
+# Jalankan script instalasi NVM terbaru
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+```
+## 3. Masukkan Konfigurasi ke .bashrc Secara Manual
+Jika setelah instalasi nvm masih tidak berfungsi, script instalasi mungkin gagal menulis ke file .bashrc Anda secara otomatis. 
+Buka file .bashrc dengan editor teks:
+
+`` bash
+nano ~/.bashrc
+```
+
+scroll ke bagian paling bawah file, lalu tempelkan kode berikut:
+
+``` bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Memuat nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # Memuat nvm bash_completion
+```
+
+Simpan dengan menekan `Ctrl + O`, lalu Enter. Keluar dengan `Ctrl + X`.
+Jalankan lagi: `source ~/.bashrc`. 
+## 4. Instal Node.js 
+Setelah perintah nvm sudah dikenali, Anda bisa langsung menginstal Node.js versi terbaru (LTS): 
+``` bash
+nvm install --lts
+```
+
+Tips Tambahan: Pastikan Anda tidak menggunakan sudo saat menjalankan perintah nvm, karena NVM dirancang untuk berjalan di level user agar tidak terjadi masalah perizinan (permission) di kemudian hari.
+
+
 ---
 
 ## 8. Penutup & Langkah Selanjutnya
