@@ -260,25 +260,78 @@ composer --version
 ## 7. Instalasi Node.js & npm (JavaScript Runtime)
 
 Node.js memungkinkan Anda menjalankan JavaScript di luar browser (backend) dan menggunakan tools modern seperti React, Vue, atau Vite.
+# Instal Node.js Menggunakan NVM
+## 1. Update Sistem
 
-### 1. Instalasi Node.js
-```bash # Install NVM
-curl -o- https://githubusercontent.com | bash
-# Restart terminal, lalu install node terbaru
-nvm install node
-```
-### 2. ✅ Verifikasi Node.js & npm
-Cek versi yang terinstal:
 ```bash
+sudo apt update
+sudo apt install curl -y
+````
+
+---
+
+## 2. Instal NVM
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
+
+---
+
+## 3. Aktifkan NVM
+
+Buka file konfigurasi:
+
+```bash
+nano ~/.bashrc
+```
+
+Tambahkan di bagian paling bawah:
+
+```bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+```
+
+Simpan dengan:
+
+```
+CTRL + O → Enter → CTRL + X
+```
+
+---
+
+## 4. Muat Ulang Terminal
+
+```bash
+source ~/.bashrc
+```
+
+---
+
+## 5. Instal Node.js
+
+Instal versi stabil (LTS):
+
+```bash
+nvm install --lts
+```
+
+---
+
+## 6. Verifikasi Instalasi
+
+```bash
+nvm -v
 node -v
 npm -v
 ```
-*   **Status Sukses:**
-    *   Jika `node -v` menampilkan versi (contoh: `v18.x.x` atau `v20.x.x`).
-    *   Jika `npm -v` menampilkan versi (contoh: `9.x.x` atau `10.x.x`).
-    *   Maka Node.js siap digunakan.
 
-> **Catatan:** Jangan pakai apt install standar karena versinya sering jadul. Kita akan pakai NVM (Node Version Manager) agar kita bisa gonta-ganti versi Node.js dengan mudah sesuai kebutuhan project
+Jika semua menampilkan **nomor versi**, instalasi berhasil.
+
+```
+
 
 > **Jika Mengalami Error** : Command 'nvm' not found, but there are 14 similar ones.
 
