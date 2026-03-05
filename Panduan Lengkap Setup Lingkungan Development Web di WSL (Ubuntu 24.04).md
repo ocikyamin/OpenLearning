@@ -262,11 +262,11 @@ composer --version
 Node.js memungkinkan Anda menjalankan JavaScript di luar browser (backend) dan menggunakan tools modern seperti React, Vue, atau Vite.
 
 ### 1. Instalasi Node.js
-Kita akan menggunakan repositori default Ubuntu untuk kemudahan instalasi.
-```bash
-sudo apt install nodejs npm -y
+```bash # Install NVM
+curl -o- https://githubusercontent.com | bash
+# Restart terminal, lalu install node terbaru
+nvm install node
 ```
-
 ### 2. ✅ Verifikasi Node.js & npm
 Cek versi yang terinstal:
 ```bash
@@ -278,7 +278,7 @@ npm -v
     *   Jika `npm -v` menampilkan versi (contoh: `9.x.x` atau `10.x.x`).
     *   Maka Node.js siap digunakan.
 
-> **Catatan:** Jika Anda memerlukan versi Node.js yang lebih spesifik atau terbaru di masa depan, Anda dapat menggunakan **NVM (Node Version Manager)**, namun untuk panduan dasar ini, versi `apt` sudah cukup untuk memulai.
+> **Catatan:** Jangan pakai apt install standar karena versinya sering jadul. Kita akan pakai NVM (Node Version Manager) agar kita bisa gonta-ganti versi Node.js dengan mudah sesuai kebutuhan project
 
 ---
 
