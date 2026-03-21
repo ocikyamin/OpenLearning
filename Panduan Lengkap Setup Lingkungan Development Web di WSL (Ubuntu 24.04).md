@@ -387,21 +387,43 @@ Tips Tambahan: Pastikan Anda tidak menggunakan sudo saat menjalankan perintah nv
 
 ---
 
-## 8. Penutup & Langkah Selanjutnya
+### **1\. Instalasi Laravel Installer Global**
 
-Selamat! 🎉 Anda sekarang memiliki lingkungan development web yang **LENGKAP**:
-*   ✅ **OS:** Ubuntu 24.04 via WSL
-*   ✅ **Web Server:** Apache
-*   ✅ **Database:** MySQL & phpMyAdmin
-*   ✅ **Bahasa Backend:** PHP & Composer
-*   ✅ **Bahasa Frontend/Tools:** Node.js & npm
-*   ✅ **Editor:** VS Code Terintegrasi
+Jalankan perintah ini untuk mengunduh paket installer Laravel secara global menggunakan Composer:
 
-### Langkah Selanjutnya untuk Pembelajaran:
-1.  **Mulai Coding:** Buat file `index.php` di `/var/www/html` dan coba tampilkan "Hello World".
-2.  **Instalasi Framework:**
-    *   PHP: Coba instal Laravel (`composer create-project laravel/laravel contoh-app`).
-    *   JS: Coba instal React/Vite (`npm create vite@latest`).
-3.  **Git:** Instal Git (`sudo apt install git`) untuk version control.
+composer global require laravel/installer
 
-Selamat belajar dan semoga sukses dalam praktikum! 🚀
+### **2\. Konfigurasi Path Shell (.bashrc)**
+
+Agar terminal mengenali perintah laravel, Anda perlu menambahkan direktori bin Composer ke dalam variabel $PATH.
+
+**Langkah Manual:**
+
+1. Buka file .bashrc dengan editor nano:  
+   nano \~/.bashrc
+
+2. Gulir ke bagian paling bawah file dan tempelkan baris berikut:  
+   export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+
+3. Simpan dengan menekan Ctrl \+ O, lalu Enter. Keluar dengan Ctrl \+ X.
+
+### **3\. Aktivasi Perubahan Path**
+
+Agar perubahan di atas langsung aktif di sesi terminal yang sedang terbuka tanpa harus restart, jalankan perintah source:
+
+source \~/.bashrc
+
+### **4\. Verifikasi dan Testing**
+
+Pastikan installer sudah terpasang dengan benar dan coba buat satu proyek uji coba.
+
+**Cek Versi:**
+
+laravel \--version
+
+**Buat Proyek Baru:**
+
+\# Membuat proyek bernama 'my-app'  
+laravel new my-app
+
+**Catatan:** Jika muncul pilihan saat instalasi (seperti starter kit atau database), pilih sesuai preferensi Anda (misal: No starter kit, MySQL).
