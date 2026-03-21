@@ -390,8 +390,9 @@ Tips Tambahan: Pastikan Anda tidak menggunakan sudo saat menjalankan perintah nv
 ### **1\. Instalasi Laravel Installer Global**
 
 Jalankan perintah ini untuk mengunduh paket installer Laravel secara global menggunakan Composer:
-
+```bash
 composer global require laravel/installer
+```
 
 ### **2\. Konfigurasi Path Shell (.bashrc)**
 
@@ -399,11 +400,14 @@ Agar terminal mengenali perintah laravel, Anda perlu menambahkan direktori bin C
 
 **Langkah Manual:**
 
-1. Buka file .bashrc dengan editor nano:  
-   nano \~/.bashrc
-
+1. Buka file .bashrc dengan editor nano:
+```bash
+nano \~/.bashrc
+```
 2. Gulir ke bagian paling bawah file dan tempelkan baris berikut:  
+   ```bash
    export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+   ```
 
 3. Simpan dengan menekan Ctrl \+ O, lalu Enter. Keluar dengan Ctrl \+ X.
 
@@ -411,7 +415,9 @@ Agar terminal mengenali perintah laravel, Anda perlu menambahkan direktori bin C
 
 Agar perubahan di atas langsung aktif di sesi terminal yang sedang terbuka tanpa harus restart, jalankan perintah source:
 
+```bash
 source \~/.bashrc
+```
 
 ### **4\. Verifikasi dan Testing**
 
@@ -419,11 +425,14 @@ Pastikan installer sudah terpasang dengan benar dan coba buat satu proyek uji co
 
 **Cek Versi:**
 
+```bash
 laravel \--version
+```
 
 **Buat Proyek Baru:**
-
+```bash
 \# Membuat proyek bernama 'my-app'  
 laravel new my-app
+```
 
 **Catatan:** Jika muncul pilihan saat instalasi (seperti starter kit atau database), pilih sesuai preferensi Anda (misal: No starter kit, MySQL).
