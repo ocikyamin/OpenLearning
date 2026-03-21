@@ -387,14 +387,14 @@ Tips Tambahan: Pastikan Anda tidak menggunakan sudo saat menjalankan perintah nv
 
 ---
 
-### **1\. Instalasi Laravel Installer Global**
+> ### **1\. Instalasi Laravel Installer Global**
 
 Jalankan perintah ini untuk mengunduh paket installer Laravel secara global menggunakan Composer:
 ```bash
 composer global require laravel/installer
 ```
 
-### **2\. Konfigurasi Path Shell (.bashrc)**
+> ### **2\. Konfigurasi Path Shell (.bashrc)**
 
 Agar terminal mengenali perintah laravel, Anda perlu menambahkan direktori bin Composer ke dalam variabel $PATH.
 
@@ -411,7 +411,7 @@ nano \~/.bashrc
 
 3. Simpan dengan menekan Ctrl \+ O, lalu Enter. Keluar dengan Ctrl \+ X.
 
-### **3\. Aktivasi Perubahan Path**
+> ### **3\. Aktivasi Perubahan Path**
 
 Agar perubahan di atas langsung aktif di sesi terminal yang sedang terbuka tanpa harus restart, jalankan perintah source:
 
@@ -419,7 +419,7 @@ Agar perubahan di atas langsung aktif di sesi terminal yang sedang terbuka tanpa
 source \~/.bashrc
 ```
 
-### **4\. Verifikasi dan Testing**
+> ### **4\. Verifikasi dan Testing**
 
 Pastikan installer sudah terpasang dengan benar dan coba buat satu proyek uji coba.
 
