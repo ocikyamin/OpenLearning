@@ -9,7 +9,7 @@ Koleksi e-book gratis yang berguna untuk belajar pemrograman dan teknologi. Semu
 
 | No | Judul | Penulis | Tahun | Ukuran | Link |
 |----|-------|---------|-------|--------|------|
-| 1 | IoT Terintegrasi dengan Machine Learning Data Analytics | onno, ama | 2026 | 6 MB | [Download](https://lnkd.in/g4HiQ_jU) |
+| 1 | IoT Terintegrasi dengan Machine Learning Data Analytics | onno, ama | 2026 | 6 MB | [Download](https://drive.google.com/drive/folders/190W5pbuPYvDHsipXUo9UFIcKvOvGCUTO) |
 | 2 | Python untuk Pemula Menuju AI & Machine Learning | onno, ama | 2026 | 5.8 MB | [Download](https://drive.google.com/drive/folders/190W5pbuPYvDHsipXUo9UFIcKvOvGCUTO) |
 | 3 | AI dalam Digital Marketing & Media Sosial | onno, ama | 2026 | 19.8 MB | [Download](https://drive.google.com/drive/folders/190W5pbuPYvDHsipXUo9UFIcKvOvGCUTO) |
 | 4 | AI untuk Manajer Non-Teknis | onno, ama | 2026 | 1.6 MB | [Download](https://drive.google.com/drive/folders/190W5pbuPYvDHsipXUo9UFIcKvOvGCUTO) |
