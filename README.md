@@ -64,12 +64,6 @@ Semua materi disimpan dalam format **Markdown (`.md`)** agar:
 
 ---
 
-## 🤝 Kontribusi
-
-Repo ini terbuka untuk pengembangan lebih lanjut. Jika kamu ingin menambahkan materi atau memperbarui konten, feel free untuk membuat pull request atau fork repo ini.
-
----
-
 ## ⭐ Dukungan
 
 Jika repo ini membantu, jangan lupa kasih ⭐ untuk motivasi kami terus mengembangkan materi lainnya!
