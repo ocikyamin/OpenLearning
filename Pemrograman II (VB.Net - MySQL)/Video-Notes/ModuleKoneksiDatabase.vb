@@ -1,5 +1,3 @@
-```vb
-
    Dim MySQLKonek = "Server=localhost;Database=db_aplikasi_vbnet;User=root;Password=root"
    Public Koneksi As New MySqlConnection(MySQLKonek)
 
@@ -26,4 +24,3 @@
        Koneksi.Close()
        Return Koneksi
    End Function
-```
