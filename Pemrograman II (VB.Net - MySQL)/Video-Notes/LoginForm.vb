@@ -1,6 +1,6 @@
 Try
 Konek()
-cmd = New MySqlCommand("SELECT * FROM users WHERE email = '" & Email & "' AND password ='" & Password & "' ", Koneksi)
+cmd = New MySqlCommand("SELECT * FROM nama_tabel WHERE email = '" & Username & "' AND password ='" & Password & "' ", Koneksi)
 'Dim reader As MySqlDataReader
 dr = cmd.ExecuteReader()
 dr.Read()
