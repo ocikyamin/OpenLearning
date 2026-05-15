@@ -429,51 +429,103 @@ Cari Transaksi :
 # Coding txtCari_TextChanged
 
 ```vbnet id="r715"
+```vbnet
 Private Sub txtCari_TextChanged(
     sender As Object,
     e As EventArgs
 ) Handles txtCari.TextChanged
 
-    Call Konek()
+    Try
 
-    Dim query As String =
-        "SELECT
-            transaksi.id_transaksi,
-            transaksi.kode_transaksi,
-            transaksi.tanggal,
-            pelanggan.nama_pelanggan,
-            users.nama_user,
-            transaksi.berat,
-            transaksi.harga_perkg,
-            transaksi.total_bayar,
-            transaksi.status_laundry
-         FROM transaksi
-         JOIN pelanggan
-         ON transaksi.id_pelanggan =
-            pelanggan.id_pelanggan
-         JOIN users
-         ON transaksi.id_user =
-            users.id_user
-         WHERE pelanggan.nama_pelanggan
-         LIKE '%" &
-         txtCari.Text &
-         "%'"
+        Call Konek()
 
-    da = New MySqlDataAdapter(
-        query,
-        Koneksi
-    )
+        Dim query As String =
+            "SELECT
+                transaksi.id_transaksi,
+                transaksi.kode_transaksi,
+                transaksi.tanggal,
+                pelanggan.nama_pelanggan,
+                users.nama_user,
+                transaksi.berat,
+                transaksi.harga_perkg,
+                transaksi.total_bayar,
+                transaksi.status_laundry
+             FROM transaksi
+             JOIN pelanggan
+             ON transaksi.id_pelanggan =
+                pelanggan.id_pelanggan
+             JOIN users
+             ON transaksi.id_user =
+                users.id_user
+             WHERE pelanggan.nama_pelanggan
+             LIKE @cari
+             ORDER BY transaksi.id_transaksi DESC"
 
-    dt = New DataTable
+        cmd = New MySqlCommand(
+            query,
+            Koneksi
+        )
 
-    da.Fill(dt)
+        cmd.Parameters.AddWithValue(
+            "@cari",
+            "%" & txtCari.Text & "%"
+        )
 
-    dgvTransaksi.DataSource = dt
+        da = New MySqlDataAdapter(cmd)
 
-    dgvTransaksi.Columns(0).Visible =
-        False
+        dt = New DataTable
 
-    Call Diskonek()
+        da.Fill(dt)
+
+        dgvTransaksi.DataSource = dt
+
+        If dgvTransaksi.Columns.Count > 0 Then
+
+            dgvTransaksi.Columns(0).Visible =
+                False
+
+            dgvTransaksi.Columns(1).HeaderText =
+                "Kode"
+
+            dgvTransaksi.Columns(2).HeaderText =
+                "Tanggal"
+
+            dgvTransaksi.Columns(3).HeaderText =
+                "Pelanggan"
+
+            dgvTransaksi.Columns(4).HeaderText =
+                "User"
+
+            dgvTransaksi.Columns(5).HeaderText =
+                "Berat"
+
+            dgvTransaksi.Columns(6).HeaderText =
+                "Harga/Kg"
+
+            dgvTransaksi.Columns(7).HeaderText =
+                "Total Bayar"
+
+            dgvTransaksi.Columns(8).HeaderText =
+                "Status"
+
+            dgvTransaksi.Columns(7).
+            DefaultCellStyle.Format = "N0"
+
+            dgvTransaksi.AutoSizeColumnsMode =
+                DataGridViewAutoSizeColumnsMode.Fill
+
+        End If
+
+        Call Diskonek()
+
+    Catch ex As Exception
+
+        MsgBox(
+            "Error Pencarian : " &
+            ex.Message
+        )
+
+    End Try
 
 End Sub
 ```
