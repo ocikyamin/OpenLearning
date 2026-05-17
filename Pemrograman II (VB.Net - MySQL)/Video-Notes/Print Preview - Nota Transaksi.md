@@ -433,9 +433,3 @@ Aplikasi sudah memiliki:
 ✅ Search
 ✅ Total Pendapatan
 ✅ Cetak Nota Laundry
-
-Dan sudah sangat layak dijadikan:
-
-* mini project kampus,
-* portofolio mahasiswa,
-* atau bahan praktikum VB.NET modern.
