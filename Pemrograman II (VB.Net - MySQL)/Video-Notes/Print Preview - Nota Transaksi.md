@@ -4,7 +4,7 @@
 
 ---
 
-# Tujuan PART 8
+# Tujuan 
 
 Pada tahap ini mahasiswa akan belajar:
 
