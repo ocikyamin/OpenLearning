@@ -211,6 +211,60 @@ const ambilData = async () => {
 
 ---
 
+---
+
+## Pendekatan B — Options API (tanpa `<script setup>`)
+
+```vue
+<template>
+  <!-- template SAMA seperti di atas -->
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import {
+  IonContent, IonHeader, IonPage,
+  IonTitle, IonToolbar, IonButton
+} from '@ionic/vue'
+import EndPointAccess from '@/services/EndPointAccess'
+
+export default defineComponent({
+  name: 'Home',
+  data() {
+    return {
+      dataUsers: null as any
+    }
+  },
+  methods: {
+    async ambilData() {
+      const access = new EndPointAccess('https://jsonplaceholder.typicode.com/users')
+      const response = await access.getRes()
+      this.dataUsers = response.data
+    }
+  },
+  components: {
+    IonContent, IonHeader, IonPage,
+    IonTitle, IonToolbar, IonButton
+  }
+})
+</script>
+
+<style scoped>
+/* ... style tetap sama ... */
+</style>
+```
+
+### Perbedaan dengan `<script setup>`:
+
+| Options API | `<script setup>` |
+|---|---|
+| `data()` return objek → `this.dataUsers` | `const dataUsers = ref()` → `dataUsers.value` |
+| `methods: { ambilData() { ... } }` → `this.ambilData()` | `const ambilData = () => {}` → langsung `ambilData` |
+| `components: { ... }` harus di-declare | Import otomatis jadi komponen |
+| `defineComponent` memberi type inference lebih baik | Lebih ringkas, kurang boilerplate |
+
+---
+
 ## 3. TABEL PERBANDINGAN
 
 | Bagian | Kode Asli (Salah) | Kode Rekomendasi (Benar) |
