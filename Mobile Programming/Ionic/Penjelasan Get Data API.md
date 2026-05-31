@@ -88,7 +88,7 @@ export default defineComponent({
 
 ## 1. IDENTIFIKASI ERROR
 
-### Error #1: Mencampur `<script setup>` dengan `export default defineComponent()`
+### Error: Mencampur `<script setup>` dengan `export default defineComponent()`
 
 Di Vue 3 ada **dua cara menulis komponen** yang TIDAK BOLEH dicampur:
 
@@ -100,16 +100,6 @@ Di Vue 3 ada **dua cara menulis komponen** yang TIDAK BOLEH dicampur:
 | Daftar komponen | Import otomatis terdaftar | `components: { ... }` harus ditulis manual |
 
 **Kenapa error?** Ketika compiler Vue melihat `<script setup>`, ia menganggap seluruh isi script adalah **setup function**. `export default defineComponent({...})` akan **diabaikan atau error** karena Vue tidak mengharapkan export default di dalam `<script setup>`.
-
-### Error #2: Data tabel masih **hardcoded** (statis)
-
-```html
-<td>1</td>
-<td>tes@gmail.com</td>
-<td>xxx</td>
-```
-
-Data di atas tidak akan berubah meskipun tombol "Get Data" diklik. Seharusnya menggunakan **binding** dengan `{{ }}` agar data dari API tampil.
 
 ---
 
@@ -220,7 +210,6 @@ const ambilData = async () => {
 | Method | `methods: { ambilData() { ... } }` | `const ambilData = async () => { ... }` |
 | Akses data di method | `this.dataUsers = ...` | `dataUsers.value = ...` |
 | Daftar komponen | `components: { IonContent, ... }` | Tidak perlu — import otomatis terdaftar |
-| Tampil data tabel | Hardcode: `1`, `tes@gmail.com`, `xxx` | Binding: `{{ index + 1 }}`, `{{ user.email }}`, `{{ user.company?.name }}` |
 | Async request | `.then()` callback | `async / await` (lebih bersih) |
 
 ---
@@ -302,5 +291,4 @@ Maka di template:
 
 1. **Jangan mencampur** `<script setup>` dengan `export default defineComponent()` — pilih salah satu
 2. Di `<script setup>`: pakai `ref()` untuk data reaktif, `const fungsi` untuk method
-3. Data dari API harus di-**bind** dengan `{{ }}` di template, jangan hardcode
-4. `async / await` lebih modern dan mudah dibaca daripada `.then().then()`
+3. `async / await` lebih modern dan mudah dibaca daripada `.then().then()`
