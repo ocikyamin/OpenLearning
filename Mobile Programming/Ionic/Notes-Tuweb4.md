@@ -1,3 +1,24 @@
+```ts
+import axios from 'axios'
+
+export default class EndPointAccess{
+
+    theUrl : string
+    constructor (url:string){
+        this.theUrl = url;
+    }
+
+
+    async getRes() {      
+const response = await axios.get(this.theUrl); 
+return response; 
+} 
+
+}
+
+```
+```html
+
 <template>
   <ion-page>
     <ion-header :translucent="true">
@@ -120,3 +141,4 @@ body {
   text-decoration: none;
 }
 </style>
+```
