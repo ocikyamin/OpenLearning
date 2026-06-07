@@ -1,3 +1,4 @@
+## Endpoint
 ```ts
 import axios from 'axios'
 
@@ -17,6 +18,8 @@ return response;
 }
 
 ```
+
+## HomePage.vue
 ```html
 
 <template>
