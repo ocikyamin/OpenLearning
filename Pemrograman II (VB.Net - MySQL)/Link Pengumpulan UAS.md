@@ -16,4 +16,4 @@
 |---------|----------------|-----------|--------|----------------|-------------------------------------------------------------------------------------------------------|
 | PTIK 4E | 07.15 - 09.45  | Lab 3-F   | 40     | ✅ Dibuka      | 🔗 [Klik di sini](https://drive.google.com/drive/folders/1ZUyn-k93TkGPfd__keBOlb8Qn_PRVhtl?usp=sharing) |
 | PTIK 4F | 09.45 - 12.14  | Lab 3-F   | 23     | ✅ Dibuka      | 🔗 [Klik di sini](https://drive.google.com/drive/folders/13o5UVsFvBuwOt6ETXN7eQzMGje08HPcY?usp=sharing) |
-| PTIK 4A | 13.30 - 16.00  | Lab 3-E   | 35     | 🔄 On Progress | 🔄 _On progress_                                                                                      |
+| PTIK 4A | 13.30 - 16.00  | Lab 3-E   | 35     | ✅ Dibuka      | 🔗 [Klik di sini](https://drive.google.com/drive/folders/1WP781je-0rBo8-NB2sCPv0KHpNqSlM9w?usp=sharing)                                                                                 |
