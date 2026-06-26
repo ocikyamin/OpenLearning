@@ -89,15 +89,15 @@ Copy prompt `6. Master Prompt - Menyiapkan Dokumen Spesifikasi Desain UI.md`, pa
 
 ## Struktur Folder
 
-```mermaid
-graph LR
-    R[Master Prompt Framework PARTS] --> R1[README.md]
-    R --> R2[1. Master Prompt ... PRD.md]
-    R --> R3[2. Master Prompt ... Tech Spec.md]
-    R --> R4[3. Master Prompt ... Task.md]
-    R --> R5[4. Master Template ... Coding.md]
-    R --> R6[5. Master Prompt ... Verifikasi.md]
-    R --> R7[6. Master Prompt ... UI Design.md]
-    R --> C[Case_Sistem_Pengaduan]
-    C --> C1[Flow_Bisnis_Sistem_Pengaduan.md]
+```
+📁 Master Prompt Framework PARTS/
+├── 📄 README.md
+├── 📄 1. Master Prompt - Menyiapkan Dokumen PRD.md
+├── 📄 2. Master Prompt - Menyiapkan Tech Specification.md
+├── 📄 3. Master Prompt - Menyusun Task.md
+├── 📄 4. Master Template - Implementasi Task.md
+├── 📄 5. Master Prompt - Verifikasi.md
+├── 📄 6. Master Prompt - Menyiapkan Dokumen Spesifikasi Desain UI.md
+└── 📁 Case_Sistem_Pengaduan/
+    └── 📄 Flow_Bisnis_Sistem_Pengaduan.md
 ```
