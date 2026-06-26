@@ -8,50 +8,17 @@ Framework ini terdiri dari 6 stage berantai untuk menyusun dan mengimplementasik
 
 ```mermaid
 graph LR
-    CS[Case Study] --> S1[Stage 1<br/>PRD]
-    S1 --> S2[Stage 2<br/>Tech Spec]
-    S2 --> S3[Stage 3<br/>Task Breakdown]
-    S3 --> S4[Stage 4<br/>Implementasi]
-    S4 --> S5[Stage 5<br/>Verifikasi]
-    S1 -.-> S6[Stage 6<br/>UI Design]
-
-    S1 -.-> |Stage1_PRD.md| S2
-    S2 -.-> |Stage2_TechSpec.md| S3
-    S3 -.-> |Stage3_TaskList.md| S4
-    S4 -.-> |Kode| S5
-    S1 -.-> |Stage1_PRD.md| S6
+    CS[Case Study] --> S1[Stage 1: PRD]
+    S1 --> |Stage1_PRD.md| S2[Stage 2: Tech Spec]
+    S2 --> |Stage2_TechSpec.md| S3[Stage 3: Task Breakdown]
+    S3 --> |Stage3_TaskList.md| S4[Stage 4: Implementasi]
+    S4 --> |Kode| S5[Stage 5: Verifikasi]
 ```
 
 ```mermaid
-graph TD
-    subgraph Input
-        CS[Case Study Bisnis]
-    end
-    subgraph Proses
-        S1[Stage 1: PRD]
-        S2[Stage 2: Tech Spec]
-        S3[Stage 3: Task Breakdown]
-        S4[Stage 4: Implementasi]
-        S5[Stage 5: Verifikasi]
-        S6[Stage 6: UI Design]
-    end
-    subgraph Output
-        O1[Stage1_PRD.md]
-        O2[Stage2_TechSpec.md]
-        O3[Stage3_TaskList.md]
-        O4[Kode Program]
-        O5[Stage5_Verifikasi.md]
-        O6[DESIGN.md]
-    end
-
-    CS --> S1
-    S1 --> O1 --> S2
-    S2 --> O2 --> S3
-    S3 --> O3 --> S4
-    S4 --> O4 --> S5
-    S5 --> O5
-    O1 -.-> S6
-    S6 --> O6
+graph LR
+    S1[Stage 1: PRD] -.-> |Stage1_PRD.md| S6[Stage 6: UI Design]
+    S6 --> |DESIGN.md| FINAL[Dokumen Desain]
 ```
 
 ---
