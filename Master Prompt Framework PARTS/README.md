@@ -6,32 +6,75 @@ Framework ini terdiri dari 6 stage berantai untuk menyusun dan mengimplementasik
 
 ## Alur Stage
 
+```mermaid
+graph LR
+    CS[Case Study] --> S1[Stage 1<br/>PRD]
+    S1 --> S2[Stage 2<br/>Tech Spec]
+    S2 --> S3[Stage 3<br/>Task Breakdown]
+    S3 --> S4[Stage 4<br/>Implementasi]
+    S4 --> S5[Stage 5<br/>Verifikasi]
+    S1 -.-> S6[Stage 6<br/>UI Design]
+
+    S1 -.-> |Stage1_PRD.md| S2
+    S2 -.-> |Stage2_TechSpec.md| S3
+    S3 -.-> |Stage3_TaskList.md| S4
+    S4 -.-> |Kode| S5
+    S1 -.-> |Stage1_PRD.md| S6
 ```
-Stage 1: PRD            ← Input: Case Study Bisnis
-  ↓ Output: Stage1_PRD.md
-Stage 2: Tech Spec      ← Input: Stage1_PRD.md
-  ↓ Output: Stage2_TechSpec.md
-Stage 3: Task Breakdown ← Input: Stage2_TechSpec.md
-  ↓ Output: Stage3_TaskList.md
-Stage 4: Implementasi   ← Input: 1 task dari Stage3_TaskList.md (via OpenCode)
-  ↓ Output: Kode program
-Stage 5: Verifikasi     ← Input: Kode + Tech Spec
-  ↓ Output: Stage5_Verifikasi.md
-Stage 6: UI Design      ← Input: PRD / Deskripsi Fitur
-  ↓ Output: DESIGN.md
+
+```mermaid
+graph TD
+    subgraph Input
+        CS[Case Study Bisnis]
+    end
+    subgraph Proses
+        S1[Stage 1: PRD]
+        S2[Stage 2: Tech Spec]
+        S3[Stage 3: Task Breakdown]
+        S4[Stage 4: Implementasi]
+        S5[Stage 5: Verifikasi]
+        S6[Stage 6: UI Design]
+    end
+    subgraph Output
+        O1[Stage1_PRD.md]
+        O2[Stage2_TechSpec.md]
+        O3[Stage3_TaskList.md]
+        O4[Kode Program]
+        O5[Stage5_Verifikasi.md]
+        O6[DESIGN.md]
+    end
+
+    CS --> S1
+    S1 --> O1 --> S2
+    S2 --> O2 --> S3
+    S3 --> O3 --> S4
+    S4 --> O4 --> S5
+    S5 --> O5
+    O1 -.-> S6
+    S6 --> O6
 ```
 
 ---
 
 ## Cara Penggunaan
 
-1. **Pilih Case Study** — Buka folder `Case_{Nama}/` dan baca dokumen bisnisnya
-2. **Stage 1** — Copy prompt `1. Master Prompt - Menyiapkan Dokumen PRD.md` ke LLM, paste case study di bagian `### Input`, simpan output sebagai `Stage1_PRD.md`
-3. **Stage 2** — Copy prompt `2. Master Prompt - Menyiapkan Tech Spec...`, paste `Stage1_PRD.md` di bagian `### Input`, simpan output sebagai `Stage2_TechSpec.md`
-4. **Stage 3** — Copy prompt `3. Master Prompt - Menyusun Task...`, paste `Stage2_TechSpec.md`, simpan output sebagai `Stage3_TaskList.md`
-5. **Stage 4** — Buka OpenCode, gunakan template `4. Master Template - Implementasi Task.md`, kerjakan 1 task per prompt sesuai urutan di Task List
-6. **Stage 5** — Copy prompt `5. Master Prompt - Verifikasi...`, paste kode yang dihasilkan + bagian Tech Spec relevan
-7. **Stage 6** — Copy prompt `6. Master Prompt - Menyiapkan Dokumen Spesifikasi Desain UI...`, paste PRD atau deskripsi fitur
+**Stage 1 — PRD**
+Copy prompt `1. Master Prompt - Menyiapkan Dokumen PRD.md` ke LLM, paste case study di bagian `### Input`, simpan output sebagai `Stage1_PRD.md`
+
+**Stage 2 — Tech Spec**
+Copy prompt `2. Master Prompt - Menyiapkan Tech Specification.md`, paste `Stage1_PRD.md` di bagian `### Input`, simpan output sebagai `Stage2_TechSpec.md`
+
+**Stage 3 — Task Breakdown**
+Copy prompt `3. Master Prompt - Menyusun Task.md`, paste `Stage2_TechSpec.md`, simpan output sebagai `Stage3_TaskList.md`
+
+**Stage 4 — Implementasi**
+Buka OpenCode, gunakan template `4. Master Template - Implementasi Task.md`, kerjakan 1 task per prompt sesuai urutan di Task List
+
+**Stage 5 — Verifikasi**
+Copy prompt `5. Master Prompt - Verifikasi.md`, paste kode yang dihasilkan + bagian Tech Spec relevan
+
+**Stage 6 — UI Design**
+Copy prompt `6. Master Prompt - Menyiapkan Dokumen Spesifikasi Desain UI.md`, paste PRD atau deskripsi fitur
 
 ---
 
@@ -39,22 +82,22 @@ Stage 6: UI Design      ← Input: PRD / Deskripsi Fitur
 
 - Kerjakan stage **berurutan**, jangan melompat
 - Setiap stage bergantung pada output stage sebelumnya
-- Stage 4 berbeda dari yang lain — ini template untuk OpenCode, bukan prompt untuk chat LLM
-- Jika output LLM tidak sesuai, ulangi dengan instruksi yang lebih spesifik, jangan lanjutkan ke stage berikutnya
+- Stage 4 berbeda — template untuk OpenCode, bukan prompt untuk chat LLM
+- Jika output LLM tidak sesuai, ulangi dengan instruksi lebih spesifik, jangan lanjut ke stage berikutnya
 
 ---
 
 ## Struktur Folder
 
-```
-Master Prompt Framework PARTS/
-├── README.md
-├── 1. Master Prompt - Menyiapkan Dokumen PRD.md
-├── 2. Master Prompt - Menyiapkan Tech Specification.md
-├── 3. Master Prompt - Menyusun Task (Breakdown Task).md
-├── 4. Master Template - Implementasi Task (Eksekusi Coding).md
-├── 5. Master Prompt - Verifikasi (Code Review & Testing).md
-├── 6. Master Prompt - Menyiapkan Dokumen Spesifikasi Desain UI.md
-└── Case_Nama/
-    └── Flow_Bisnis_Nama.md
+```mermaid
+graph LR
+    R[Master Prompt Framework PARTS] --> R1[README.md]
+    R --> R2[1. Master Prompt ... PRD.md]
+    R --> R3[2. Master Prompt ... Tech Spec.md]
+    R --> R4[3. Master Prompt ... Task.md]
+    R --> R5[4. Master Template ... Coding.md]
+    R --> R6[5. Master Prompt ... Verifikasi.md]
+    R --> R7[6. Master Prompt ... UI Design.md]
+    R --> C[Case_Sistem_Pengaduan]
+    C --> C1[Flow_Bisnis_Sistem_Pengaduan.md]
 ```
