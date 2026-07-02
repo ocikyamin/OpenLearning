@@ -46,74 +46,61 @@ Sebelum memulai, pastikan perangkat Anda telah terinstall:
 
 ```
 📁 Laravel Framework/
-├── 📁 Laravel Basic/        → Proyek Laravel dasar (praktikum)
-├── 📁 Modul/                → Modul ajar (PDF / DOC) [jika ada]
-├── 📁 Contoh/               → Contoh kode tambahan [jika ada]
-└── README.md                → Dokumentasi repositori
+├── 📁 00-Persiapan/              → Panduan setup environment
+├── 📁 01-Pengantar-Laravel/      → Pengantar & MVC
+├── 📁 02-Routing-Controller/     → Route & Controller
+├── 📁 03-Blade-Templating/       → Blade templating
+├── 📁 04-Migration-Eloquent/     → Migration & ORM
+├── 📁 05-Relasi-Database/        → Relasi antar tabel
+├── 📁 06-Form-Validation/        → Validasi form
+├── 📁 07-Authentication/         → Login & register
+├── 📁 08-REST-API/               → API dasar
+├── 📁 Referensi/                 → Cheatsheet & link
+├── 📁 Tugas/                     → Soal tugas per pertemuan
+└── README.md                     → Dokumentasi utama
 ```
 
 ---
 
 ## Cara Menggunakan Repositori
 
+Repositori ini berisi **dokumentasi bahan ajar**, bukan project Laravel. Setiap mahasiswa diharapkan membuat project Laravel sendiri di laptop masing-masing.
+
 ### 1. Clone Repositori
 ```bash
 git clone https://github.com/<username>/<repository>.git
-cd "Laravel Framework/Laravel Basic"
+cd "Laravel Framework"
 ```
 
-### 2. Buat Project
-```bash
-laravel new nama-project
-```
-Ikuti pertanyaan interaktif: pilih **None** (starter kit), **PHPUnit**, dan **SQLite** (atau **MySQL**).
+### 2. Ikuti Panduan Setup
+Baca folder [`00-Persiapan/`](00-Persiapan/Pilih-Jalur.md) untuk menyiapkan environment pengembangan.
 
-### 3. Install & Build Frontend
-```bash
-npm install && npm run build
-```
+### 3. Baca Materi Per Pertemuan
+Setiap folder `01-*` sampai `08-*` berisi materi sesuai silabus. Mulai dari [Pertemuan 1](01-Pengantar-Laravel/README.md).
 
-### 4. Konfigurasi Database (Jika Pilih MySQL)
-Sesuaikan file `.env`:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=laravel_basic
-DB_USERNAME=root
-DB_PASSWORD=
-```
-Jalankan migration:
-```bash
-php artisan migrate
-```
-
-### 5. Jalankan Server
-```bash
-composer run dev
-```
-Akses di browser: `http://localhost:8000`
+### 4. Kerjakan Tugas
+Soal tugas tersedia di folder [`Tugas/`](Tugas/).
 
 ---
 
 ## Silabus / Materi Perkuliahan
 
-| Pertemuan | Topik | Status |
-|-----------|-------|--------|
-| 1 | Pengenalan Laravel & Konsep MVC | ⬜ |
-| 2 | Routing & Controller | ⬜ |
-| 3 | Blade Templating & Layout | ⬜ |
-| 4 | Migration & Schema Builder | ⬜ |
-| 5 | Eloquent ORM & Query Builder | ⬜ |
-| 6 | Relasi Database (1:1, 1:N, N:N) | ⬜ |
-| 7 | Form Request & Validation | ⬜ |
-| 8 | Authentication & Middleware | ⬜ |
-| 9 | File Upload & Storage | ⬜ |
-| 10 | REST API Dasar | ⬜ |
-| 11 | Testing Dasar (PHPUnit/Pest) | ⬜ |
-| 12 | Project Akhir | ⬜ |
+| Pertemuan | Topik | Materi | Tugas | Status |
+|-----------|-------|--------|-------|--------|
+| 1 | Pengenalan Laravel & Konsep MVC | [📖](01-Pengantar-Laravel/README.md) | [📝](Tugas/tugas-01.md) | ✅ |
+| 2 | Routing & Controller | [📖](02-Routing-Controller/README.md) | 📝 | ⬜ |
+| 3 | Blade Templating & Layout | [📖](03-Blade-Templating/README.md) | 📝 | ⬜ |
+| 4 | Migration & Eloquent ORM | [📖](04-Migration-Eloquent/README.md) | 📝 | ⬜ |
+| 5 | Relasi Database (1:1, 1:N, N:N) | [📖](05-Relasi-Database/README.md) | 📝 | ⬜ |
+| 6 | Form Request & Validation | [📖](06-Form-Validation/README.md) | 📝 | ⬜ |
+| 7 | Authentication & Middleware | [📖](07-Authentication/README.md) | 📝 | ⬜ |
+| 8 | REST API Dasar | [📖](08-REST-API/README.md) | 📝 | ⬜ |
+| 9 | File Upload & Storage | *(opsional)* | 📝 | ⬜ |
+| 10 | Testing Dasar (PHPUnit/Pest) | *(opsional)* | 📝 | ⬜ |
+| 11 | Deployment | *(opsional)* | 📝 | ⬜ |
+| 12 | Project Akhir | — | 🎯 | ⬜ |
 
-> Status akan diisi saat materi sudah tersedia (`✅` = selesai, `⬜` = belum).
+> ✅ = Materi tersedia | ⬜ = Belum tersedia | 🎯 = Tugas akhir
 
 ---
 
