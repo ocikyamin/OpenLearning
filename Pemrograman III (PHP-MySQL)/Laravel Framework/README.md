@@ -88,7 +88,7 @@ Soal tugas tersedia di folder [`Tugas/`](Tugas/).
 | Pertemuan | Topik | Materi | Tugas | Status |
 |-----------|-------|--------|-------|--------|
 | 1 | Pengenalan Laravel & Konsep MVC | [📖](01-Pengantar-Laravel/README.md) | [📝](Tugas/tugas-01.md) | ✅ |
-| 2 | Routing & Controller | [📖](02-Routing-Controller/README.md) | 📝 | ⬜ |
+| 2 | Routing & Controller | [📖](02-Routing-Controller/README.md) | [📝](Tugas/tugas-02.md) | ✅ |
 | 3 | Blade Templating & Layout | [📖](03-Blade-Templating/README.md) | 📝 | ⬜ |
 | 4 | Migration & Eloquent ORM | [📖](04-Migration-Eloquent/README.md) | 📝 | ⬜ |
 | 5 | Relasi Database (1:1, 1:N, N:N) | [📖](05-Relasi-Database/README.md) | 📝 | ⬜ |
