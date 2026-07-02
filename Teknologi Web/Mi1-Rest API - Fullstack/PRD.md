@@ -1,11 +1,11 @@
 ## Product Requirements Document (PRD): TaskFlow System
 
 ## 1. Project Overview
-TaskFlow adalah aplikasi manajemen tugas berbasis web yang memungkinkan pengguna untuk mengatur proyek, melacak daftar tugas, dan mengelola prioritas secara efisien. Sistem ini menggunakan arsitektur Decoupled (Terpisah) dengan Laravel sebagai REST API dan Vue.js sebagai Single Page Application (SPA). [1, 2] 
+TaskFlow adalah aplikasi manajemen tugas berbasis web yang memungkinkan pengguna untuk mengatur proyek, melacak daftar tugas, dan mengelola prioritas secara efisien. Sistem ini menggunakan arsitektur Decoupled (Terpisah) dengan Laravel sebagai REST API dan Vue.js sebagai Single Page Application (SPA).
 ## 2. Tech Stack Standard
 
 * Backend: Laravel 13.x (PHP 8.3+)
-* Frontend: Vue.js 3 (Composition API)
+* Frontend: Vue.js 3/4 (Composition API)
 * State Management: Pinia (untuk Vue)
 * Database: MySQL / PostgreSQL
 * API Standard: RESTful API dengan JSON Response (CamelCase)
@@ -21,13 +21,13 @@ TaskFlow adalah aplikasi manajemen tugas berbasis web yang memungkinkan pengguna
 
 * Registration: User dapat mendaftar dengan nama, email, dan password.
 * Login: User mendapatkan token untuk akses API.
-* Logout: Revoke token akses. [3] 
+* Logout: Revoke token akses.
 
 ## M2: Project Management
 
 * Create Project: Membuat wadah tugas dengan nama, deskripsi, dan label warna.
 * View Projects: Menampilkan daftar semua proyek milik user tersebut.
-* Update/Delete Project: Mengubah detail atau menghapus proyek (Cascading delete ke tugas terkait). [4, 5] 
+* Update/Delete Project: Mengubah detail atau menghapus proyek (Cascading delete ke tugas terkait).
 
 ## M3: Task Management (Core)
 
@@ -43,7 +43,7 @@ TaskFlow adalah aplikasi manajemen tugas berbasis web yang memungkinkan pengguna
 
 ## 5. Data Schema (Entity Relationship)
 
-| Entity [6] | Attributes | Relations |
+| Entity| Attributes | Relations |
 |---|---|---|
 | User | id, name, email, password | HasMany Projects, HasMany Tasks |
 | Project | id, user_id, name, description, color | BelongsTo User, HasMany Tasks |
@@ -73,12 +73,12 @@ TaskFlow adalah aplikasi manajemen tugas berbasis web yang memungkinkan pengguna
 * Validation: Judul tugas wajib diisi (min 5 karakter). Tanggal jatuh tempo tidak boleh di masa lalu.
 * Consistency: API Resource harus selalu mengembalikan format camelCase (misal: due_date di DB menjadi dueDate di JSON).
 
-------------------------------
-## 💡 Instruksi Selanjutnya untuk Anda:
+<!-- ------------------------------
+## 💡 Contoh Instruksi Selanjutnya untuk Anda:
 Anda bisa memberikan PRD ini ke OpenCode AI dengan perintah:
 
 "Berdasarkan PRD TaskFlow ini, buatkan file migrations dan models Laravel yang sesuai, lengkap dengan relasi Eloquent-nya."
 
 Setelah itu, lanjutkan dengan:
 
-"Sekarang buatkan API Resources dan Controllers yang menangani CRUD sesuai endpoint di PRD ini."
+"Sekarang buatkan API Resources dan Controllers yang menangani CRUD sesuai endpoint di PRD ini." -->
