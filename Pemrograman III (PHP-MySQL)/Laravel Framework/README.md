@@ -93,7 +93,7 @@ Soal tugas tersedia di folder [`Tugas/`](Tugas/).
 | 4 | Migration & Eloquent ORM | [📖](BAB-04-Migration-dan-Eloquent-ORM/README.md) | 📝 | ✅ |
 | 5 | Relasi Database (1:1, 1:N, N:N) | [📖](BAB-05-Relasi-Database/README.md) | 📝 | ✅ |
 | 6 | Form Request & Validation | [📖](BAB-06-Form-Request-dan-Validation/README.md) | [📝](Tugas/tugas-06.md) | ✅ |
-| 7 | Authentication & Middleware | [📖](BAB-07-Authentication-dan-Middleware/README.md) | 📝 | ⬜ |
+| 7 | Authentication & Middleware | [📖](BAB-07-Authentication-dan-Middleware/README.md) | [📝](Tugas/tugas-07.md) | ✅ |
 | 8 | REST API Dasar | [📖](BAB-08-REST-API/README.md) | 📝 | ⬜ |
 | 9 | File Upload & Storage | *(opsional)* | 📝 | ⬜ |
 | 10 | Testing Dasar (PHPUnit/Pest) | *(opsional)* | 📝 | ⬜ |

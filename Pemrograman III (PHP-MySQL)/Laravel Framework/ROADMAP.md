@@ -16,13 +16,13 @@
 | BAB 4 — Migration & Eloquent | `README.md` + `video.md` | ✅ **Selesai** |
 | BAB 5 — Relasi Database | `README.md` + `video.md` | ✅ **Selesai** |
 | BAB 6 — Form Validation | `README.md` + `video.md` | ✅ **Selesai** |
-| BAB 7 — Authentication | `README.md` | ⬜ Belum |
+| BAB 7 — Authentication | `README.md` + `video.md` | ✅ **Selesai** |
 | BAB 8 — REST API | `README.md` | ⬜ Belum |
 | Referensi | 4 file (3 cheatsheet + link) | ✅ **Selesai** |
 | Tugas 1 | `tugas-01.md` | ✅ **Selesai** |
 | Tugas 2 | `tugas-02.md` | ✅ **Selesai** |
 | Tugas 3 | `tugas-03.md` | ✅ **Selesai** |
-| Tugas 4—8 | 3 selesai, 2 belum | ⬜ Belum |
+| Tugas 4—8 | 4 selesai, 1 belum | ⬜ Belum |
 | Slide presentasi | `.pdf` per BAB | ⬜ Belum |
 
 ---
@@ -128,13 +128,13 @@
 ## Progress Bar
 
 ```
-▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱  (49%)
+▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱  (51%)
 ```
 
 | Item | Selesai | Total |
 |------|---------|-------|
-| Folder materi | 6 | 8 |
-| Tugas | 4 | 8 |
+| Folder materi | 7 | 8 |
+| Tugas | 5 | 8 |
 | Referensi | 4 | 4 |
 | Persiapan | 9 | 9 |
-| **Total** | **22** | **~45** |
+| **Total** | **23** | **~45** |
