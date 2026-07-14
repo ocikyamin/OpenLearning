@@ -99,7 +99,7 @@ $produk = [
 
 - Kumpulkan file: semua file Blade di `resources/views/`, Controller, dan `routes/web.php`
 - Sertakan screenshot setiap halaman
-- Batas pengumpulan: sebelum pertemuan berikutnya
+- Batas pengumpulan: sebelum BAB berikutnya
 
 ---
 

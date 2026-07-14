@@ -46,7 +46,7 @@ Contoh: `/hitung/5/3` → menampilkan "Hasil penjumlahan 5 + 3 = 8"
 
 - Kumpulkan dalam bentuk screenshot kode dan hasil di browser
 - atau kumpulkan link repository GitHub (jika sudah bisa git)
-- Batas pengumpulan: sebelum pertemuan berikutnya
+- Batas pengumpulan: sebelum BAB berikutnya
 
 ---
 

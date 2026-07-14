@@ -46,18 +46,18 @@ Sebelum memulai, pastikan perangkat Anda telah terinstall:
 
 ```
 📁 Laravel Framework/
-├── 📁 00-Persiapan/              → Panduan setup environment
-├── 📁 01-Pengantar-Laravel/      → Pengantar & MVC
-├── 📁 02-Routing-Controller/     → Route & Controller
-├── 📁 03-Blade-Templating/       → Blade templating
-├── 📁 04-Migration-Eloquent/     → Migration & ORM
-├── 📁 05-Relasi-Database/        → Relasi antar tabel
-├── 📁 06-Form-Validation/        → Validasi form
-├── 📁 07-Authentication/         → Login & register
-├── 📁 08-REST-API/               → API dasar
-├── 📁 Referensi/                 → Cheatsheet & link
-├── 📁 Tugas/                     → Soal tugas per pertemuan
-└── README.md                     → Dokumentasi utama
+├── 📁 00-Persiapan/                             → Panduan setup environment
+├── 📁 BAB-01-Pengantar-Laravel-dan-MVC/         → BAB 1: Pengantar & MVC
+├── 📁 BAB-02-Routing-dan-Controller/            → BAB 2: Route & Controller
+├── 📁 BAB-03-Blade-Templating/                  → BAB 3: Blade templating
+├── 📁 BAB-04-Migration-dan-Eloquent-ORM/        → BAB 4: Migration & ORM
+├── 📁 BAB-05-Relasi-Database/                   → BAB 5: Relasi antar tabel
+├── 📁 BAB-06-Form-Request-dan-Validation/       → BAB 6: Validasi form
+├── 📁 BAB-07-Authentication-dan-Middleware/     → BAB 7: Login & register
+├── 📁 BAB-08-REST-API/                          → BAB 8: API dasar
+├── 📁 Referensi/                                → Cheatsheet & link
+├── 📁 Tugas/                                    → Soal tugas per BAB
+└── README.md                                    → Dokumentasi utama
 ```
 
 ---
@@ -75,8 +75,8 @@ cd "Laravel Framework"
 ### 2. Ikuti Panduan Setup
 Baca folder [`00-Persiapan/`](00-Persiapan/Pilih-Jalur.md) untuk menyiapkan environment pengembangan.
 
-### 3. Baca Materi Per Pertemuan
-Setiap folder `01-*` sampai `08-*` berisi materi sesuai silabus. Mulai dari [Pertemuan 1](01-Pengantar-Laravel/README.md).
+### 3. Baca Materi Per BAB
+Setiap folder `BAB-01-*` sampai `BAB-08-*` berisi materi sesuai silabus. Mulai dari [BAB 1](BAB-01-Pengantar-Laravel-dan-MVC/README.md).
 
 ### 4. Kerjakan Tugas
 Soal tugas tersedia di folder [`Tugas/`](Tugas/).
@@ -85,16 +85,16 @@ Soal tugas tersedia di folder [`Tugas/`](Tugas/).
 
 ## Silabus / Materi Perkuliahan
 
-| Pertemuan | Topik | Materi | Tugas | Status |
-|-----------|-------|--------|-------|--------|
-| 1 | Pengenalan Laravel & Konsep MVC | [📖](01-Pengantar-Laravel/README.md) | [📝](Tugas/tugas-01.md) | ✅ |
-| 2 | Routing & Controller | [📖](02-Routing-Controller/README.md) | [📝](Tugas/tugas-02.md) | ✅ |
-| 3 | Blade Templating & Layout | [📖](03-Blade-Templating/README.md) | [📝](Tugas/tugas-03.md) | ✅ |
-| 4 | Migration & Eloquent ORM | [📖](04-Migration-Eloquent/README.md) | 📝 | ⬜ |
-| 5 | Relasi Database (1:1, 1:N, N:N) | [📖](05-Relasi-Database/README.md) | 📝 | ⬜ |
-| 6 | Form Request & Validation | [📖](06-Form-Validation/README.md) | 📝 | ⬜ |
-| 7 | Authentication & Middleware | [📖](07-Authentication/README.md) | 📝 | ⬜ |
-| 8 | REST API Dasar | [📖](08-REST-API/README.md) | 📝 | ⬜ |
+| BAB | Topik | Materi | Tugas | Status |
+|-----|-------|--------|-------|--------|
+| 1 | Pengenalan Laravel & Konsep MVC | [📖](BAB-01-Pengantar-Laravel-dan-MVC/README.md) | [📝](Tugas/tugas-01.md) | ✅ |
+| 2 | Routing & Controller | [📖](BAB-02-Routing-dan-Controller/README.md) | [📝](Tugas/tugas-02.md) | ✅ |
+| 3 | Blade Templating & Layout | [📖](BAB-03-Blade-Templating/README.md) | [📝](Tugas/tugas-03.md) | ✅ |
+| 4 | Migration & Eloquent ORM | [📖](BAB-04-Migration-dan-Eloquent-ORM/README.md) | 📝 | ⬜ |
+| 5 | Relasi Database (1:1, 1:N, N:N) | [📖](BAB-05-Relasi-Database/README.md) | 📝 | ⬜ |
+| 6 | Form Request & Validation | [📖](BAB-06-Form-Request-dan-Validation/README.md) | 📝 | ⬜ |
+| 7 | Authentication & Middleware | [📖](BAB-07-Authentication-dan-Middleware/README.md) | 📝 | ⬜ |
+| 8 | REST API Dasar | [📖](BAB-08-REST-API/README.md) | 📝 | ⬜ |
 | 9 | File Upload & Storage | *(opsional)* | 📝 | ⬜ |
 | 10 | Testing Dasar (PHPUnit/Pest) | *(opsional)* | 📝 | ⬜ |
 | 11 | Deployment | *(opsional)* | 📝 | ⬜ |

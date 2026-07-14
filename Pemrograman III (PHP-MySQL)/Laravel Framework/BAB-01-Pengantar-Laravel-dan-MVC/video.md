@@ -1,4 +1,4 @@
-# Video Pembelajaran — Pertemuan 1
+# Video Pembelajaran — BAB 1
 
 > Bagian ini dapat diisi dengan link video pembelajaran (YouTube, Google Drive, atau platform lain) sesuai ketersediaan.
 

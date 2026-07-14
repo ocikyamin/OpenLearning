@@ -64,7 +64,7 @@ Buat route `/produk/{id}` — jika ID tidak ditemukan di array, kembalikan respo
 
 - Kumpulkan file `routes/web.php` dan `app/Http/Controllers/ProductController.php`
 - Sertakan screenshot hasil setiap route di browser
-- Batas pengumpulan: sebelum pertemuan berikutnya
+- Batas pengumpulan: sebelum BAB berikutnya
 
 ---
 
