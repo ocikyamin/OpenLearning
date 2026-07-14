@@ -13,7 +13,7 @@
 | BAB 1 — Pengantar MVC | `README.md` + `video.md` | ✅ **Selesai** |
 | BAB 2 — Routing & Controller | `README.md` + `video.md` | ✅ **Selesai** |
 | BAB 3 — Blade Templating | `README.md` + `video.md` | ✅ **Selesai** |
-| BAB 4 — Migration & Eloquent | `README.md` | ⬜ Belum |
+| BAB 4 — Migration & Eloquent | `README.md` + `video.md` | ✅ **Selesai** |
 | BAB 5 — Relasi Database | `README.md` | ⬜ Belum |
 | BAB 6 — Form Validation | `README.md` | ⬜ Belum |
 | BAB 7 — Authentication | `README.md` | ⬜ Belum |
@@ -120,7 +120,7 @@
 - Penjelasan bersifat **naratif seperti buku/modul ajar**, bukan hanya poin-poin teknis
 - Semua panduan mengacu pada **Laravel 13.x** sesuai [dokumentasi resmi](https://laravel.com/docs/13.x)
 - Setup environment menggunakan **Laragon** (Windows) atau **WSL + Ubuntu**
-- Database disarankan **SQLite** untuk awal, lalu migrasi ke **MySQL** di BAB 4
+- Database menggunakan **MySQL** langsung sejak awal
 - Setiap praktikum dimulai dari langkah paling awal (buat project, masuk folder, dll.)
 
 ---
@@ -128,13 +128,13 @@
 ## Progress Bar
 
 ```
-▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱  (42%)
+▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱  (44%)
 ```
 
 | Item | Selesai | Total |
 |------|---------|-------|
-| Folder materi | 3 | 8 |
+| Folder materi | 4 | 8 |
 | Tugas | 3 | 8 |
 | Referensi | 4 | 4 |
 | Persiapan | 9 | 9 |
-| **Total** | **19** | **~45** |
+| **Total** | **20** | **~45** |

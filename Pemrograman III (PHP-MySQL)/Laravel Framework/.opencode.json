@@ -6,6 +6,7 @@
     "Setiap BAB harus memiliki struktur Sub-BAB yang rapi: 1.1, 1.2, 1.3 — jangan langsung poin tanpa nomor.",
     "Penjelasan harus naratif seperti buku/modul ajar, tidak hanya kode dan tabel. Sertakan konteks, analogi, dan alasan.",
     "Setiap praktikum harus dimulai dari langkah paling awal (buat project, masuk folder, dll) tanpa melompat-lompat.",
-    "Penamaan folder BAB harus deskriptif: BAB-XX-Topik-Utama."
+    "Penamaan folder BAB harus deskriptif: BAB-XX-Topik-Utama.",
+    "Setiap BAB harus memiliki file video.md (template link video) selain README.md."
   ]
 }

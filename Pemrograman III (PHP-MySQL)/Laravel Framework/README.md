@@ -90,7 +90,7 @@ Soal tugas tersedia di folder [`Tugas/`](Tugas/).
 | 1 | Pengenalan Laravel & Konsep MVC | [📖](BAB-01-Pengantar-Laravel-dan-MVC/README.md) | [📝](Tugas/tugas-01.md) | ✅ |
 | 2 | Routing & Controller | [📖](BAB-02-Routing-dan-Controller/README.md) | [📝](Tugas/tugas-02.md) | ✅ |
 | 3 | Blade Templating & Layout | [📖](BAB-03-Blade-Templating/README.md) | [📝](Tugas/tugas-03.md) | ✅ |
-| 4 | Migration & Eloquent ORM | [📖](BAB-04-Migration-dan-Eloquent-ORM/README.md) | 📝 | ⬜ |
+| 4 | Migration & Eloquent ORM | [📖](BAB-04-Migration-dan-Eloquent-ORM/README.md) | 📝 | ✅ |
 | 5 | Relasi Database (1:1, 1:N, N:N) | [📖](BAB-05-Relasi-Database/README.md) | 📝 | ⬜ |
 | 6 | Form Request & Validation | [📖](BAB-06-Form-Request-dan-Validation/README.md) | 📝 | ⬜ |
 | 7 | Authentication & Middleware | [📖](BAB-07-Authentication-dan-Middleware/README.md) | 📝 | ⬜ |
