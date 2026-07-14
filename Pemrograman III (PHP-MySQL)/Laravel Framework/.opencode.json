@@ -7,6 +7,7 @@
     "Penjelasan harus naratif seperti buku/modul ajar, tidak hanya kode dan tabel. Sertakan konteks, analogi, dan alasan.",
     "Setiap praktikum harus dimulai dari langkah paling awal (buat project, masuk folder, dll) tanpa melompat-lompat.",
     "Penamaan folder BAB harus deskriptif: BAB-XX-Topik-Utama.",
-    "Setiap BAB harus memiliki file video.md (template link video) selain README.md."
+    "Setiap BAB harus memiliki file video.md (template link video) selain README.md.",
+    "Setiap BAB harus memiliki file tugas di folder Tugas/ (tugas-XX.md) selain README.md dan video.md."
   ]
 }

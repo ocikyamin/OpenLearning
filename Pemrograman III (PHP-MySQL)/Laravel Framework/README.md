@@ -91,8 +91,8 @@ Soal tugas tersedia di folder [`Tugas/`](Tugas/).
 | 2 | Routing & Controller | [📖](BAB-02-Routing-dan-Controller/README.md) | [📝](Tugas/tugas-02.md) | ✅ |
 | 3 | Blade Templating & Layout | [📖](BAB-03-Blade-Templating/README.md) | [📝](Tugas/tugas-03.md) | ✅ |
 | 4 | Migration & Eloquent ORM | [📖](BAB-04-Migration-dan-Eloquent-ORM/README.md) | 📝 | ✅ |
-| 5 | Relasi Database (1:1, 1:N, N:N) | [📖](BAB-05-Relasi-Database/README.md) | 📝 | ⬜ |
-| 6 | Form Request & Validation | [📖](BAB-06-Form-Request-dan-Validation/README.md) | 📝 | ⬜ |
+| 5 | Relasi Database (1:1, 1:N, N:N) | [📖](BAB-05-Relasi-Database/README.md) | 📝 | ✅ |
+| 6 | Form Request & Validation | [📖](BAB-06-Form-Request-dan-Validation/README.md) | [📝](Tugas/tugas-06.md) | ✅ |
 | 7 | Authentication & Middleware | [📖](BAB-07-Authentication-dan-Middleware/README.md) | 📝 | ⬜ |
 | 8 | REST API Dasar | [📖](BAB-08-REST-API/README.md) | 📝 | ⬜ |
 | 9 | File Upload & Storage | *(opsional)* | 📝 | ⬜ |
