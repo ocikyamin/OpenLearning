@@ -1,4 +1,7 @@
-# OpenLearning
+# 📚 OpenLearning ?
+
+**OpenLearning** adalah kumpulan materi pemrograman untuk belajar coding dari dasar hingga lanjutan. Semua materi ditulis dalam bahasa Indonesia yang mudah dipahami, dilengkapi dengan contoh kode dan tutorial langkah demi langkah.
+
 
 <p align="left">
   <img src="https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white&style=flat" alt="HTML5"/>
@@ -36,36 +39,4 @@
   <img src="https://img.shields.io/badge/-GitHub-181717?logo=github&logoColor=white&style=flat" alt="GitHub"/>
 </p>
 
-## 📚 Apa Ini?
 
-**OpenLearning** adalah kumpulan materi pemrograman untuk belajar coding dari dasar hingga lanjutan. Semua materi ditulis dalam bahasa Indonesia yang mudah dipahami, dilengkapi dengan contoh kode dan tutorial langkah demi langkah.
-
-Repo ini cocok untuk:
-- Mahasiswa yang sedang menempuh mata kuliah pemrograman
-- Pemula yang ingin belajar coding dari nol
-- Siapa saja yang membutuhkan referensi pemrograman dalam bahasa lokal
-
-
-## 💡 Cara Menggunakan
-
-1. **Pilih materi** - Cari folder yang sesuai dengan kebutuhan
-2. **Baca materi** - Materi tersedia dalam format Markdown (`.md`) yang mudah dibaca
-3. **Praktikkan** - Ikuti contoh kode yang disediakan
-4. **Eksplorasi** - Jangan ragu untuk mencoba variasi sendiri
-
----
-
-## 📝 Format Materi
-
-Semua materi disimpan dalam format **Markdown (`.md`)** agar:
-- Mudah dibaca langsung di GitHub
-- Mudah diedit dan dikembangkan
-- Ringan dan tidak memerlukan aplikasi khusus
-
----
-
-## ⭐ Dukungan
-
-Jika repo ini membantu, jangan lupa kasih ⭐ untuk motivasi kami terus mengembangkan materi lainnya!
-
-**Selamat belajar & happy coding!** 🚀
