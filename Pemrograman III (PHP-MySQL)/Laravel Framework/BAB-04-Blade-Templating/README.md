@@ -152,6 +152,8 @@ Dalam setiap perulangan `@foreach`, Blade menyediakan variabel `$loop` yang beri
 
 ---
 
+![Blade Template Inheritance](../-/04-blade-inheritance.png)
+
 ## 4.5 Layout dengan Template Inheritance
 
 Salah satu fitur terkuat Blade adalah **template inheritance**. Kita bisa membuat satu layout utama yang berisi kerangka halaman (header, navbar, sidebar, footer), lalu setiap halaman bisa mewarisi layout tersebut dan mengisi bagian-bagian tertentu.
