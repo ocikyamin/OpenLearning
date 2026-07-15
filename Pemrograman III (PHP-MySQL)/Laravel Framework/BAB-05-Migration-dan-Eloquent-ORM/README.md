@@ -93,6 +93,8 @@ Jika muncul daftar migrasi (meskipun belum dijalankan), artinya koneksi berhasil
 
 ![Migration Flow](../-/05-migration-flow.png)
 
+*Gambar 5.1: Migration Flow*
+
 ## 5.4 Migration
 
 Migration adalah cara Laravel untuk membuat dan mengubah struktur tabel database. Setiap migrasi adalah file PHP yang berisi instruksi naik (`up`) dan turun (`down`).
@@ -380,6 +382,8 @@ Article::factory()->published()->count(5)->create();
 ---
 
 ![Eloquent ORM Mapping](../-/05-eloquent-mapping.png)
+
+*Gambar 5.2: Eloquent ORM Mapping*
 
 ## 5.6 Eloquent Model
 

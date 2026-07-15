@@ -31,6 +31,8 @@ Sebagai developer web, memahami HTTP sangat penting karena setiap fitur yang kit
 
 ![Arsitektur Client-Server](../-/01-client-server.png)
 
+*Gambar 1.1: Arsitektur Client-Server*
+
 - **Client** — perangkat atau aplikasi yang meminta data. Contoh: browser, mobile app, Postman
 - **Server** — komputer yang menyimpan data dan logika aplikasi. Contoh: Laravel, Apache, Nginx
 

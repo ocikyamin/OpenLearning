@@ -122,6 +122,8 @@ Atau jika ingin dengan namespace:
 
 ![Livewire Lifecycle](../-/10-livewire-lifecycle.png)
 
+*Gambar 10.1: Livewire Lifecycle*
+
 ## 10.5 Data Binding
 
 Livewire mendukung **two-way data binding** — ketika pengguna mengisi input, properti di komponen otomatis terupdate, dan sebaliknya.

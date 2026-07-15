@@ -26,6 +26,8 @@ Pada BAB 3 ini, kita akan mempelajari routing secara lebih mendalam, mulai dari 
 
 ![Request Lifecycle](../-/03-request-lifecycle.png)
 
+*Gambar 3.1: Request Lifecycle*
+
 ## 3.3 Routing di Laravel
 
 Semua route untuk keperluan web didefinisikan di file `routes/web.php`. Laravel secara otomatis akan memuat file ini ketika aplikasi berjalan.
