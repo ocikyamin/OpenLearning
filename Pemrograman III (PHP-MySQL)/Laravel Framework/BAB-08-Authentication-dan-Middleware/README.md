@@ -1,10 +1,10 @@
-# BAB 7 — Authentication & Middleware
+# BAB 8 — Authentication & Middleware
 
 ---
 
-## 7.1 Tujuan Pembelajaran
+## 8.1 Tujuan Pembelajaran
 
-Setelah menyelesaikan BAB 7 ini, teman-teman diharapkan mampu:
+Setelah menyelesaikan BAB 8 ini, teman-teman diharapkan mampu:
 
 - Menjelaskan perbedaan otentikasi (login) dan otorisasi (hak akses)
 - Menginstal Breeze sebagai starter kit autentikasi
@@ -17,7 +17,7 @@ Setelah menyelesaikan BAB 7 ini, teman-teman diharapkan mampu:
 
 ---
 
-## 7.2 Pendahuluan
+## 8.2 Pendahuluan
 
 Sejauh ini, aplikasi kita bisa diakses oleh siapa saja tanpa perlu login. Di dunia nyata, kita membutuhkan sistem yang bisa:
 
@@ -32,18 +32,18 @@ Laravel menyediakan sistem otentikasi yang lengkap dan aman. Mulai dari Laravel 
 
 ---
 
-## 7.3 Instalasi Breeze
+## 8.3 Instalasi Breeze
 
 Breeze adalah starter kit minimalis untuk otentikasi Laravel. Ia menyediakan halaman login, register, forgot password, reset password, dan profil — lengkap dengan Blade views dan Tailwind CSS.
 
-### 7.3.1 Membuat Project Baru
+### 8.3.1 Membuat Project Baru
 
 ```bash
 composer create-project laravel/laravel blog-auth
 cd blog-auth
 ```
 
-### 7.3.2 Setting Database
+### 8.3.2 Setting Database
 
 `.env`:
 
@@ -62,7 +62,7 @@ Buat database:
 CREATE DATABASE blog_auth CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 7.3.3 Install Breeze
+### 8.3.3 Install Breeze
 
 ```bash
 composer require laravel/breeze
@@ -80,20 +80,20 @@ Perintah ini akan:
 - Menambahkan beberapa controller
 - Menginstal Tailwind CSS dan Vite
 
-### 7.3.4 Instal Dependency Frontend
+### 8.3.4 Instal Dependency Frontend
 
 ```bash
 npm install
 npm run build
 ```
 
-### 7.3.5 Jalankan Migrasi
+### 8.3.5 Jalankan Migrasi
 
 ```bash
 php artisan migrate
 ```
 
-### 7.3.6 Uji Coba
+### 8.3.6 Uji Coba
 
 ```bash
 php artisan serve
@@ -105,9 +105,9 @@ Coba daftarkan akun baru, lalu login. Setelah login, kita akan diarahkan ke hala
 
 ---
 
-## 7.4 Memahami Fitur Breeze
+## 8.4 Memahami Fitur Breeze
 
-### 7.4.1 Route yang Dihasilkan Breeze
+### 8.4.1 Route yang Dihasilkan Breeze
 
 Breeze menambahkan route otentikasi di file `routes/auth.php` (di-load secara otomatis oleh `bootstrap/app.php`):
 
@@ -124,13 +124,13 @@ Breeze menambahkan route otentikasi di file `routes/auth.php` (di-load secara ot
 | `/verify-email` | GET | `auth` | Verifikasi email |
 | `/logout` | POST | `auth` | Logout |
 
-### 7.4.2 Middleware `guest` dan `auth`
+### 8.4.2 Middleware `guest` dan `auth`
 
 Route yang menggunakan middleware `guest` hanya bisa diakses oleh pengguna yang **belum login**. Jika sudah login dan mencoba mengakses `/login`, pengguna akan diarahkan ke `/dashboard`.
 
 Route yang menggunakan middleware `auth` hanya bisa diakses oleh pengguna yang **sudah login**. Jika belum login, pengguna akan diarahkan ke halaman login.
 
-### 7.4.3 Menambahkan Route yang Butuh Login
+### 8.4.3 Menambahkan Route yang Butuh Login
 
 Untuk menambahkan halaman yang hanya bisa diakses setelah login, bungkus dalam middleware `auth`:
 
@@ -144,7 +144,7 @@ Route::middleware('auth')->group(function () {
 });
 ```
 
-### 7.4.4 Mengakses Data User yang Login
+### 8.4.4 Mengakses Data User yang Login
 
 Di controller:
 
@@ -173,11 +173,11 @@ Di Blade:
 
 ---
 
-## 7.5 Middleware
+## 8.5 Middleware
 
 Middleware adalah filter yang dijalankan sebelum request mencapai route. Laravel memiliki beberapa middleware bawaan, dan kita juga bisa membuat middleware kustom.
 
-### 7.5.1 Middleware Bawaan
+### 8.5.1 Middleware Bawaan
 
 | Middleware | Fungsi |
 |------------|--------|
@@ -186,7 +186,7 @@ Middleware adalah filter yang dijalankan sebelum request mencapai route. Laravel
 | `throttle:60,1` | Batasi request (60 kali per menit) |
 | `verified` | Pastikan email sudah diverifikasi |
 
-### 7.5.2 Cara Kerja Middleware
+### 8.5.2 Cara Kerja Middleware
 
 ```
 Request → Middleware → Route → Controller → Response
@@ -194,7 +194,7 @@ Request → Middleware → Route → Controller → Response
           Redirect / Error
 ```
 
-### 7.5.3 Membuat Middleware Kustom
+### 8.5.3 Membuat Middleware Kustom
 
 Misalnya, kita ingin memastikan user memiliki role tertentu.
 
@@ -226,7 +226,7 @@ class CheckRole
 }
 ```
 
-### 7.5.4 Mendaftarkan Middleware
+### 8.5.4 Mendaftarkan Middleware
 
 Di `bootstrap/app.php`, daftarkan middleware dengan alias:
 
@@ -244,7 +244,7 @@ return Application::configure(basePath: dirname(__DIR__))
     // ...
 ```
 
-### 7.5.5 Menggunakan Middleware Kustom
+### 8.5.5 Menggunakan Middleware Kustom
 
 ```php
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -254,7 +254,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 ```
 
-### 7.5.6 Multiple Middleware
+### 8.5.6 Multiple Middleware
 
 ```php
 Route::get('/admin', function () {
@@ -264,11 +264,11 @@ Route::get('/admin', function () {
 
 ---
 
-## 7.6 Gate
+## 8.6 Gate
 
 Gate adalah cara sederhana untuk otorisasi — cocok untuk aksi yang tidak terikat pada model tertentu.
 
-### 7.6.1 Mendefinisikan Gate
+### 8.6.1 Mendefinisikan Gate
 
 Bukalah `app/Providers/AppServiceProvider.php`:
 
@@ -296,7 +296,7 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
-### 7.6.2 Menggunakan Gate di Controller
+### 8.6.2 Menggunakan Gate di Controller
 
 ```php
 use Illuminate\Support\Facades\Gate;
@@ -312,7 +312,7 @@ public function destroy(Article $article)
 }
 ```
 
-### 7.6.3 Gate di Blade
+### 8.6.3 Gate di Blade
 
 ```blade
 @can('admin')
@@ -326,11 +326,11 @@ public function destroy(Article $article)
 
 ---
 
-## 7.7 Policy
+## 8.7 Policy
 
 Policy adalah class otorisasi yang terfokus pada satu model. Misalnya `ArticlePolicy` berisi method untuk authorize operasi CRUD pada Article.
 
-### 7.7.1 Membuat Policy
+### 8.7.1 Membuat Policy
 
 ```bash
 php artisan make:policy ArticlePolicy --model=Article
@@ -375,7 +375,7 @@ class ArticlePolicy
 }
 ```
 
-### 7.7.2 Mendaftarkan Policy
+### 8.7.2 Mendaftarkan Policy
 
 Di `app/Providers/AppServiceProvider.php`:
 
@@ -390,7 +390,7 @@ public function boot(): void
 }
 ```
 
-### 7.7.3 Menggunakan Policy di Controller
+### 8.7.3 Menggunakan Policy di Controller
 
 ```php
 public function update(UpdateArticleRequest $request, Article $article)
@@ -414,7 +414,7 @@ public function destroy(Article $article)
 }
 ```
 
-### 7.7.4 Authorization di Form Request
+### 8.7.4 Authorization di Form Request
 
 Policy juga bisa dipanggil dari Form Request:
 
@@ -425,7 +425,7 @@ public function authorize(): bool
 }
 ```
 
-### 7.7.5 Policy di Blade
+### 8.7.5 Policy di Blade
 
 ```blade
 @can('update', $article)
@@ -443,11 +443,11 @@ public function authorize(): bool
 
 ---
 
-## 7.8 Roles Sederhana
+## 8.8 Roles Sederhana
 
 Untuk kebutuhan sederhana, kita bisa menambahkan kolom `role` di tabel users.
 
-### 7.8.1 Migration
+### 8.8.1 Migration
 
 ```bash
 php artisan make:migration add_role_to_users_table
@@ -465,7 +465,7 @@ Jalankan migrasi:
 php artisan migrate
 ```
 
-### 7.8.2 Model User
+### 8.8.2 Model User
 
 Tambahkan `$fillable` untuk role dan helper method:
 
@@ -491,14 +491,14 @@ class User extends Model
 }
 ```
 
-### 7.8.3 Gate Berbasis Role
+### 8.8.3 Gate Berbasis Role
 
 ```php
 Gate::define('admin', fn (User $user) => $user->isAdmin());
 Gate::define('editor', fn (User $user) => $user->isEditor());
 ```
 
-### 7.8.4 Middleware Berbasis Role
+### 8.8.4 Middleware Berbasis Role
 
 Gunakan middleware `CheckRole` yang kita buat di sub-bab 7.5.3.
 
@@ -512,11 +512,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 ---
 
-## 7.9 Praktikum: Aplikasi Artikel dengan Auth
+## 8.9 Praktikum: Aplikasi Artikel dengan Auth
 
 Pada praktikum ini, kita akan membuat aplikasi artikel yang memerlukan login untuk membuat, mengedit, dan menghapus artikel. Setiap pengguna hanya bisa mengedit/menghapus artikel miliknya sendiri.
 
-### 7.9.1 Persiapan
+### 8.9.1 Persiapan
 
 Buat project baru dengan Breeze:
 
@@ -549,7 +549,7 @@ CREATE DATABASE blog_auth CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 php artisan migrate
 ```
 
-### 7.9.2 Migration Artikel
+### 8.9.2 Migration Artikel
 
 ```bash
 php artisan make:migration create_articles_table
@@ -569,7 +569,7 @@ Schema::create('articles', function (Blueprint $table) {
 });
 ```
 
-### 7.9.3 Model Article
+### 8.9.3 Model Article
 
 ```bash
 php artisan make:model Article
@@ -606,7 +606,7 @@ class Article extends Model
 }
 ```
 
-### 7.9.4 Policy
+### 8.9.4 Policy
 
 ```bash
 php artisan make:policy ArticlePolicy --model=Article
@@ -654,7 +654,7 @@ public function boot(): void
 }
 ```
 
-### 7.9.5 Route
+### 8.9.5 Route
 
 `routes/web.php`:
 
@@ -675,7 +675,7 @@ Route::middleware('auth')->group(function () {
 
 Semua route artikel hanya bisa diakses setelah login.
 
-### 7.9.6 Controller
+### 8.9.6 Controller
 
 ```bash
 php artisan make:controller ArticleController
@@ -771,7 +771,7 @@ class ArticleController extends Controller
 }
 ```
 
-### 7.9.7 View
+### 8.9.7 View
 
 **Layout — `resources/views/layouts/app.blade.php`:**
 
@@ -1011,7 +1011,7 @@ class ArticleController extends Controller
 @endsection
 ```
 
-### 7.9.8 Uji Coba
+### 8.9.8 Uji Coba
 
 1. **Jalankan server**: `php artisan serve`
 2. **Buka** `http://localhost:8000`
@@ -1022,7 +1022,7 @@ class ArticleController extends Controller
 
 ---
 
-## 7.10 Rangkuman
+## 8.10 Rangkuman
 
 | Konsep | Intinya |
 |--------|---------|
@@ -1037,7 +1037,7 @@ class ArticleController extends Controller
 
 ---
 
-## 7.11 Referensi
+## 8.11 Referensi
 
 - [Laravel Breeze](https://laravel.com/docs/13.x/starter-kits#breeze)
 - [Laravel Authentication](https://laravel.com/docs/13.x/authentication)
@@ -1046,6 +1046,6 @@ class ArticleController extends Controller
 
 ---
 
-**Lanjut ke:** [BAB 8 — REST API](../BAB-08-REST-API/README.md)
+**Lanjut ke:** [BAB 9 — Upload File & Storage](../BAB-09-Upload-File-dan-Storage/README.md)
 
-**Kembali ke:** [BAB 6 — Form Request & Validation](../BAB-06-Form-Request-dan-Validation/README.md)
+**Kembali ke:** [BAB 7 — Form Request & Validation](../BAB-07-Form-Request-dan-Validation/README.md)

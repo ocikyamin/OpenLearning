@@ -1,10 +1,10 @@
-# Tugas 6 — Form Request & Validation
+# Tugas 6 — Relasi Database
 
 ---
 
 ## Tujuan
 
-Mahasiswa mampu membuat form dengan validasi menggunakan Form Request, menampilkan error messages, menangani old input, dan menampilkan flash data.
+Mahasiswa mampu mendefinisikan dan menggunakan relasi database (one-to-many, many-to-many), eager loading, dan query agregat dengan Eloquent.
 
 ---
 
@@ -12,81 +12,130 @@ Mahasiswa mampu membuat form dengan validasi menggunakan Form Request, menampilk
 
 ### 1. Persiapan
 
-Buat project baru dan database MySQL `db_tugas6`.
+Buat project baru atau gunakan project dari tugas sebelumnya. Buat database `db_tugas6`.
 
-Buat satu model **Product** dengan migration:
+### 2. Migration
+
+Buat tabel-tabel berikut:
+
+**Tabel `categories`**
 
 | Kolom | Tipe | Keterangan |
 |-------|------|------------|
-| `id` | auto-increment | — |
+| `id` | auto-increment | Primary key |
+| `name` | string(50) | Nama kategori |
+| `slug` | string(50) | Unique |
+| `timestamps` | — | — |
+
+**Tabel `products`** (ulang dari tugas 4, tanpa kolom `category` — gunakan relasi ke `categories`)
+
+| Kolom | Tipe | Keterangan |
+|-------|------|------------|
+| `id` | auto-increment | Primary key |
 | `name` | string(100) | — |
-| `sku` | string(20) | Kode produk, unique |
-| `price` | integer | Harga dalam rupiah |
-| `stock` | integer | Stok, default 0 |
-| `category` | string(50) | — |
+| `slug` | string(100) | Unique |
+| `price` | integer | — |
+| `stock` | integer | Default 0 |
 | `description` | text | Nullable |
 | `is_active` | boolean | Default true |
+| `category_id` | foreign key | → categories |
 | `user_id` | foreign key | → users |
 | `timestamps` | — | — |
 
-### 2. Form Request StoreProductRequest
+**Tabel `order_items`**
 
-Buat Form Request dengan aturan:
+| Kolom | Tipe | Keterangan |
+|-------|------|------------|
+| `id` | auto-increment | Primary key |
+| `product_id` | foreign key | → products |
+| `quantity` | integer | Jumlah barang |
+| `price` | integer | Harga saat checkout |
+| `customer_name` | string(100) | Nama pembeli |
+| `notes` | text | Nullable, catatan tambahan |
+| `timestamps` | — | — |
 
-| Field | Aturan | Pesan Error Kustom |
-|-------|--------|-------------------|
-| `name` | required, max:100 | "Nama produk wajib diisi", "Nama maksimal 100 karakter" |
-| `sku` | required, alpha_dash, unique:products | "Kode SKU wajib diisi", "Format SKU tidak valid", "SKU sudah digunakan" |
-| `price` | required, integer, min:0 | "Harga wajib diisi", "Harga harus angka", "Harga tidak boleh negatif" |
-| `stock` | required, integer, min:0 | — (default) |
-| `category` | required, in:Elektronik,Fashion,Makanan,Buku,Olahraga | "Pilih kategori yang valid" |
-| `description` | nullable, max:1000 | "Deskripsi maksimal 1000 karakter" |
-| `is_active` | boolean | — |
+### 3. Model & Relasi
 
-### 3. Form Request UpdateProductRequest
+Buat model dan definisikan relasi berikut:
 
-Buat Form Request untuk update dengan aturan yang sama, kecuali `sku` bersifat **unique tapi ignore produk yang sedang diedit**.
+| Model | Relasi | Ke |
+|-------|--------|----|
+| `Product` | `belongsTo` | `Category` |
+| `Product` | `hasMany` | `OrderItem` |
+| `Product` | `belongsTo` | `User` |
+| `Category` | `hasMany` | `Product` |
+| `OrderItem` | `belongsTo` | `Product` |
 
-### 4. Resource Controller
+**Product** juga harus memiliki:
+- `$fillable`, `casts()` untuk `is_active` dan `price`
+- Local scope `active()` dan `minPrice(int $price)`
 
-Buat `ProductController --resource` lengkap:
-- `index` — daftar produk, paginate 10
-- `create` — form tambah
-- `store` — simpan dengan `StoreProductRequest`
-- `show` — detail produk
-- `edit` — form edit
-- `update` — update dengan `UpdateProductRequest`
-- `destroy` — hapus produk
+### 4. Factory & Seeder
 
-Setiap redirect harus menyertakan flash message `success`.
+**CategoryFactory**: buat 5 kategori (acak)
 
-### 5. View
+**ProductFactory**: 30 produk, masing-masing terhubung ke kategori dan user admin secara acak
 
-Buat layout utama dan halaman-halaman berikut:
+**OrderItemFactory**: 50 order item, masing-masing terhubung ke produk acak
 
-**Halaman daftar:** tabel produk dengan kolom No, Nama, SKU, Harga, Stok, Kategori, Status (Aktif/Nonaktif), Aksi (Edit/Hapus). Tambah tombol "Tambah Produk".
+**DatabaseSeeder**: jalankan semua factory dan buat satu user admin.
 
-**Halaman form (create & edit):**
-- Gunakan layout yang sama
-- Tampilkan error per field dengan `@error`
-- Gunakan `old()` untuk mengisi nilai setelah gagal validasi
-- Gunakan `@selected`, `@checked` untuk select dan checkbox
-- Tampilkan `@csrf` dan `@method` yang sesuai
+### 5. Route & Controller
 
-**Halaman detail:** tampilkan semua informasi produk.
+Buat route dan controller untuk:
 
-**Flash message:** tampilkan alert hijau di layout jika ada session success.
+| URL | Method | Keterangan |
+|-----|--------|------------|
+| `/products` | GET | Daftar produk dengan eager loading category |
+| `/products/{product}` | GET | Detail produk + daftar order item + eager loading semua relasi |
+| `/products/category/{category:slug}` | GET | Filter produk berdasarkan kategori |
+| `/products/top` | GET | 5 produk dengan order item terbanyak (pakai `withCount`) |
 
-### 6. Validasi Kustom (Opsional)
+### 6. View
 
-Buat `Rule` kustom `StockSufficient` yang memvalidasi bahwa stok tidak boleh melebihi 999. Gunakan di Form Request.
+**Layout utama** — `layouts/app.blade.php`:
+- Navigasi: Home, Produk, Kategori (dropdown dari semua kategori)
+
+**Halaman daftar produk** — tampilkan:
+- Nama, kategori, harga, stok
+- Jumlah order item (pakai `withCount`)
+- Filter: link ke `/products/category/{slug}` untuk setiap kategori
+
+**Halaman detail produk** — tampilkan:
+- Semua info produk
+- Daftar order item (customer, quantity, total harga)
+- Total semua order item untuk produk ini
+
+**Halaman filter kategori** — sama seperti daftar tapi hanya produk dari kategori tertentu
+
+**Halaman top products** — tabel 5 produk terlaris:
+- Ranking, nama, kategori, jumlah order item
+
+### 7. Eksplorasi Tinker
+
+Jalankan perintah berikut dan screenshot hasilnya:
+
+```php
+use App\Models\Product;
+use App\Models\Category;
+
+// Eager loading
+Product::with(['category', 'user'])->get();
+
+// withCount
+Product::withCount('orderItems')->orderBy('order_items_count', 'desc')->take(5)->get();
+
+// whereHas
+Category::whereHas('products', fn ($q) => $q->where('is_active', true))->get();
+```
 
 ---
 
 ## Ketentuan Pengumpulan
 
-- Kumpulkan: migration, model, Form Request (Store & Update), controller, routes, semua view
-- Sertakan screenshot: hasil submit form kosong (tampilkan error), hasil sukses simpan (flash message), hasil edit dengan slug duplikat (tampilkan error unique)
+- Kumpulkan semua file: migration, model, factory, seeder, controller, routes, view
+- Screenshot: hasil migrate --seed, setiap halaman browser, dan perintah Tinker
+- Batas pengumpulan: sebelum BAB berikutnya
 
 ---
 
@@ -94,10 +143,9 @@ Buat `Rule` kustom `StockSufficient` yang memvalidasi bahwa stok tidak boleh mel
 
 | Aspek | Bobot |
 |-------|-------|
-| Form Request (Store & Update) dengan aturan lengkap | 25% |
-| Form Request Update dengan ignore unique | 10% |
-| Resource Controller & Route | 15% |
-| View form (old, error, selected, checked) | 25% |
-| Flash message & layout | 10% |
-| Validasi kustom (opsional) | 10% |
-| Kerapihan kode | 5% |
+| Migration & foreign key | 15% |
+| Model & relasi (belongsTo, hasMany) | 20% |
+| Factory & Seeder (data acak) | 10% |
+| Route & Controller (eager loading, withCount) | 20% |
+| View (layout, daftar, detail, filter, top) | 25% |
+| Tinker (3 query) | 10% |

@@ -1,10 +1,10 @@
-# BAB 5 — Relasi Database
+# BAB 6 — Relasi Database
 
 ---
 
-## 5.1 Tujuan Pembelajaran
+## 6.1 Tujuan Pembelajaran
 
-Setelah menyelesaikan BAB 5 ini, teman-teman diharapkan mampu:
+Setelah menyelesaikan BAB 6 ini, teman-teman diharapkan mampu:
 
 - Menjelaskan jenis-jenis relasi database (one-to-one, one-to-many, many-to-many)
 - Mendefinisikan relasi antar model menggunakan Eloquent
@@ -15,9 +15,9 @@ Setelah menyelesaikan BAB 5 ini, teman-teman diharapkan mampu:
 
 ---
 
-## 5.2 Pendahuluan
+## 6.2 Pendahuluan
 
-Pada BAB 4, kita telah belajar membuat satu model `Article` yang berdiri sendiri. Namun, di dunia nyata, data tidak pernah benar-benar terisolasi. Sebuah artikel pasti ditulis oleh **user** (penulis). Sebuah artikel bisa memiliki banyak **komentar**. Sebuah artikel bisa memiliki banyak **tag**, dan satu tag bisa digunakan di banyak artikel.
+Pada BAB 5, kita telah belajar membuat satu model `Article` yang berdiri sendiri. Namun, di dunia nyata, data tidak pernah benar-benar terisolasi. Sebuah artikel pasti ditulis oleh **user** (penulis). Sebuah artikel bisa memiliki banyak **komentar**. Sebuah artikel bisa memiliki banyak **tag**, dan satu tag bisa digunakan di banyak artikel.
 
 Relasi database adalah cara menghubungkan tabel-tabel yang berbeda sehingga data bisa diakses secara terstruktur dan efisien. Tanpa relasi, kita harus menyimpan semua data dalam satu tabel besar — yang akan menyebabkan duplikasi data, pemborosan storage, dan sulitnya pemeliharaan.
 
@@ -33,13 +33,13 @@ Eloquent ORM membuat pengelolaan relasi menjadi sangat intuitif. Kita cukup mend
 
 ---
 
-## 5.3 One-to-One (1:1)
+## 6.3 One-to-One (1:1)
 
 Relasi one-to-one berarti satu record di tabel A berhubungan dengan **satu** record di tabel B.
 
 Contoh: setiap user memiliki satu profile (berisi bio, avatar, nomor telepon, dll).
 
-### 5.3.1 Membuat Migration
+### 6.3.1 Membuat Migration
 
 ```bash
 php artisan make:migration create_profiles_table
@@ -57,7 +57,7 @@ Schema::create('profiles', function (Blueprint $table) {
 });
 ```
 
-### 5.3.2 Mendefinisikan Relasi di Model
+### 6.3.2 Mendefinisikan Relasi di Model
 
 **Model User:**
 
@@ -99,7 +99,7 @@ class Profile extends Model
 }
 ```
 
-### 5.3.3 Menggunakan Relasi One-to-One
+### 6.3.3 Menggunakan Relasi One-to-One
 
 ```php
 // Mendapatkan profile dari user
@@ -119,13 +119,13 @@ $user->profile()->create([
 
 ---
 
-## 5.4 One-to-Many (1:N)
+## 6.4 One-to-Many (1:N)
 
 Relasi one-to-many berarti satu record di tabel A berhubungan dengan **banyak** record di tabel B.
 
 Contoh: satu artikel memiliki banyak komentar. Satu user bisa menulis banyak artikel.
 
-### 5.4.1 Membuat Migration
+### 6.4.1 Membuat Migration
 
 ```bash
 php artisan make:migration create_comments_table
@@ -141,7 +141,7 @@ Schema::create('comments', function (Blueprint $table) {
 });
 ```
 
-### 5.4.2 Mendefinisikan Relasi di Model
+### 6.4.2 Mendefinisikan Relasi di Model
 
 **Model Article:**
 
@@ -194,7 +194,7 @@ class Comment extends Model
 }
 ```
 
-### 5.4.3 Menggunakan Relasi One-to-Many
+### 6.4.3 Menggunakan Relasi One-to-Many
 
 ```php
 // Semua komentar dari sebuah artikel
@@ -212,7 +212,7 @@ $article->comments()->create([
 ]);
 ```
 
-### 5.4.4 Query dengan whereHas dan whereDoesntHave
+### 6.4.4 Query dengan whereHas dan whereDoesntHave
 
 Untuk mencari artikel yang memiliki (atau tidak memiliki) komentar:
 
@@ -231,13 +231,13 @@ $articles = Article::whereDoesntHave('comments')->get();
 
 ---
 
-## 5.5 Many-to-Many (N:N)
+## 6.5 Many-to-Many (N:N)
 
 Relasi many-to-many berarti satu record di tabel A berhubungan dengan **banyak** record di tabel B, dan sebaliknya. Relasi ini membutuhkan **tabel pivot** sebagai perantara.
 
 Contoh: satu artikel bisa memiliki banyak tag (Teknologi, PHP, Laravel), dan satu tag bisa digunakan di banyak artikel.
 
-### 5.5.1 Tabel Pivot
+### 6.5.1 Tabel Pivot
 
 Tabel pivot adalah tabel perantara yang menghubungkan dua tabel. Nama tabel pivot biasanya gabungan dari kedua nama tabel dalam bentuk singular, dipisah underscore, sesuai urutan abjad: `article_tag`.
 
@@ -249,7 +249,7 @@ article_tag
 └── tag_id      → foreign key ke tags
 ```
 
-### 5.5.2 Membuat Migration untuk Tags dan Pivot
+### 6.5.2 Membuat Migration untuk Tags dan Pivot
 
 ```bash
 php artisan make:migration create_tags_table
@@ -282,7 +282,7 @@ Schema::create('article_tag', function (Blueprint $table) {
 
 > **Catatan:** Nama tabel pivot adalah gabungan dua nama model dalam bentuk **singular** dan **sesuai urutan abjad**: `article_tag` (bukan `tag_article`). Eloquent mengikuti konvensi ini secara otomatis.
 
-### 5.5.3 Mendefinisikan Relasi di Model
+### 6.5.3 Mendefinisikan Relasi di Model
 
 **Model Article:**
 
@@ -306,7 +306,7 @@ public function articles(): BelongsToMany
 }
 ```
 
-### 5.5.4 Menggunakan Relasi Many-to-Many
+### 6.5.4 Menggunakan Relasi Many-to-Many
 
 ```php
 // Tag dari sebuah artikel
@@ -332,7 +332,7 @@ $article->tags()->sync([1, 3, 5]);        // hasil akhir: tag 1, 3, 5 saja
 $article->tags()->syncWithoutDetaching([2, 6]);
 ```
 
-### 5.5.5 Kolom Tambahan di Tabel Pivot
+### 6.5.5 Kolom Tambahan di Tabel Pivot
 
 Tabel pivot bisa memiliki kolom tambahan. Misalnya, kolom `created_at` untuk mencatat kapan tag ditambahkan ke artikel.
 
@@ -361,11 +361,11 @@ public function tags(): BelongsToMany
 
 ---
 
-## 5.6 Eager Loading & N+1 Problem
+## 6.6 Eager Loading & N+1 Problem
 
 Salah satu masalah performa paling umum di Laravel adalah **N+1 query problem**.
 
-### 5.6.1 Apa Itu N+1?
+### 6.6.1 Apa Itu N+1?
 
 Perhatikan kode berikut:
 
@@ -381,7 +381,7 @@ Kode di atas menghasilkan **1 + N query** — 1 query untuk mengambil semua arti
 
 Masalah ini sering tidak terlihat di lingkungan development dengan data sedikit, tetapi akan sangat terasa di production dengan ribuan data.
 
-### 5.6.2 Solusi: Eager Loading
+### 6.6.2 Solusi: Eager Loading
 
 Gunakan method `with()` untuk mengambil relasi sekaligus dalam satu query:
 
@@ -400,13 +400,13 @@ Berapa query sekarang?
 
 Hanya **2 query** berapa pun jumlah artikelnya.
 
-### 5.6.3 Eager Loading Multiple Relasi
+### 6.6.3 Eager Loading Multiple Relasi
 
 ```php
 $articles = Article::with(['author', 'comments', 'tags'])->get();
 ```
 
-### 5.6.4 Nested Eager Loading
+### 6.6.4 Nested Eager Loading
 
 ```php
 $articles = Article::with('comments.user')->get();
@@ -414,7 +414,7 @@ $articles = Article::with('comments.user')->get();
 // Total: 3 query
 ```
 
-### 5.6.5 Constrained Eager Loading
+### 6.6.5 Constrained Eager Loading
 
 Kadang kita hanya perlu sebagian data dari relasi. Bisa dibatasi dengan closure:
 
@@ -424,7 +424,7 @@ $articles = Article::with(['comments' => function ($query) {
 }])->get();
 ```
 
-### 5.6.6 Mencegah Lazy Loading
+### 6.6.6 Mencegah Lazy Loading
 
 Untuk menangkap N+1 sejak development, aktifkan pencegahan di `AppServiceProvider`:
 
@@ -441,7 +441,7 @@ Dengan ini, jika ada kode yang memanggil relasi tanpa eager loading, Laravel aka
 
 ---
 
-## 5.7 withCount
+## 6.7 withCount
 
 Jika kita hanya perlu **jumlah** data dari suatu relasi (bukan datanya), gunakan `withCount()`. Ini lebih efisien daripada memuat seluruh koleksi lalu menghitungnya.
 
@@ -476,7 +476,7 @@ $articles = Article::withCount([
 
 ---
 
-## 5.8 whereBelongsTo
+## 6.8 whereBelongsTo
 
 Daripada menulis foreign key secara manual, gunakan `whereBelongsTo()` untuk query yang lebih bersih:
 
@@ -493,13 +493,13 @@ $articles = Article::whereBelongsTo($user, 'author')->get();
 
 ---
 
-## 5.9 Praktikum: Membangun Relasi Database
+## 6.9 Praktikum: Membangun Relasi Database
 
-Pada praktikum ini, kita akan mengembangkan aplikasi artikel dari BAB 4 dengan menambahkan fitur komentar dan tag.
+Pada praktikum ini, kita akan mengembangkan aplikasi artikel dari BAB 5 dengan menambahkan fitur komentar dan tag.
 
-### 5.9.1 Persiapan
+### 6.9.1 Persiapan
 
-Pastikan project Laravel dari BAB 4 sudah siap. Jika belum, buat project baru dan jalankan migrasi BAB 4 terlebih dahulu.
+Pastikan project Laravel dari BAB 5 sudah siap. Jika belum, buat project baru dan jalankan migrasi BAB 5 terlebih dahulu.
 
 ```bash
 composer create-project laravel/laravel blog-relasi
@@ -523,7 +523,7 @@ Buat database MySQL:
 CREATE DATABASE blog_relasi CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 5.9.2 Membuat Model, Migration, Seeder
+### 6.9.2 Membuat Model, Migration, Seeder
 
 Buat model Article beserta migration dan factory:
 
@@ -533,7 +533,7 @@ php artisan make:model Comment -mf
 php artisan make:model Tag -mf
 ```
 
-### 5.9.3 Migration Articles
+### 6.9.3 Migration Articles
 
 `database/migrations/xxxx_create_articles_table.php`:
 
@@ -551,7 +551,7 @@ Schema::create('articles', function (Blueprint $table) {
 });
 ```
 
-### 5.9.4 Migration Comments
+### 6.9.4 Migration Comments
 
 `database/migrations/xxxx_create_comments_table.php`:
 
@@ -565,7 +565,7 @@ Schema::create('comments', function (Blueprint $table) {
 });
 ```
 
-### 5.9.5 Migration Tags
+### 6.9.5 Migration Tags
 
 `database/migrations/xxxx_create_tags_table.php`:
 
@@ -594,7 +594,7 @@ Schema::create('article_tag', function (Blueprint $table) {
 });
 ```
 
-### 5.9.6 Mendefinisikan Model
+### 6.9.6 Mendefinisikan Model
 
 **Model `app/Models/Article.php`:**
 
@@ -701,7 +701,7 @@ class Tag extends Model
 }
 ```
 
-### 5.9.7 Factory dan Seeder
+### 6.9.7 Factory dan Seeder
 
 **ArticleFactory** — `database/factories/ArticleFactory.php`:
 
@@ -820,13 +820,13 @@ class DatabaseSeeder extends Seeder
 }
 ```
 
-### 5.9.8 Menjalankan Migrasi dan Seeder
+### 6.9.8 Menjalankan Migrasi dan Seeder
 
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-### 5.9.9 Membuat Controller
+### 6.9.9 Membuat Controller
 
 ```bash
 php artisan make:controller ArticleController
@@ -867,7 +867,7 @@ class ArticleController extends Controller
 }
 ```
 
-### 5.9.10 Route
+### 6.9.10 Route
 
 `routes/web.php`:
 
@@ -883,7 +883,7 @@ Route::get('/articles', [ArticleController::class, 'index'])->name('articles.ind
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 ```
 
-### 5.9.11 View
+### 6.9.11 View
 
 **Layout — `resources/views/layouts/app.blade.php`:**
 
@@ -1006,14 +1006,14 @@ Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('art
 @endsection
 ```
 
-### 5.9.12 Uji Coba
+### 6.9.12 Uji Coba
 
 1. Jalankan server: `php artisan serve`
 2. Buka `http://localhost:8000/articles`
 3. Hasil: daftar artikel dengan tag, nama author, jumlah komentar
 4. Klik artikel: tampil detail artikel, tag, dan daftar komentar
 
-### 5.9.13 Eksplorasi Query dengan Tinker
+### 6.9.13 Eksplorasi Query dengan Tinker
 
 ```bash
 php artisan tinker
@@ -1038,7 +1038,7 @@ Tag::withCount('articles')->get();
 
 ---
 
-## 5.10 Rangkuman
+## 6.10 Rangkuman
 
 | Konsep | Intinya |
 |--------|---------|
@@ -1053,7 +1053,7 @@ Tag::withCount('articles')->get();
 
 ---
 
-## 5.11 Referensi
+## 6.11 Referensi
 
 - [Eloquent Relationships](https://laravel.com/docs/13.x/eloquent-relationships)
 - [Eager Loading](https://laravel.com/docs/13.x/eloquent-relationships#eager-loading)
@@ -1062,6 +1062,6 @@ Tag::withCount('articles')->get();
 
 ---
 
-**Lanjut ke:** [BAB 6 — Form Request & Validation](../BAB-06-Form-Request-dan-Validation/README.md)
+**Lanjut ke:** [BAB 7 — Form Request & Validation](../BAB-07-Form-Request-dan-Validation/README.md)
 
-**Kembali ke:** [BAB 4 — Migration & Eloquent ORM](../BAB-04-Migration-dan-Eloquent-ORM/README.md)
+**Kembali ke:** [BAB 5 — Migration & Eloquent ORM](../BAB-05-Migration-dan-Eloquent-ORM/README.md)

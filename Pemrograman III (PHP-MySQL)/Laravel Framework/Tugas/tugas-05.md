@@ -1,140 +1,123 @@
-# Tugas 5 — Relasi Database
+# Tugas 5 — Migration & Eloquent ORM
 
 ---
 
 ## Tujuan
 
-Mahasiswa mampu mendefinisikan dan menggunakan relasi database (one-to-many, many-to-many), eager loading, dan query agregat dengan Eloquent.
+Mahasiswa mampu membuat migration, model, factory, seeder, dan melakukan operasi CRUD menggunakan Eloquent dengan database MySQL.
 
 ---
 
 ## Soal
 
-### 1. Persiapan
+### 1. Persiapan Project
 
-Buat project baru atau gunakan project dari tugas sebelumnya. Buat database `db_tugas5`.
+Buat project Laravel baru dengan nama `tugas-relasi-mysql`.
+
+Atur koneksi database di `.env` untuk menggunakan **MySQL** dengan database `db_tugas5`.
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_tugas4
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Buat database di MySQL:
+
+```sql
+CREATE DATABASE db_tugas5 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
 ### 2. Migration
 
-Buat tabel-tabel berikut:
-
-**Tabel `categories`**
+Buat migrasi untuk tabel **products** dengan kolom berikut:
 
 | Kolom | Tipe | Keterangan |
 |-------|------|------------|
 | `id` | auto-increment | Primary key |
-| `name` | string(50) | Nama kategori |
-| `slug` | string(50) | Unique |
-| `timestamps` | — | — |
+| `name` | string(100) | Nama produk |
+| `slug` | string(100) | Slug URL, unique |
+| `price` | integer | Harga dalam rupiah |
+| `stock` | integer | Stok barang, default 0 |
+| `category` | string(50) | Kategori produk |
+| `description` | text | Deskripsi, boleh null |
+| `is_active` | boolean | Status aktif, default true |
+| `user_id` | foreign key | Foreign key ke tabel users |
+| `timestamps` | — | created_at & updated_at |
 
-**Tabel `products`** (ulang dari tugas 4, tanpa kolom `category` — gunakan relasi ke `categories`)
+**Ketentuan:**
+- Gunakan `constrained()->cascadeOnDelete()` untuk foreign key
+- Tambahkan `->index()` pada kolom `category`
+- Tulis method `down()` yang reversible
 
-| Kolom | Tipe | Keterangan |
-|-------|------|------------|
-| `id` | auto-increment | Primary key |
-| `name` | string(100) | — |
-| `slug` | string(100) | Unique |
-| `price` | integer | — |
-| `stock` | integer | Default 0 |
-| `description` | text | Nullable |
-| `is_active` | boolean | Default true |
-| `category_id` | foreign key | → categories |
-| `user_id` | foreign key | → users |
-| `timestamps` | — | — |
+### 3. Model
 
-**Tabel `order_items`**
+Buat model `Product` dengan ketentuan:
 
-| Kolom | Tipe | Keterangan |
-|-------|------|------------|
-| `id` | auto-increment | Primary key |
-| `product_id` | foreign key | → products |
-| `quantity` | integer | Jumlah barang |
-| `price` | integer | Harga saat checkout |
-| `customer_name` | string(100) | Nama pembeli |
-| `notes` | text | Nullable, catatan tambahan |
-| `timestamps` | — | — |
-
-### 3. Model & Relasi
-
-Buat model dan definisikan relasi berikut:
-
-| Model | Relasi | Ke |
-|-------|--------|----|
-| `Product` | `belongsTo` | `Category` |
-| `Product` | `hasMany` | `OrderItem` |
-| `Product` | `belongsTo` | `User` |
-| `Category` | `hasMany` | `Product` |
-| `OrderItem` | `belongsTo` | `Product` |
-
-**Product** juga harus memiliki:
-- `$fillable`, `casts()` untuk `is_active` dan `price`
-- Local scope `active()` dan `minPrice(int $price)`
+- `$fillable` yang sesuai
+- Method `casts()` untuk `is_active` (boolean) dan `price` (integer)
+- Local scope `active()` untuk mengambil produk yang aktif
+- Local scope `category(string $category)` untuk filter kategori
+- Relasi `user()`: belongsTo ke User
 
 ### 4. Factory & Seeder
 
-**CategoryFactory**: buat 5 kategori (acak)
+Buat factory untuk Product yang menghasilkan data realistis:
+- `name`: kalimat 3 kata
+- `slug`: slug dari name
+- `price`: angka acak antara 10.000 dan 1.000.000
+- `stock`: angka acak 0–100
+- `category`: acak dari [Elektronik, Fashion, Makanan, Buku, Olahraga]
+- `description`: 2 paragraf
+- `is_active`: 80% true
 
-**ProductFactory**: 30 produk, masing-masing terhubung ke kategori dan user admin secara acak
-
-**OrderItemFactory**: 50 order item, masing-masing terhubung ke produk acak
-
-**DatabaseSeeder**: jalankan semua factory dan buat satu user admin.
+Buat **DatabaseSeeder** yang:
+1. Membuat satu user admin (email: `admin@toko.test`)
+2. Membuat 30 produk milik user tersebut
 
 ### 5. Route & Controller
 
-Buat route dan controller untuk:
-
-| URL | Method | Keterangan |
-|-----|--------|------------|
-| `/products` | GET | Daftar produk dengan eager loading category |
-| `/products/{product}` | GET | Detail produk + daftar order item + eager loading semua relasi |
-| `/products/category/{category:slug}` | GET | Filter produk berdasarkan kategori |
-| `/products/top` | GET | 5 produk dengan order item terbanyak (pakai `withCount`) |
+Buat `ProductController` (gunakan `--resource`) dan daftarkan route dengan prefix `/products` dan hanya method `index` dan `show`.
 
 ### 6. View
 
-**Layout utama** — `layouts/app.blade.php`:
-- Navigasi: Home, Produk, Kategori (dropdown dari semua kategori)
+**Daftar Produk** (`/products`):
+- Tampilkan produk aktif saja
+- Gunakan eager loading `user` dan `withCount` untuk kolom tambahan (tidak ada)
+- Paginate 10 per halaman
+- Tampilkan: nama, kategori, harga (format Rupiah), stok, status aktif/nonaktif
+- Setiap produk bisa diklik ke halaman detail
 
-**Halaman daftar produk** — tampilkan:
-- Nama, kategori, harga, stok
-- Jumlah order item (pakai `withCount`)
-- Filter: link ke `/products/category/{slug}` untuk setiap kategori
+**Detail Produk** (`/products/{id}`):
+- Tampilkan semua informasi produk
+- Jika produk tidak aktif, tampilkan 404
 
-**Halaman detail produk** — tampilkan:
-- Semua info produk
-- Daftar order item (customer, quantity, total harga)
-- Total semua order item untuk produk ini
+### 7. Tinker
 
-**Halaman filter kategori** — sama seperti daftar tapi hanya produk dari kategori tertentu
-
-**Halaman top products** — tabel 5 produk terlaris:
-- Ranking, nama, kategori, jumlah order item
-
-### 7. Eksplorasi Tinker
-
-Jalankan perintah berikut dan screenshot hasilnya:
+Jalankan `php artisan tinker` dan buktikan dengan screenshot bahwa query berikut berhasil:
 
 ```php
 use App\Models\Product;
-use App\Models\Category;
 
-// Eager loading
-Product::with(['category', 'user'])->get();
+// Produk yang aktif
+Product::active()->count();
 
-// withCount
-Product::withCount('orderItems')->orderBy('order_items_count', 'desc')->take(5)->get();
+// Produk per kategori
+Product::category('Elektronik')->count();
 
-// whereHas
-Category::whereHas('products', fn ($q) => $q->where('is_active', true))->get();
+// Relasi user
+Product::with('user')->first()->user->name;
 ```
 
 ---
 
 ## Ketentuan Pengumpulan
 
-- Kumpulkan semua file: migration, model, factory, seeder, controller, routes, view
-- Screenshot: hasil migrate --seed, setiap halaman browser, dan perintah Tinker
+- Kumpulkan file: migration, model, factory, seeder, controller, routes/web.php, dan semua file view
+- Sertakan screenshot: hasil `php artisan migrate:fresh --seed`, tiap halaman di browser, dan hasil perintah Tinker
 - Batas pengumpulan: sebelum BAB berikutnya
 
 ---
@@ -143,9 +126,10 @@ Category::whereHas('products', fn ($q) => $q->where('is_active', true))->get();
 
 | Aspek | Bobot |
 |-------|-------|
-| Migration & foreign key | 15% |
-| Model & relasi (belongsTo, hasMany) | 20% |
-| Factory & Seeder (data acak) | 10% |
-| Route & Controller (eager loading, withCount) | 20% |
-| View (layout, daftar, detail, filter, top) | 25% |
-| Tinker (3 query) | 10% |
+| Migration (foreign key, index, down) | 15% |
+| Model ($fillable, casts, scopes, relasi) | 15% |
+| Factory & Seeder (data realistis) | 15% |
+| Controller & Route (eager loading, paginate) | 20% |
+| View (daftar & detail produk) | 20% |
+| Tinker (3 query berhasil) | 10% |
+| Kerapihan kode & dokumentasi | 5% |

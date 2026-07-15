@@ -1,10 +1,10 @@
-# BAB 6 — Form Request & Validation
+# BAB 7 — Form Request & Validation
 
 ---
 
-## 6.1 Tujuan Pembelajaran
+## 7.1 Tujuan Pembelajaran
 
-Setelah menyelesaikan BAB 6 ini, teman-teman diharapkan mampu:
+Setelah menyelesaikan BAB 7 ini, teman-teman diharapkan mampu:
 
 - Memvalidasi input form langsung di Controller
 - Membuat Form Request class untuk validasi terpisah
@@ -16,7 +16,7 @@ Setelah menyelesaikan BAB 6 ini, teman-teman diharapkan mampu:
 
 ---
 
-## 6.2 Pendahuluan
+## 7.2 Pendahuluan
 
 Sejauh ini, kita telah belajar menampilkan data dari database ke halaman web. Namun, aplikasi web yang sesungguhnya juga harus bisa **menerima input dari pengguna** — baik itu form registrasi, form artikel, form komentar, dan lain-lain.
 
@@ -31,9 +31,9 @@ Tanpa validasi, aplikasi kita rentan terhadap data rusak, error server, hingga s
 
 ---
 
-## 6.3 Validasi Dasar di Controller
+## 7.3 Validasi Dasar di Controller
 
-### 6.3.1 Menggunakan validate()
+### 7.3.1 Menggunakan validate()
 
 Cara paling sederhana adalah menggunakan method `validate()` pada objek Request:
 
@@ -69,7 +69,7 @@ class ArticleController extends Controller
 - Jika validasi gagal, Laravel otomatis mengarahkan kembali ke halaman sebelumnya dan menyimpan error di session
 - Jika validasi lolos, method mengembalikan array data yang sudah tervalidasi
 
-### 6.3.2 Aturan Validasi Umum
+### 7.3.2 Aturan Validasi Umum
 
 | Aturan | Fungsi |
 |--------|--------|
@@ -92,7 +92,7 @@ class ArticleController extends Controller
 | `mimes:jpg,png` | Ekstensi file tertentu |
 | `max:2048` | Ukuran file maksimal (dalam KB) |
 
-### 6.3.3 Validasi dengan Array Syntax
+### 7.3.3 Validasi dengan Array Syntax
 
 Laravel mendukung dua cara penulisan aturan validasi. Di kode sebelumnya kita menggunakan **string notation** (`'required|max:255'`). Alternatifnya adalah **array syntax** yang lebih mudah dibaca saat aturannya kompleks:
 
@@ -106,7 +106,7 @@ $validated = $request->validate([
 
 Untuk konsistensi, pilih salah satu gaya dan gunakan secara konsisten di seluruh project.
 
-### 6.3.4 Menampilkan Error di View
+### 7.3.4 Menampilkan Error di View
 
 Ketika validasi gagal, Laravel akan:
 
@@ -141,7 +141,7 @@ Di Blade:
 </form>
 ```
 
-### 6.3.5 Flash Data
+### 7.3.5 Flash Data
 
 Setelah berhasil menyimpan data, kita sering menampilkan pesan sukses. Gunakan `with()` pada redirect:
 
@@ -162,11 +162,11 @@ Tampilkan di view:
 
 ---
 
-## 6.4 Form Request Class
+## 7.4 Form Request Class
 
 Validasi di Controller memang sederhana, tapi untuk aplikasi yang lebih besar, menulis semua aturan validasi di Controller akan membuat Controller menjadi gemuk dan sulit diuji. Solusinya adalah **Form Request** — class khusus yang menangani validasi.
 
-### 6.4.1 Membuat Form Request
+### 7.4.1 Membuat Form Request
 
 ```bash
 php artisan make:request StoreArticleRequest
@@ -220,7 +220,7 @@ class StoreArticleRequest extends FormRequest
 | `rules()` | Mendefinisikan aturan validasi |
 | `messages()` | Kustom pesan error (opsional) |
 
-### 6.4.2 Menggunakan Form Request di Controller
+### 7.4.2 Menggunakan Form Request di Controller
 
 ```php
 use App\Http\Requests\StoreArticleRequest;
@@ -239,7 +239,7 @@ Perhatikan, Controller menjadi sangat bersih:
 - Method `$request->validated()` hanya mengembalikan data yang sudah tervalidasi
 - Controller hanya fokus pada logika bisnis
 
-### 6.4.3 Form Request untuk Update
+### 7.4.3 Form Request untuk Update
 
 Buat Form Request terpisah untuk update:
 
@@ -263,7 +263,7 @@ public function rules(): array
 
 Perbedaan dengan Store: aturan `unique` mengecualikan artikel yang sedang diedit agar tidak konflik dengan slug-nya sendiri.
 
-### 6.4.4 Authorize di Form Request
+### 7.4.4 Authorize di Form Request
 
 Jika hanya user tertentu yang boleh membuat artikel:
 
@@ -285,9 +285,9 @@ public function authorize(): bool
 
 ---
 
-## 6.5 Aturan Validasi Lanjutan
+## 7.5 Aturan Validasi Lanjutan
 
-### 6.5.1 Conditional Validation dengan Rule::when()
+### 7.5.1 Conditional Validation dengan Rule::when()
 
 ```php
 use Illuminate\Validation\Rule;
@@ -303,7 +303,7 @@ public function rules(): array
 }
 ```
 
-### 6.5.2 Custom Validation dengan after()
+### 7.5.2 Custom Validation dengan after()
 
 Jika validasi membutuhkan logika yang melibatkan beberapa field:
 
@@ -320,7 +320,7 @@ public function after(): array
 }
 ```
 
-### 6.5.3 Kustom Aturan Validasi
+### 7.5.3 Kustom Aturan Validasi
 
 Buat aturan kustom jika aturan bawaan tidak mencukupi:
 
@@ -362,9 +362,9 @@ public function rules(): array
 
 ---
 
-## 6.6 Prinsip Keamanan
+## 7.6 Prinsip Keamanan
 
-### 6.6.1 Mass Assignment Protection
+### 7.6.1 Mass Assignment Protection
 
 Jangan pernah menggunakan `$request->all()` untuk operasi mass assignment. Gunakan `$request->validated()` atau tetapkan kolom secara eksplisit:
 
@@ -387,7 +387,7 @@ class Article extends Model
 }
 ```
 
-### 6.6.2 CSRF Protection
+### 7.6.2 CSRF Protection
 
 Semua form POST, PUT, PATCH, DELETE harus menyertakan token CSRF. Blade directive `@csrf` akan menambahkan input hidden dengan token yang valid.
 
@@ -402,13 +402,13 @@ Jangan lupa sertakan `@csrf` di setiap form — Laravel akan menolak request tan
 
 ---
 
-## 6.7 Praktikum: Form Artikel dengan Validasi
+## 7.7 Praktikum: Form Artikel dengan Validasi
 
 Pada praktikum ini, kita akan membuat fitur tambah dan edit artikel dengan validasi lengkap menggunakan Form Request.
 
-### 6.7.1 Persiapan
+### 7.7.1 Persiapan
 
-Gunakan project dari BAB 5 atau buat project baru dengan migrasi articles, categories, tags, dan comments.
+Gunakan project dari BAB 6 atau buat project baru dengan migrasi articles, categories, tags, dan comments.
 
 ```bash
 composer create-project laravel/laravel blog-validation
@@ -432,7 +432,7 @@ Buat database:
 CREATE DATABASE blog_validation CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 6.7.2 Model Article
+### 7.7.2 Model Article
 
 ```bash
 php artisan make:model Article -m
@@ -466,7 +466,7 @@ class Article extends Model
 }
 ```
 
-### 6.7.3 Migration Articles
+### 7.7.3 Migration Articles
 
 `database/migrations/xxxx_create_articles_table.php`:
 
@@ -484,7 +484,7 @@ Schema::create('articles', function (Blueprint $table) {
 });
 ```
 
-### 6.7.4 Form Request Store
+### 7.7.4 Form Request Store
 
 ```bash
 php artisan make:request StoreArticleRequest
@@ -535,7 +535,7 @@ class StoreArticleRequest extends FormRequest
 }
 ```
 
-### 6.7.5 Form Request Update
+### 7.7.5 Form Request Update
 
 ```bash
 php artisan make:request UpdateArticleRequest
@@ -587,7 +587,7 @@ class UpdateArticleRequest extends FormRequest
 }
 ```
 
-### 6.7.6 Controller
+### 7.7.6 Controller
 
 ```bash
 php artisan make:controller ArticleController
@@ -653,7 +653,7 @@ class ArticleController extends Controller
 }
 ```
 
-### 6.7.7 Route
+### 7.7.7 Route
 
 `routes/web.php`:
 
@@ -668,7 +668,7 @@ Route::get('/', fn () => view('home'));
 Route::resource('articles', ArticleController::class);
 ```
 
-### 6.7.8 View
+### 7.7.8 View
 
 **Layout — `resources/views/layouts/app.blade.php`:**
 
@@ -920,7 +920,7 @@ Route::resource('articles', ArticleController::class);
 @endsection
 ```
 
-### 6.7.9 Uji Coba
+### 7.7.9 Uji Coba
 
 1. Jalankan migrasi: `php artisan migrate`
 2. Jalankan server: `php artisan serve`
@@ -932,7 +932,7 @@ Route::resource('articles', ArticleController::class);
 
 ---
 
-## 6.8 Rangkuman
+## 7.8 Rangkuman
 
 | Konsep | Intinya |
 |--------|---------|
@@ -948,7 +948,7 @@ Route::resource('articles', ArticleController::class);
 
 ---
 
-## 6.9 Referensi
+## 7.9 Referensi
 
 - [Laravel Validation](https://laravel.com/docs/13.x/validation)
 - [Form Request](https://laravel.com/docs/13.x/validation#form-request-validation)
@@ -958,6 +958,6 @@ Route::resource('articles', ArticleController::class);
 
 ---
 
-**Lanjut ke:** [BAB 7 — Authentication & Middleware](../BAB-07-Authentication-dan-Middleware/README.md)
+**Lanjut ke:** [BAB 8 — Authentication & Middleware](../BAB-08-Authentication-dan-Middleware/README.md)
 
-**Kembali ke:** [BAB 5 — Relasi Database](../BAB-05-Relasi-Database/README.md)
+**Kembali ke:** [BAB 6 — Relasi Database](../BAB-06-Relasi-Database/README.md)

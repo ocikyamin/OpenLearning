@@ -1,104 +1,69 @@
-# Tugas 3 — Blade Templating
+# Tugas 3 — Routing & Controller
 
 ---
 
 ## Tujuan
 
-Mahasiswa mampu membuat layout utama, halaman dengan template inheritance, dan menampilkan data menggunakan Blade.
+Mahasiswa mampu mendefinisikan route, menggunakan route parameters, membuat controller, dan mengelola response.
 
 ---
 
 ## Soal
 
-Buat aplikasi dengan **layout utama** dan **beberapa halaman** seperti di bawah ini.
+### 1. Route & Controller Dasar
 
-### 1. Layout Utama
+Buat project baru atau gunakan project tugas sebelumnya.
 
-Buat file `resources/views/layouts/main.blade.php` dengan struktur:
+Buat **ProductController** dengan method berikut:
 
-- `<title>` dinamis menggunakan `@yield`
-- Navigasi dengan link: **Home**, **Produk**, **Tentang**, **Kontak**
-- Bagian `@yield('content')` untuk konten utama
-- Sidebar (opsional, bisa menggunakan `@section('sidebar')`)
-- Footer: "© 2026 — Toko Laravel"
+| Method | Route | Tampilkan |
+|--------|-------|-----------|
+| `index()` | `GET /produk` | Daftar produk (hardcoded array) |
+| `show($id)` | `GET /produk/{id}` | Detail produk dengan ID tertentu |
+| `kategori($kategori)` | `GET /produk/kategori/{kategori}` | Filter produk berdasarkan kategori |
 
-### 2. Halaman Home (`/`)
-
-Menggunakan layout utama, menampilkan:
-
-- Judul "Selamat Datang di Toko Kami"
-- 3-4 produk unggulan dalam bentuk **card component** (gunakan `<x-card>`)
-- Setiap card berisi: nama produk, harga, dan tombol "Detail"
-
-### 3. Halaman Produk (`/produk`)
-
-- Menampilkan daftar produk dalam bentuk **tabel HTML**
-- Data produk dikirim dari **controller** (bukan closure di route)
-- Kolom tabel: No, Nama, Harga, Kategori, Aksi
-- Jika array produk kosong, tampilkan pesan "Tidak ada produk"
-- Gunakan `@forelse`
-
-### 4. Halaman Detail Produk (`/produk/{id}`)
-
-- Menampilkan detail satu produk: nama, harga, kategori, deskripsi
-- Jika ID tidak ditemukan, tampilkan pesan error "Produk tidak ditemukan"
-- Gunakan komponen `x-alert` untuk menampilkan pesan error
-
-### 5. Halaman Tentang (`/tentang`)
-
-- Layout utama, judul "Tentang Toko Kami"
-- Paragraf tentang toko
-- Daftar kelebihan menggunakan `@foreach`
-
-### 6. Halaman Kontak (`/kontak`)
-
-- Form kontak sederhana dengan method POST dan `@csrf`
-- Field: Nama, Email, Pesan
-- Gunakan `old()` untuk mengisi nilai setelah submit
-- Jika ada error validasi, tampilkan menggunakan `@error`
-
-### 7. Komponen Blade
-
-Buat komponen berikut di `resources/views/components/`:
-
-**`card.blade.php`**:
-```blade
-<div class="card">
-    <h3>{{ $title }}</h3>
-    <div class="card-body">{{ $slot }}</div>
-    @if(isset($footer))<div class="card-footer">{{ $footer }}</div>@endif
-</div>
-```
-
-**`alert.blade.php`**:
-```blade
-<div class="alert alert-{{ $type ?? 'info' }}">
-    {{ $slot }}
-</div>
-```
-
----
-
-## Data Produk
-
-Gunakan data berikut di controller:
+Data produk (gunakan array di dalam controller):
 
 ```php
 $produk = [
-    ['id' => 1, 'nama' => 'Laptop Pro 15', 'harga' => 15000000, 'kategori' => 'Elektronik', 'deskripsi' => 'Laptop dengan spesifikasi tinggi untuk produktivitas.'],
-    ['id' => 2, 'nama' => 'Smartphone X', 'harga' => 5000000, 'kategori' => 'Elektronik', 'deskripsi' => 'Smartphone dengan kamera canggih.'],
-    ['id' => 3, 'nama' => 'Kemeja Flanel', 'harga' => 200000, 'kategori' => 'Fashion', 'deskripsi' => 'Kemeja flanel hangat dan nyaman.'],
-    ['id' => 4, 'nama' => 'Sepatu Olahraga', 'harga' => 350000, 'kategori' => 'Fashion', 'deskripsi' => 'Sepatu olahraga ringan dan fleksibel.'],
-    ['id' => 5, 'nama' => 'Novel Petualangan', 'harga' => 85000, 'kategori' => 'Buku', 'deskripsi' => 'Novel petualangan seru untuk dibaca.'],
+    ['id' => 1, 'nama' => 'Laptop', 'harga' => 12000000, 'kategori' => 'elektronik'],
+    ['id' => 2, 'nama' => 'Baju', 'harga' => 150000, 'kategori' => 'fashion'],
+    ['id' => 3, 'nama' => 'Buku', 'harga' => 75000, 'kategori' => 'pendidikan'],
+    ['id' => 4, 'nama' => 'Mouse', 'harga' => 250000, 'kategori' => 'elektronik'],
 ];
 ```
+
+### 2. Named Route & Redirect
+
+- Beri nama `produk.index` pada route daftar produk
+- Beri nama `produk.show` pada route detail produk
+- Buat route `/cari` yang me-redirect ke route `produk.index`
+- Buat route `/promo` yang me-redirect ke route `produk.show` dengan parameter `id=2`
+
+### 3. Route Group
+
+Buat route group dengan prefix `admin` untuk route berikut:
+
+| Route | Method | Tampilkan |
+|-------|--------|-----------|
+| `/admin/dashboard` | GET | "Dashboard Admin" |
+| `/admin/produk` | GET | "Manajemen Produk" |
+| `/admin/produk/tambah` | POST | "Produk ditambahkan" |
+
+### 4. Response JSON
+
+Buat route `/api/produk` yang mengembalikan data produk dalam format JSON (bisa copy dari data array yang sama).
+
+### 5. Halaman 404 Kustom
+
+Buat route `/produk/{id}` — jika ID tidak ditemukan di array, kembalikan response dengan status code 404 dan pesan "Produk tidak ditemukan".
 
 ---
 
 ## Ketentuan Pengumpulan
 
-- Kumpulkan file: semua file Blade di `resources/views/`, Controller, dan `routes/web.php`
-- Sertakan screenshot setiap halaman
+- Kumpulkan file `routes/web.php` dan `app/Http/Controllers/ProductController.php`
+- Sertakan screenshot hasil setiap route di browser
 - Batas pengumpulan: sebelum BAB berikutnya
 
 ---
@@ -107,10 +72,9 @@ $produk = [
 
 | Aspek | Bobot |
 |-------|-------|
-| Layout utama (navbar, title, footer) | 15% |
-| Halaman Home dengan card component | 15% |
-| Halaman Produk dengan tabel & @forelse | 20% |
-| Halaman Detail dengan penanganan error | 15% |
-| Halaman Tentang & Kontak (form + csrf) | 15% |
-| Komponen Blade (card, alert) | 10% |
-| Kerapihan kode & konsistensi | 10% |
+| Route & Controller dasar (index, show, kategori) | 30% |
+| Named route & redirect | 20% |
+| Route group prefix admin | 15% |
+| Response JSON | 15% |
+| Penanganan error 404 kustom | 10% |
+| Kerapihan kode & dokumentasi | 10% |

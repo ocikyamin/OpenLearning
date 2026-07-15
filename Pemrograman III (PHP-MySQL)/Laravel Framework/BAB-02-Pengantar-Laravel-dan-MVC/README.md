@@ -1,10 +1,10 @@
-# BAB 1 — Pengantar Laravel & Konsep MVC
+# BAB 2 — Pengantar Laravel & Konsep MVC
 
 ---
 
-## 1.1 Tujuan Pembelajaran
+## 2.1 Tujuan Pembelajaran
 
-Setelah menyelesaikan BAB 1 ini, teman-teman diharapkan mampu:
+Setelah menyelesaikan BAB 2 ini, teman-teman diharapkan mampu:
 
 - Menjelaskan apa itu Laravel dan mengapa kita perlu menggunakannya
 - Memahami arsitektur MVC (Model-View-Controller) sebagai fondasi Laravel
@@ -14,7 +14,7 @@ Setelah menyelesaikan BAB 1 ini, teman-teman diharapkan mampu:
 
 ---
 
-## 1.2 Pendahuluan
+## 2.2 Pendahuluan
 
 Pernahkah teman-teman membangun website menggunakan PHP native? Biasanya kita mencampur kode PHP, HTML, dan query SQL dalam satu file. Semakin besar aplikasinya, semakin sulit mengelola kode tersebut. Di sinilah **framework** hadir sebagai solusi.
 
@@ -24,7 +24,7 @@ Laravel pertama kali dirilis pada tahun 2011 oleh Taylor Otwell. Hingga tahun 20
 
 ---
 
-## 1.3 Mengapa Memilih Laravel?
+## 2.3 Mengapa Memilih Laravel?
 
 Mungkin teman-teman bertanya, "Apa bedanya Laravel dengan PHP biasa?" Mari kita lihat perbandingannya:
 
@@ -36,7 +36,7 @@ Mungkin teman-teman bertanya, "Apa bedanya Laravel dengan PHP biasa?" Mari kita 
 | Keamanan | Manual | CSRF, XSS, SQL injection built-in |
 | Migrasi DB | Manual | Migration & Seeder otomatis |
 
-### 1.3.1 Fitur Unggulan Laravel 13
+### 2.3.1 Fitur Unggulan Laravel 13
 
 - **Eloquent ORM** — berinteraksi dengan database menggunakan sintaks PHP yang intuitif, tanpa menulis SQL secara langsung
 - **Blade Templating** — engine template yang ringan dan powerful, namun tetap mengizinkan kita menggunakan kode PHP biasa
@@ -49,7 +49,7 @@ Mungkin teman-teman bertanya, "Apa bedanya Laravel dengan PHP biasa?" Mari kita 
 
 ---
 
-## 1.4 Konsep MVC
+## 2.4 Konsep MVC
 
 MVC adalah pola arsitektur yang memisahkan aplikasi menjadi tiga komponen utama:
 
@@ -76,7 +76,7 @@ MVC adalah pola arsitektur yang memisahkan aplikasi menjadi tiga komponen utama:
 └─────────────────────────────────────────────────┘
 ```
 
-### 1.4.1 Penjelasan Tiap Komponen
+### 2.4.1 Penjelasan Tiap Komponen
 
 | Komponen | Tugas | Analogi Restoran |
 |----------|-------|------------------|
@@ -84,7 +84,7 @@ MVC adalah pola arsitektur yang memisahkan aplikasi menjadi tiga komponen utama:
 | **View** | Menampilkan data ke pengguna dalam bentuk halaman HTML | Piring — tempat penyajian makanan |
 | **Controller** | Menghubungkan Model dan View, memproses input dari pengguna | Pelayan — menerima pesanan dan mengantarkannya |
 
-### 1.4.2 Alur Request di Laravel
+### 2.4.2 Alur Request di Laravel
 
 Agar lebih mudah dipahami, mari kita lihat bagaimana sebuah request dari browser diproses oleh Laravel:
 
@@ -98,11 +98,11 @@ Agar lebih mudah dipahami, mari kita lihat bagaimana sebuah request dari browser
 
 ---
 
-## 1.5 Praktikum: Membuat Project Laravel Pertama
+## 2.5 Praktikum: Membuat Project Laravel Pertama
 
 Pada praktikum kali ini, kita akan membuat project Laravel dari awal dan menampilkan halaman pertama. Pastikan teman-teman sudah menyelesaikan setup environment terlebih dahulu. Jika belum, silakan ikuti panduan di folder **00-Persiapan/**.
 
-### 1.5.1 Prasyarat
+### 2.5.1 Prasyarat
 
 Sebelum memulai praktikum, pastikan hal-hal berikut sudah siap:
 
@@ -113,7 +113,7 @@ Sebelum memulai praktikum, pastikan hal-hal berikut sudah siap:
 
 > **Bagi yang belum melakukan instalasi**, silakan buka folder `00-Persiapan/` dan pilih jalur yang sesuai: **Laragon** untuk pengguna Windows, atau **WSL + Ubuntu** untuk pengguna yang menggunakan WSL.
 
-### 1.5.2 Membuat Project Laravel Baru
+### 2.5.2 Membuat Project Laravel Baru
 
 Buka terminal atau command prompt, lalu jalankan perintah berikut:
 
@@ -128,7 +128,7 @@ Perintah di atas akan:
 
 Proses ini membutuhkan waktu beberapa menit tergantung kecepatan internet. Jika berhasil, kita akan melihat folder baru bernama `belajar-laravel`.
 
-### 1.5.3 Masuk ke Folder Project
+### 2.5.3 Masuk ke Folder Project
 
 Setelah project berhasil dibuat, masuk ke dalam folder tersebut:
 
@@ -138,7 +138,7 @@ cd belajar-laravel
 
 Semua perintah Laravel selanjutnya harus dijalankan dari dalam folder project ini.
 
-### 1.5.4 Menjalankan Development Server
+### 2.5.4 Menjalankan Development Server
 
 Laravel memiliki server bawaan untuk keperluan pengembangan. Jalankan perintah berikut:
 
@@ -164,7 +164,7 @@ Kita akan melihat halaman selamat datang (welcome page) bawaan Laravel. Selamat!
 
 > **Catatan:** Biarkan terminal tetap terbuka selama proses pengembangan. Untuk menghentikan server, tekan `Ctrl + C`.
 
-### 1.5.5 Mengenal Struktur Folder Project
+### 2.5.5 Mengenal Struktur Folder Project
 
 Sebelum kita mulai menulis kode, penting untuk memahami struktur folder project Laravel. Berikut penjelasan folder-folder utama yang akan sering kita akses:
 
@@ -205,7 +205,7 @@ belajar-laravel/
 | `database/migrations/` | Menyimpan file migrasi tabel |
 | `config/` | Konfigurasi aplikasi |
 
-### 1.5.6 Mengenal Artisan CLI
+### 2.5.6 Mengenal Artisan CLI
 
 **Artisan** adalah command-line tool bawaan Laravel. Kita bisa menjalankannya melalui terminal dengan format:
 
@@ -229,7 +229,7 @@ Berikut perintah-perintah dasar yang akan sering kita gunakan:
 | `php artisan route:list` | Melihat semua route yang terdaftar |
 | `php artisan cache:clear` | Menghapus cache |
 
-### 1.5.7 Membuat Halaman Pertama dengan Route
+### 2.5.7 Membuat Halaman Pertama dengan Route
 
 Sekarang kita akan membuat halaman sederhana sendiri. Bukalah file `routes/web.php` dengan code editor. Di dalamnya, kita akan melihat kode berikut:
 
@@ -260,9 +260,9 @@ Simpan file tersebut. Buka browser dan akses: **http://localhost:8000/halo**
 
 Jika muncul tulisan **"Halo, ini Laravel pertamaku!"** di browser, berarti routing sudah berfungsi dengan baik.
 
-### 1.5.8 Membuat Halaman dengan File View (Blade)
+### 2.5.8 Membuat Halaman dengan File View (Blade)
 
-Selanjutnya, kita akan membuat halaman menggunakan file Blade. Blade adalah template engine bawaan Laravel yang akan kita pelajari lebih dalam di BAB 3.
+Selanjutnya, kita akan membuat halaman menggunakan file Blade. Blade adalah template engine bawaan Laravel yang akan kita pelajari lebih dalam di BAB 4.
 
 Buat file baru di `resources/views/halo.blade.php`:
 
@@ -293,7 +293,7 @@ Refresh browser di **http://localhost:8000/halo**. Halaman akan berubah sesuai d
 
 ---
 
-## 1.6 Rangkuman
+## 2.6 Rangkuman
 
 | Konsep | Intinya |
 |--------|---------|
@@ -306,7 +306,7 @@ Refresh browser di **http://localhost:8000/halo**. Halaman akan berubah sesuai d
 
 ---
 
-## 1.7 Referensi
+## 2.7 Referensi
 
 - [Dokumentasi Laravel 13](https://laravel.com/docs/13.x)
 - [Laravel Directory Structure](https://laravel.com/docs/13.x/structure)
@@ -315,11 +315,13 @@ Refresh browser di **http://localhost:8000/halo**. Halaman akan berubah sesuai d
 
 ---
 
-## 1.8 Bahan Pendukung
+## 2.8 Bahan Pendukung
 
 - `slide.pdf` — belum tersedia
 - `video.md` — link video pendukung
 
 ---
 
-**Lanjut ke:** [BAB 2 — Routing & Controller](../BAB-02-Routing-dan-Controller/README.md)
+**Kembali ke:** [BAB 1 — HTTP Dasar](../BAB-01-HTTP-Dasar/README.md)
+
+**Lanjut ke:** [BAB 3 — Routing & Controller](../BAB-03-Routing-dan-Controller/README.md)

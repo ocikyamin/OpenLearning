@@ -1,10 +1,10 @@
-# Tugas 7 — Authentication & Middleware
+# Tugas 7 — Form Request & Validation
 
 ---
 
 ## Tujuan
 
-Mahasiswa mampu mengimplementasikan otentikasi (login/register) dan otorisasi (policy & role) menggunakan Laravel Breeze, middleware, Gate, dan Policy.
+Mahasiswa mampu membuat form dengan validasi menggunakan Form Request, menampilkan error messages, menangani old input, dan menampilkan flash data.
 
 ---
 
@@ -12,129 +12,81 @@ Mahasiswa mampu mengimplementasikan otentikasi (login/register) dan otorisasi (p
 
 ### 1. Persiapan
 
-Buat project baru dengan Breeze dan database MySQL `db_tugas7`.
+Buat project baru dan database MySQL `db_tugas7`.
 
-```bash
-composer create-project laravel/laravel tugas-auth
-cd tugas-auth
-composer require laravel/breeze
-php artisan breeze:install blade
-npm install && npm run build
-```
-
-Buat database:
-
-```sql
-CREATE DATABASE db_tugas7 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-Jalankan migrasi: `php artisan migrate`
-
-### 2. Migration
-
-Buat migrasi untuk tabel **projects**:
+Buat satu model **Product** dengan migration:
 
 | Kolom | Tipe | Keterangan |
 |-------|------|------------|
-| `id` | auto-increment | Primary key |
-| `title` | string(150) | Judul project |
-| `description` | text | Deskripsi, nullable |
-| `status` | string(20) | Default 'planning' |
-| `deadline` | date | Tenggat waktu, nullable |
-| `is_completed` | boolean | Default false |
-| `user_id` | foreign key | Foreign key ke users |
+| `id` | auto-increment | — |
+| `name` | string(100) | — |
+| `sku` | string(20) | Kode produk, unique |
+| `price` | integer | Harga dalam rupiah |
+| `stock` | integer | Stok, default 0 |
+| `category` | string(50) | — |
+| `description` | text | Nullable |
+| `is_active` | boolean | Default true |
+| `user_id` | foreign key | → users |
 | `timestamps` | — | — |
 
-Juga buat migrasi untuk menambah kolom `role` di tabel users:
+### 2. Form Request StoreProductRequest
 
-```php
-$table->string('role')->default('user');
-```
+Buat Form Request dengan aturan:
 
-### 3. Model & Role
+| Field | Aturan | Pesan Error Kustom |
+|-------|--------|-------------------|
+| `name` | required, max:100 | "Nama produk wajib diisi", "Nama maksimal 100 karakter" |
+| `sku` | required, alpha_dash, unique:products | "Kode SKU wajib diisi", "Format SKU tidak valid", "SKU sudah digunakan" |
+| `price` | required, integer, min:0 | "Harga wajib diisi", "Harga harus angka", "Harga tidak boleh negatif" |
+| `stock` | required, integer, min:0 | — (default) |
+| `category` | required, in:Elektronik,Fashion,Makanan,Buku,Olahraga | "Pilih kategori yang valid" |
+| `description` | nullable, max:1000 | "Deskripsi maksimal 1000 karakter" |
+| `is_active` | boolean | — |
 
-**Model Project** — dengan `$fillable`, `casts()`, relasi `user()`.
+### 3. Form Request UpdateProductRequest
 
-**Model User** — tambahkan method helper:
-- `isAdmin(): bool` — role === 'admin'
-- `isManager(): bool` — role === 'manager'
+Buat Form Request untuk update dengan aturan yang sama, kecuali `sku` bersifat **unique tapi ignore produk yang sedang diedit**.
 
-### 4. ProjectPolicy
+### 4. Resource Controller
 
-Buat policy dengan method:
+Buat `ProductController --resource` lengkap:
+- `index` — daftar produk, paginate 10
+- `create` — form tambah
+- `store` — simpan dengan `StoreProductRequest`
+- `show` — detail produk
+- `edit` — form edit
+- `update` — update dengan `UpdateProductRequest`
+- `destroy` — hapus produk
 
-| Method | Aturan |
-|--------|--------|
-| `viewAny(User $user)` | true (semua user bisa lihat daftar) |
-| `create(User $user)` | true (semua user bisa buat) |
-| `update(User $user, Project $project)` | hanya pemilik atau admin/manager |
-| `delete(User $user, Project $project)` | hanya pemilik atau admin |
+Setiap redirect harus menyertakan flash message `success`.
 
-Daftarkan policy di `AppServiceProvider`.
+### 5. View
 
-### 5. Middleware CheckRole
+Buat layout utama dan halaman-halaman berikut:
 
-Buat middleware `CheckRole` yang menerima parameter role. Daftarkan dengan alias `role`.
+**Halaman daftar:** tabel produk dengan kolom No, Nama, SKU, Harga, Stok, Kategori, Status (Aktif/Nonaktif), Aksi (Edit/Hapus). Tambah tombol "Tambah Produk".
 
-Jika user tidak memiliki role yang sesuai, kembalikan response 403.
+**Halaman form (create & edit):**
+- Gunakan layout yang sama
+- Tampilkan error per field dengan `@error`
+- Gunakan `old()` untuk mengisi nilai setelah gagal validasi
+- Gunakan `@selected`, `@checked` untuk select dan checkbox
+- Tampilkan `@csrf` dan `@method` yang sesuai
 
-### 6. Route
+**Halaman detail:** tampilkan semua informasi produk.
 
-| URL | Middleware | Keterangan |
-|-----|-----------|------------|
-| `/projects` | `auth` | Resource controller penuh |
-| `/admin` | `auth`, `role:admin` | Halaman admin sederhana |
-| `/manager/projects` | `auth`, `role:manager` | Lihat semua project (milik siapa pun) |
+**Flash message:** tampilkan alert hijau di layout jika ada session success.
 
-### 7. Controller
+### 6. Validasi Kustom (Opsional)
 
-Buat `ProjectController` lengkap (resource):
-- Setiap operasi update/delete harus diproteksi dengan `Gate::authorize()`
-- Manager bisa melihat semua project di `/manager/projects`
-- Di halaman daftar, hanya tampilkan tombol Edit/Hapus jika user diizinkan oleh Policy
-
-Buat `AdminController` sederhana untuk halaman admin.
-
-### 8. View
-
-Buat halaman berikut:
-
-**Daftar Project** (`/projects`):
-- Tabel: No, Judul, Status, Deadline, Pemilik, Aksi
-- Tombol "Buat Project"
-- Tombol Edit/Hapus hanya muncul jika `@can('update', $project)` / `@can('delete', $project)`
-
-**Form Buat/Edit Project:**
-- Field: title, description, status (select: planning, active, completed, archived), deadline (date)
-- Validasi lengkap dengan Form Request atau validate()
-- Tampilkan error dan old input
-
-**Detail Project** (`/projects/{project}`):
-- Semua informasi project
-- Tombol Edit/Hapus jika authorized
-
-**Halaman Admin** (`/admin`):
-- Tampilkan "Panel Admin" dan daftar semua user (nama, email, role)
-- Sederhana saja
-
-**Halaman Manager** (`/manager/projects`):
-- Tampilkan semua project (milik user mana pun)
-- Tidak perlu tombol edit/hapus
-
-### 9. Seeder
-
-Buat seeder yang membuat:
-1. Admin: `admin@example.com` role 'admin'
-2. Manager: `manager@example.com` role 'manager'
-3. User biasa: `user@example.com` role 'user'
-4. 10 project (milik acak dari ketiga user di atas)
+Buat `Rule` kustom `StockSufficient` yang memvalidasi bahwa stok tidak boleh melebihi 999. Gunakan di Form Request.
 
 ---
 
 ## Ketentuan Pengumpulan
 
-- Kumpulkan: migration, model, policy, middleware, controller, route, semua view, seeder
-- Screenshot: hasil register dan login sebagai user berbeda, buat/edit/hapus project sebagai pemilik vs bukan pemilik, akses halaman admin/manager
+- Kumpulkan: migration, model, Form Request (Store & Update), controller, routes, semua view
+- Sertakan screenshot: hasil submit form kosong (tampilkan error), hasil sukses simpan (flash message), hasil edit dengan slug duplikat (tampilkan error unique)
 
 ---
 
@@ -142,9 +94,10 @@ Buat seeder yang membuat:
 
 | Aspek | Bobot |
 |-------|-------|
-| Breeze + Migration (termasuk kolom role) | 15% |
-| Policy (update: pemilik/admin, delete: pemilik/admin) | 20% |
-| Middleware CheckRole (admin, manager) | 15% |
-| Controller + Gate::authorize() | 20% |
-| View (tabel, form, otorisasi tombol) | 20% |
-| Seeder (3 user + 10 project) | 10% |
+| Form Request (Store & Update) dengan aturan lengkap | 25% |
+| Form Request Update dengan ignore unique | 10% |
+| Resource Controller & Route | 15% |
+| View form (old, error, selected, checked) | 25% |
+| Flash message & layout | 10% |
+| Validasi kustom (opsional) | 10% |
+| Kerapihan kode | 5% |

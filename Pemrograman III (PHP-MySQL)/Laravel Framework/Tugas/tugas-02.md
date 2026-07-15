@@ -1,69 +1,51 @@
-# Tugas 2 — Routing & Controller
+# Tugas 2 — Pengantar Laravel & Konsep MVC
 
 ---
 
 ## Tujuan
 
-Mahasiswa mampu mendefinisikan route, menggunakan route parameters, membuat controller, dan mengelola response.
+Mahasiswa mampu membuat project Laravel, mendefinisikan route, dan menampilkan view sederhana.
 
 ---
 
 ## Soal
 
-### 1. Route & Controller Dasar
+### 1. Project Baru
 
-Buat project baru atau gunakan project tugas sebelumnya.
+Buat project Laravel baru dengan nama `tugas-laravel-1`.
 
-Buat **ProductController** dengan method berikut:
+> Gunakan perintah `laravel new tugas-laravel-1`, lalu atur database MySQL di `.env`.
 
-| Method | Route | Tampilkan |
-|--------|-------|-----------|
-| `index()` | `GET /produk` | Daftar produk (hardcoded array) |
-| `show($id)` | `GET /produk/{id}` | Detail produk dengan ID tertentu |
-| `kategori($kategori)` | `GET /produk/kategori/{kategori}` | Filter produk berdasarkan kategori |
+### 2. Route & View
 
-Data produk (gunakan array di dalam controller):
+Buatlah halaman dengan ketentuan berikut:
 
-```php
-$produk = [
-    ['id' => 1, 'nama' => 'Laptop', 'harga' => 12000000, 'kategori' => 'elektronik'],
-    ['id' => 2, 'nama' => 'Baju', 'harga' => 150000, 'kategori' => 'fashion'],
-    ['id' => 3, 'nama' => 'Buku', 'harga' => 75000, 'kategori' => 'pendidikan'],
-    ['id' => 4, 'nama' => 'Mouse', 'harga' => 250000, 'kategori' => 'elektronik'],
-];
-```
+| URL | Yang Ditampilkan |
+|-----|------------------|
+| `/profile` | Nama lengkap, NIM, dan kelas |
+| `/bio` | Paragraf tentang diri sendiri (minimal 3 kalimat) |
+| `/p` | Mengarahkan (redirect) ke `/profile` |
 
-### 2. Named Route & Redirect
+### 3. Layout
 
-- Beri nama `produk.index` pada route daftar produk
-- Beri nama `produk.show` pada route detail produk
-- Buat route `/cari` yang me-redirect ke route `produk.index`
-- Buat route `/promo` yang me-redirect ke route `produk.show` dengan parameter `id=2`
+Buat layout utama bernama `layouts/app.blade.php` yang digunakan oleh kedua halaman di atas. Layout harus memiliki:
 
-### 3. Route Group
+- Tag `<title>` yang dinamis (berubah sesuai halaman)
+- Navigasi sederhana (link ke `/profile` dan `/bio`)
+- Footer berisi tulisan "© 2026 — Pemrograman III"
 
-Buat route group dengan prefix `admin` untuk route berikut:
+### 4. Data Dinamis
 
-| Route | Method | Tampilkan |
-|-------|--------|-----------|
-| `/admin/dashboard` | GET | "Dashboard Admin" |
-| `/admin/produk` | GET | "Manajemen Produk" |
-| `/admin/produk/tambah` | POST | "Produk ditambahkan" |
+Buat route `/hitung/{angka1}/{angka2}` yang menampilkan hasil penjumlahan dua angka tersebut.
 
-### 4. Response JSON
-
-Buat route `/api/produk` yang mengembalikan data produk dalam format JSON (bisa copy dari data array yang sama).
-
-### 5. Halaman 404 Kustom
-
-Buat route `/produk/{id}` — jika ID tidak ditemukan di array, kembalikan response dengan status code 404 dan pesan "Produk tidak ditemukan".
+Contoh: `/hitung/5/3` → menampilkan "Hasil penjumlahan 5 + 3 = 8"
 
 ---
 
 ## Ketentuan Pengumpulan
 
-- Kumpulkan file `routes/web.php` dan `app/Http/Controllers/ProductController.php`
-- Sertakan screenshot hasil setiap route di browser
+- Kumpulkan dalam bentuk screenshot kode dan hasil di browser
+- atau kumpulkan link repository GitHub (jika sudah bisa git)
 - Batas pengumpulan: sebelum BAB berikutnya
 
 ---
@@ -72,9 +54,8 @@ Buat route `/produk/{id}` — jika ID tidak ditemukan di array, kembalikan respo
 
 | Aspek | Bobot |
 |-------|-------|
-| Route & Controller dasar (index, show, kategori) | 30% |
-| Named route & redirect | 20% |
-| Route group prefix admin | 15% |
-| Response JSON | 15% |
-| Penanganan error 404 kustom | 10% |
-| Kerapihan kode & dokumentasi | 10% |
+| Project berjalan dengan benar | 20% |
+| Route & View (/profile, /bio) | 20% |
+| Layout dengan template | 25% |
+| Route dinamis (/hitung) | 20% |
+| Kerapihan kode & struktur folder | 15% |

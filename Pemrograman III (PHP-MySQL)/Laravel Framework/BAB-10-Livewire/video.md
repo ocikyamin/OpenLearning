@@ -1,4 +1,4 @@
-# Video Pembelajaran — BAB 2
+# Video Pembelajaran — BAB 10
 
 > Bagian ini dapat diisi dengan link video pembelajaran (YouTube, Google Drive, atau platform lain) sesuai ketersediaan.
 
@@ -8,16 +8,16 @@
 
 | No | Judul | Link | Durasi |
 |----|-------|------|--------|
-| 1 | Pengenalan Laravel & MVC | (isi link) | ... |
-| 2 | Instalasi Laravel & Struktur Folder | (isi link) | ... |
-| 3 | Routing & View Pertama | (isi link) | ... |
+| 1 | Pengenalan Livewire & Instalasi | (isi link) | ... |
+| 2 | Komponen, Action & Data Binding | (isi link) | ... |
+| 3 | Form dengan Livewire | (isi link) | ... |
+| 4 | Tabel & Pencarian Realtime | (isi link) | ... |
 
 ## Video Tambahan (Opsional)
 
 | No | Judul | Link | Durasi |
 |----|-------|------|--------|
-| 1 | Laracasts: Laravel From Scratch | https://laracasts.com/series/laravel-from-scratch | ... |
-| 2 | ... | ... | ... |
+| 1 | Livewire Docs: Quickstart | https://livewire.laravel.com/docs/quickstart | ... |
 
 ---
 

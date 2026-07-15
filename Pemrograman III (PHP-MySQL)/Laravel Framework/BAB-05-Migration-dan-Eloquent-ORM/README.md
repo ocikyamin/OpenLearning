@@ -1,10 +1,10 @@
-# BAB 4 — Migration & Eloquent ORM
+# BAB 5 — Migration & Eloquent ORM
 
 ---
 
-## 4.1 Tujuan Pembelajaran
+## 5.1 Tujuan Pembelajaran
 
-Setelah menyelesaikan BAB 4 ini, teman-teman diharapkan mampu:
+Setelah menyelesaikan BAB 5 ini, teman-teman diharapkan mampu:
 
 - Menjelaskan konsep Migration dan Eloquent ORM
 - Membuat dan menjalankan file migrasi untuk membuat/mengubah tabel
@@ -16,9 +16,9 @@ Setelah menyelesaikan BAB 4 ini, teman-teman diharapkan mampu:
 
 ---
 
-## 4.2 Pendahuluan
+## 5.2 Pendahuluan
 
-Pada BAB 1–3, kita telah belajar membuat halaman web statis dan semi-dinamis menggunakan route, controller, dan Blade. Namun, aplikasi web yang sesungguhnya membutuhkan **database** untuk menyimpan data secara permanen — seperti artikel, user, produk, dan lain-lain.
+Pada BAB 2–4, kita telah belajar membuat halaman web statis dan semi-dinamis menggunakan route, controller, dan Blade. Namun, aplikasi web yang sesungguhnya membutuhkan **database** untuk menyimpan data secara permanen — seperti artikel, user, produk, dan lain-lain.
 
 Di PHP native, kita biasanya menulis query SQL langsung di dalam kode:
 
@@ -41,11 +41,11 @@ Laravel menyelesaikan masalah-masalah tersebut dengan dua fitur utama:
 
 ---
 
-## 4.3 Konfigurasi Database
+## 5.3 Konfigurasi Database
 
 Sebelum mulai membuat tabel, kita perlu memastikan project Laravel terhubung ke database.
 
-### 4.3.1 Setting di File `.env`
+### 5.3.1 Setting di File `.env`
 
 Buka file `.env` di root project Laravel. Cari dan sesuaikan bagian berikut:
 
@@ -69,7 +69,7 @@ Penjelasan:
 | `DB_USERNAME` | Username MySQL |
 | `DB_PASSWORD` | Password MySQL |
 
-### 4.3.2 Membuat Database
+### 5.3.2 Membuat Database
 
 Buka terminal MySQL atau tool seperti phpMyAdmin, Laragon, atau MySQL Workbench, lalu buat database:
 
@@ -79,7 +79,7 @@ CREATE DATABASE belajar_laravel CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 
 Atau jika menggunakan Laragon, bisa klik kanan → Database → Create Database.
 
-### 4.3.3 Verifikasi Koneksi
+### 5.3.3 Verifikasi Koneksi
 
 Untuk memastikan koneksi berhasil, jalankan perintah Artisan berikut:
 
@@ -91,11 +91,11 @@ Jika muncul daftar migrasi (meskipun belum dijalankan), artinya koneksi berhasil
 
 ---
 
-## 4.4 Migration
+## 5.4 Migration
 
 Migration adalah cara Laravel untuk membuat dan mengubah struktur tabel database. Setiap migrasi adalah file PHP yang berisi instruksi naik (`up`) dan turun (`down`).
 
-### 4.4.1 Anatomi File Migrasi
+### 5.4.1 Anatomi File Migrasi
 
 Buka folder `database/migrations/`. Kita akan melihat beberapa file migrasi bawaan Laravel:
 
@@ -112,7 +112,7 @@ YYYY_MM_DD_HHMMSS_nama_migrasi.php
 
 Timestamp otomatis ini memastikan urutan eksekusi migrasi konsisten di semua lingkungan (lokal, staging, production).
 
-### 4.4.2 Membuat Migration
+### 5.4.2 Membuat Migration
 
 Gunakan Artisan CLI:
 
@@ -148,7 +148,7 @@ return new class extends Migration
 };
 ```
 
-### 4.4.3 Mendefinisikan Kolom dengan Schema Builder
+### 5.4.3 Mendefinisikan Kolom dengan Schema Builder
 
 Sekarang kita akan menambahkan kolom-kolom yang diperlukan. Ubah method `up()` menjadi seperti berikut:
 
@@ -182,7 +182,7 @@ public function up(): void
 
 > **Catatan:** Method `constrained()` secara otomatis akan membuat foreign key yang merujuk ke tabel `users` (dari nama kolom `user_id`). Jika nama kolom berbeda, misalnya `author_id`, kita bisa tentukan nama tabelnya: `->constrained('users')`.
 
-### 4.4.4 Migration yang Mengubah Tabel
+### 5.4.4 Migration yang Mengubah Tabel
 
 Selain membuat tabel baru, kita juga bisa mengubah tabel yang sudah ada. Misalnya, menambahkan kolom `excerpt` ke tabel `articles`:
 
@@ -223,7 +223,7 @@ return new class extends Migration
 - Method `down()` harus reversibel — siapkan `dropColumn()` agar rollback berfungsi
 - **Jangan pernah mengubah migrasi yang sudah dijalankan** di production. Buat migrasi baru untuk perubahan
 
-### 4.4.5 Menjalankan Migration
+### 5.4.5 Menjalankan Migration
 
 ```bash
 php artisan migrate
@@ -243,7 +243,7 @@ Perintah ini akan menjalankan semua migrasi yang belum pernah dijalankan. Larave
 | `php artisan migrate:status` | Melihat status setiap migrasi |
 | `php artisan make:migration nama` | Membuat file migrasi baru |
 
-### 4.4.6 Prinsip Penting Migration
+### 5.4.6 Prinsip Penting Migration
 
 1. **Satu migrasi untuk satu perubahan** — jangan mencampur DDL (buat tabel) dan DML (isi data) dalam satu file
 2. **Migration bersifat immutable** — setelah dijalankan di production, jangan diedit. Buat migrasi baru
@@ -252,11 +252,11 @@ Perintah ini akan menjalankan semua migrasi yang belum pernah dijalankan. Larave
 
 ---
 
-## 4.5 Seeder & Factory
+## 5.5 Seeder & Factory
 
 Seeder dan Factory digunakan untuk mengisi database dengan data dummy untuk keperluan pengembangan dan testing.
 
-### 4.5.1 Model Factory
+### 5.5.1 Model Factory
 
 Factory adalah class yang mendefinisikan bagaimana data dummy dibuat untuk suatu model.
 
@@ -300,7 +300,7 @@ class ArticleFactory extends Factory
 - `fake()->randomElement([...])` — memilih secara acak dari array
 - `Str::slug($title)` — mengubah judul menjadi format slug URL
 
-### 4.5.2 Database Seeder
+### 5.5.2 Database Seeder
 
 Seeder adalah class yang menjalankan perintah untuk mengisi data ke database.
 
@@ -333,7 +333,7 @@ Penjelasan:
 - `User::factory()->create([...])` — membuat satu user dengan data spesifik
 - `Article::factory(20)->create()` — membuat 20 artikel data dummy
 
-### 4.5.3 Menjalankan Seeder
+### 5.5.3 Menjalankan Seeder
 
 ```bash
 php artisan migrate:fresh --seed
@@ -356,7 +356,7 @@ Atau seeder spesifik:
 php artisan db:seed --class=ArticleSeeder
 ```
 
-### 4.5.4 Factory States
+### 5.5.4 Factory States
 
 Factory states memungkinkan kita membuat variasi data. Misalnya, artikel yang sudah dipublikasikan:
 
@@ -377,11 +377,11 @@ Article::factory()->published()->count(5)->create();
 
 ---
 
-## 4.6 Eloquent Model
+## 5.6 Eloquent Model
 
 Model adalah representasi dari sebuah tabel database dalam bentuk class PHP. Setiap instance model mewakili satu baris data.
 
-### 4.6.1 Membuat Model
+### 5.6.1 Membuat Model
 
 ```bash
 php artisan make:model Article
@@ -397,7 +397,7 @@ php artisan make:model Article -mf
 - `-f` : membuat factory
 - `-s` : membuat seeder
 
-### 4.6.2 Konvensi Penamaan
+### 5.6.2 Konvensi Penamaan
 
 Eloquent mengikuti konvensi "tabel jamak, model tunggal":
 
@@ -423,7 +423,7 @@ class Article extends Model
 }
 ```
 
-### 4.6.3 Atribut Model
+### 5.6.3 Atribut Model
 
 ```php
 <?php
@@ -466,7 +466,7 @@ class Article extends Model
 | `$guarded` | Kebalikan dari `$fillable` — kolom yang tidak boleh diisi massal |
 | `casts()` | Mengkonversi tipe data secara otomatis (string → boolean, datetime, array, dll) |
 
-### 4.6.4 Menggunakan Model di Controller
+### 5.6.4 Menggunakan Model di Controller
 
 ```php
 <?php
@@ -496,11 +496,11 @@ Perhatikan parameter `show(Article $article)` — ini adalah **Route Model Bindi
 
 ---
 
-## 4.7 CRUD dengan Eloquent
+## 5.7 CRUD dengan Eloquent
 
 CRUD adalah singkatan dari **Create, Read, Update, Delete** — empat operasi dasar pada data.
 
-### 4.7.1 Create (Menyimpan Data Baru)
+### 5.7.1 Create (Menyimpan Data Baru)
 
 ```php
 // Method 1 — Mass assignment (gunakan $fillable)
@@ -524,7 +524,7 @@ $article->user_id = 1;
 $article->save();
 ```
 
-### 4.7.2 Read (Mengambil Data)
+### 5.7.2 Read (Mengambil Data)
 
 ```php
 // Semua data
@@ -546,7 +546,7 @@ $article = Article::where('slug', 'belajar-laravel-untuk-pemula')->firstOrFail()
 $articles = Article::paginate(10);
 ```
 
-### 4.7.3 Update (Memperbarui Data)
+### 5.7.3 Update (Memperbarui Data)
 
 ```php
 // Method 1 — Mass assignment
@@ -562,7 +562,7 @@ $article->body = 'Konten yang diperbarui...';
 $article->save();
 ```
 
-### 4.7.4 Delete (Menghapus Data)
+### 5.7.4 Delete (Menghapus Data)
 
 ```php
 // Hapus satu data
@@ -576,7 +576,7 @@ Article::destroy(1);
 Article::destroy([1, 2, 3]);
 ```
 
-### 4.7.5 Query Scopes
+### 5.7.5 Query Scopes
 
 Untuk query yang sering digunakan, buat **local scope** di model:
 
@@ -603,7 +603,7 @@ $articles = Article::published()
 
 ---
 
-## 4.8 Query Builder vs Eloquent
+## 5.8 Query Builder vs Eloquent
 
 Laravel menyediakan dua pendekatan untuk berinteraksi dengan database:
 
@@ -638,11 +638,11 @@ Sebagai aturan umum: **gunakan Eloquent untuk segala interaksi dengan model yang
 
 ---
 
-## 4.9 Praktikum: CRUD Artikel dengan MySQL
+## 5.9 Praktikum: CRUD Artikel dengan MySQL
 
 Pada praktikum ini, kita akan membangun fitur CRUD untuk artikel menggunakan MySQL sebagai database.
 
-### 4.9.1 Persiapan Database
+### 5.9.1 Persiapan Database
 
 1. Buka MySQL dan buat database:
 
@@ -667,7 +667,7 @@ DB_PASSWORD=
 php artisan migrate:status
 ```
 
-### 4.9.2 Membuat Model, Migration, Factory
+### 5.9.2 Membuat Model, Migration, Factory
 
 Jalankan satu perintah untuk membuat semuanya sekaligus:
 
@@ -675,7 +675,7 @@ Jalankan satu perintah untuk membuat semuanya sekaligus:
 php artisan make:model Article -mf
 ```
 
-### 4.9.3 Mendefinisikan Migration
+### 5.9.3 Mendefinisikan Migration
 
 Buka file migrasi `database/migrations/xxxx_xx_xx_create_articles_table.php`:
 
@@ -710,7 +710,7 @@ return new class extends Migration
 };
 ```
 
-### 4.9.4 Mendefinisikan Factory
+### 5.9.4 Mendefinisikan Factory
 
 Buka file `database/factories/ArticleFactory.php`:
 
@@ -742,7 +742,7 @@ class ArticleFactory extends Factory
 }
 ```
 
-### 4.9.5 Mendefinisikan Seeder
+### 5.9.5 Mendefinisikan Seeder
 
 Buka file `database/seeders/DatabaseSeeder.php`:
 
@@ -769,7 +769,7 @@ class DatabaseSeeder extends Seeder
 }
 ```
 
-### 4.9.6 Mengisi Model
+### 5.9.6 Mengisi Model
 
 Buka file `app/Models/Article.php`:
 
@@ -820,7 +820,7 @@ class Article extends Model
 }
 ```
 
-### 4.9.7 Menjalankan Migrasi dan Seeder
+### 5.9.7 Menjalankan Migrasi dan Seeder
 
 ```bash
 php artisan migrate:fresh --seed
@@ -838,7 +838,7 @@ Seeding: Database\Seeders\DatabaseSeeder
 Seeded:  Database\Seeders\DatabaseSeeder
 ```
 
-### 4.9.8 Membuat Controller
+### 5.9.8 Membuat Controller
 
 ```bash
 php artisan make:controller ArticleController --resource
@@ -877,7 +877,7 @@ class ArticleController extends Controller
 }
 ```
 
-### 4.9.9 Mendefinisikan Route
+### 5.9.9 Mendefinisikan Route
 
 Buka `routes/web.php`:
 
@@ -895,7 +895,7 @@ Route::get('/articles', [ArticleController::class, 'index'])->name('articles.ind
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 ```
 
-### 4.9.10 Membuat View
+### 5.9.10 Membuat View
 
 Buat folder `resources/views/articles/`.
 
@@ -984,14 +984,14 @@ Buat folder `resources/views/articles/`.
 @endsection
 ```
 
-### 4.9.11 Uji Coba
+### 5.9.11 Uji Coba
 
 1. Jalankan server: `php artisan serve`
 2. Buka `http://localhost:8000/articles`
 3. Jika berhasil, akan muncul daftar 20 artikel yang sudah di-seed
 4. Klik salah satu artikel untuk melihat detailnya
 
-### 4.9.12 Eksplorasi dengan Tinker
+### 5.9.12 Eksplorasi dengan Tinker
 
 Tinker adalah interactive shell untuk menguji Eloquent query secara langsung:
 
@@ -1027,7 +1027,7 @@ exit
 
 ---
 
-## 4.10 Rangkuman
+## 5.10 Rangkuman
 
 | Konsep | Intinya |
 |--------|---------|
@@ -1044,7 +1044,7 @@ exit
 
 ---
 
-## 4.11 Referensi
+## 5.11 Referensi
 
 - [Laravel Migration](https://laravel.com/docs/13.x/migrations)
 - [Laravel Seeding](https://laravel.com/docs/13.x/seeding)
@@ -1055,6 +1055,6 @@ exit
 
 ---
 
-**Lanjut ke:** [BAB 5 — Relasi Database](../BAB-05-Relasi-Database/README.md)
+**Lanjut ke:** [BAB 6 — Relasi Database](../BAB-06-Relasi-Database/README.md)
 
-**Kembali ke:** [BAB 3 — Blade Templating](../BAB-03-Blade-Templating/README.md)
+**Kembali ke:** [BAB 4 — Blade Templating](../BAB-04-Blade-Templating/README.md)

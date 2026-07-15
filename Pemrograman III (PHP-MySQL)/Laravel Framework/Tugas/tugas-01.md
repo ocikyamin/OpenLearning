@@ -1,51 +1,102 @@
-# Tugas 1 — Pengantar Laravel
+# Tugas 1 — HTTP Dasar & Postman
 
 ---
 
 ## Tujuan
 
-Mahasiswa mampu membuat project Laravel, mendefinisikan route, dan menampilkan view sederhana.
+Mahasiswa mampu memahami konsep HTTP (method, status code, header) dan menggunakan Postman untuk menguji request/response.
 
 ---
 
 ## Soal
 
-### 1. Project Baru
+### 1. Eksplorasi HTTP Method
 
-Buat project Laravel baru dengan nama `tugas-laravel-1`.
+Gunakan Postman untuk melakukan request ke `https://jsonplaceholder.typicode.com/posts` dengan method berikut, lalu catat perbedaan response-nya:
 
-> Gunakan perintah `laravel new tugas-laravel-1`, pilih SQLite.
+| Method | Endpoint | Response |
+|--------|----------|----------|
+| GET | `/posts` | ? |
+| GET | `/posts/1` | ? |
+| POST | `/posts` | ? |
+| PUT | `/posts/1` | ? |
+| PATCH | `/posts/1` | ? |
+| DELETE | `/posts/1` | ? |
 
-### 2. Route & View
+Untuk POST, PUT, PATCH, kirim body JSON:
+```json
+{
+  "title": "Contoh Post",
+  "body": "Ini adalah isi post",
+  "userId": 1
+}
+```
 
-Buatlah halaman dengan ketentuan berikut:
+**Pertanyaan:**
+- Apa perbedaan response antara GET `/posts` dan GET `/posts/1`?
+- Apa perbedaan antara POST dan PUT?
+- Status code apa yang dikembalikan oleh DELETE?
+- Header `Content-Type` apa yang harus dikirim untuk request dengan body JSON?
 
-| URL | Yang Ditampilkan |
-|-----|------------------|
-| `/profile` | Nama lengkap, NIM, dan kelas |
-| `/bio` | Paragraf tentang diri sendiri (minimal 3 kalimat) |
-| `/p` | Mengarahkan (redirect) ke `/profile` |
+### 2. Response Status Code
 
-### 3. Layout
+Buat request ke URL berikut dan catat status code serta artinya:
 
-Buat layout utama bernama `layouts/app.blade.php` yang digunakan oleh kedua halaman di atas. Layout harus memiliki:
+| URL | Status Code | Arti |
+|-----|-------------|------|
+| `https://httpbin.org/status/200` | | |
+| `https://httpbin.org/status/301` | | |
+| `https://httpbin.org/status/404` | | |
+| `https://httpbin.org/status/500` | | |
 
-- Tag `<title>` yang dinamis (berubah sesuai halaman)
-- Navigasi sederhana (link ke `/profile` dan `/bio`)
-- Footer berisi tulisan "© 2026 — Pemrograman III"
+### 3. Header Request & Response
 
-### 4. Data Dinamis
+Lakukan GET ke `https://jsonplaceholder.typicode.com/posts/1`.
 
-Buat route `/hitung/{angka1}/{angka2}` yang menampilkan hasil penjumlahan dua angka tersebut.
+**Header Request yang dikirim:**
+- `Accept: application/json`
+- `User-Agent: Tugas-Pemrograman3/1.0`
 
-Contoh: `/hitung/5/3` → menampilkan "Hasil penjumlahan 5 + 3 = 8"
+**Catat header response berikut:**
+- `Content-Type`
+- `x-ratelimit-limit` (atau header limit lainnya)
+- `Etag` (jika ada)
+
+### 4. Query Parameters
+
+Gunakan Postman untuk GET ke `https://jsonplaceholder.typicode.com/posts` dengan query parameter:
+- `userId=1`
+- `userId=2`
+
+Apa perbedaan hasilnya?
+
+### 5. Simulasi Webhook
+
+Bayangkan kamu memiliki aplikasi yang menerima data dari layanan eksternal (webhook). Lakukan POST ke `https://httpbin.org/post` dengan body JSON:
+
+```json
+{
+  "event": "order_created",
+  "order_id": "ORD-001",
+  "customer": {
+    "name": "Budi",
+    "email": "budi@example.com"
+  },
+  "items": [
+    { "product": "Laptop", "qty": 1, "price": 12000000 }
+  ],
+  "total": 12000000
+}
+```
+
+Catat apa yang dikembalikan oleh `https://httpbin.org/post`. Perhatikan bahwa server mengembalikan data yang kita kirim — fitur ini disebut **echo server** dan berguna untuk debugging webhook.
 
 ---
 
 ## Ketentuan Pengumpulan
 
-- Kumpulkan dalam bentuk screenshot kode dan hasil di browser
-- atau kumpulkan link repository GitHub (jika sudah bisa git)
+- Kumpulkan dalam format PDF atau dokumen (bisa screenshot Postman + penjelasan)
+- Setiap nomor harus menyertakan screenshot hasil request di Postman
 - Batas pengumpulan: sebelum BAB berikutnya
 
 ---
@@ -54,8 +105,9 @@ Contoh: `/hitung/5/3` → menampilkan "Hasil penjumlahan 5 + 3 = 8"
 
 | Aspek | Bobot |
 |-------|-------|
-| Project berjalan dengan benar | 20% |
-| Route & View (/profile, /bio) | 20% |
-| Layout dengan template | 25% |
-| Route dinamis (/hitung) | 20% |
-| Kerapihan kode & struktur folder | 15% |
+| Eksplorasi HTTP Method (6 method, perbedaan, status code) | 30% |
+| Response Status Code (4 URL) | 15% |
+| Header Request & Response | 20% |
+| Query Parameters | 10% |
+| Simulasi Webhook (body JSON, echo server) | 15% |
+| Dokumentasi & kerapihan laporan | 10% |

@@ -1,4 +1,4 @@
-# Video Pembelajaran — BAB 2
+# Video Pembelajaran — BAB 3
 
 > Bagian ini dapat diisi dengan link video pembelajaran sesuai ketersediaan.
 

@@ -1,10 +1,10 @@
-# BAB 2 — Routing & Controller
+# BAB 3 — Routing & Controller
 
 ---
 
-## 2.1 Tujuan Pembelajaran
+## 3.1 Tujuan Pembelajaran
 
-Setelah menyelesaikan BAB 2 ini, teman-teman diharapkan mampu:
+Setelah menyelesaikan BAB 3 ini, teman-teman diharapkan mampu:
 
 - Mendefinisikan route untuk berbagai method HTTP (GET, POST, PUT, DELETE)
 - Mengirim data dinamis melalui route parameters
@@ -16,19 +16,19 @@ Setelah menyelesaikan BAB 2 ini, teman-teman diharapkan mampu:
 
 ---
 
-## 2.2 Pendahuluan
+## 3.2 Pendahuluan
 
-Pada BAB 1, kita telah belajar membuat project Laravel dan mendefinisikan route sederhana. Route adalah mekanisme yang menghubungkan URL yang diminta pengguna dengan logika yang harus dijalankan oleh aplikasi. Bayangkan route sebagai **papan petunjuk arah** — ketika pengguna mengunjungi suatu alamat, route akan memberi tahu Laravel harus ke mana dan apa yang harus dilakukan.
+Pada BAB 2, kita telah belajar membuat project Laravel dan mendefinisikan route sederhana. Route adalah mekanisme yang menghubungkan URL yang diminta pengguna dengan logika yang harus dijalankan oleh aplikasi. Bayangkan route sebagai **papan petunjuk arah** — ketika pengguna mengunjungi suatu alamat, route akan memberi tahu Laravel harus ke mana dan apa yang harus dilakukan.
 
-Pada BAB 2 ini, kita akan mempelajari routing secara lebih mendalam, mulai dari route sederhana hingga penggunaan Controller untuk memisahkan logika aplikasi dari definisi route.
+Pada BAB 3 ini, kita akan mempelajari routing secara lebih mendalam, mulai dari route sederhana hingga penggunaan Controller untuk memisahkan logika aplikasi dari definisi route.
 
 ---
 
-## 2.3 Routing di Laravel
+## 3.3 Routing di Laravel
 
 Semua route untuk keperluan web didefinisikan di file `routes/web.php`. Laravel secara otomatis akan memuat file ini ketika aplikasi berjalan.
 
-### 2.3.1 Anatomi Route
+### 3.3.1 Anatomi Route
 
 Secara umum, sebuah route ditulis dengan format:
 
@@ -43,7 +43,7 @@ Route::method('/url', callback);
 | `/url` | URL pattern yang akan dicocokkan dengan request |
 | `callback` | Fungsi atau method controller yang akan dijalankan |
 
-### 2.3.2 Basic Routing
+### 3.3.2 Basic Routing
 
 **Route GET** — digunakan untuk menampilkan halaman atau mengambil data:
 
@@ -103,7 +103,7 @@ Route::any('/test', function () {
 });
 ```
 
-### 2.3.3 Route Parameters
+### 3.3.3 Route Parameters
 
 Terkadang kita perlu mengambil data dinamis dari URL. Misalnya, kita ingin menampilkan profil user berdasarkan ID-nya. Laravel menyediakan **route parameters** untuk keperluan ini.
 
@@ -161,7 +161,7 @@ public function boot(): void
 
 Setelah itu, semua parameter bernama `{id}` di route manapun akan otomatis hanya menerima angka.
 
-### 2.3.4 Named Routes
+### 3.3.4 Named Routes
 
 Memberi nama pada route memudahkan kita merujuk route tersebut dari view, controller, atau bagian lain tanpa perlu menulis URL secara hardcode.
 
@@ -198,7 +198,7 @@ Route::get('/profil-saya', function () {
 // Di view tetap: route('profile'), tidak perlu diubah
 ```
 
-### 2.3.5 Route Groups
+### 3.3.5 Route Groups
 
 Ketika aplikasi semakin besar, kita akan memiliki banyak route. Route groups membantu kita mengelompokkan route yang memiliki kesamaan, seperti prefix URL, middleware, atau nama route.
 
@@ -246,11 +246,11 @@ Route::middleware(['auth'])->group(function () {
 
 ---
 
-## 2.4 Controller
+## 3.4 Controller
 
 Sejauh ini, kita menulis logika aplikasi langsung di dalam file `routes/web.php`. Namun, untuk aplikasi yang lebih besar, pendekatan ini akan membuat file route menjadi sulit dibaca dan dipelihara. **Controller** hadir sebagai solusi — Controller memisahkan logika aplikasi dari definisi route.
 
-### 2.4.1 Membuat Controller
+### 3.4.1 Membuat Controller
 
 Gunakan Artisan CLI untuk membuat Controller:
 
@@ -281,7 +281,7 @@ class UserController extends Controller
 }
 ```
 
-### 2.4.2 Menghubungkan Controller ke Route
+### 3.4.2 Menghubungkan Controller ke Route
 
 Setelah Controller dibuat, kita bisa menghubungkannya ke route menggunakan sintaks array:
 
@@ -292,7 +292,7 @@ Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 ```
 
-### 2.4.3 Single Action Controller
+### 3.4.3 Single Action Controller
 
 Jika suatu Controller hanya memiliki satu method (untuk satu tugas spesifik), kita bisa menggunakan opsi `--invokable`:
 
@@ -316,7 +316,7 @@ Route untuk invokable controller:
 Route::get('/profile', ProfileController::class);
 ```
 
-### 2.4.4 Resource Controller
+### 3.4.4 Resource Controller
 
 Seringkali kita membuat fitur CRUD (Create, Read, Update, Delete) untuk suatu entitas. Resource Controller menyediakan method-method standar untuk operasi tersebut.
 
@@ -365,9 +365,9 @@ Route::apiResource('posts', PostController::class);
 
 ---
 
-## 2.5 Request & Response
+## 3.5 Request & Response
 
-### 2.5.1 Objek Request
+### 3.5.1 Objek Request
 
 Laravel secara otomatis mengirimkan objek `Illuminate\Http\Request` ke setiap method controller. Objek ini berisi informasi tentang request yang masuk.
 
@@ -411,7 +411,7 @@ class UserController extends Controller
 }
 ```
 
-### 2.5.2 Redirect Response
+### 3.5.2 Redirect Response
 
 Redirect digunakan untuk mengarahkan pengguna ke halaman lain setelah suatu aksi:
 
@@ -432,7 +432,7 @@ return back();
 return redirect()->route('user.show', ['id' => 1]);
 ```
 
-### 2.5.3 Response JSON
+### 3.5.3 Response JSON
 
 Untuk aplikasi modern atau API, kita sering mengembalikan data dalam format JSON:
 
@@ -447,7 +447,7 @@ return response()->json([
 return response()->json(['error' => 'Not found'], 404);
 ```
 
-### 2.5.4 Response dengan Header
+### 3.5.4 Response dengan Header
 
 ```php
 return response('Halo')
@@ -457,9 +457,9 @@ return response('Halo')
 
 ---
 
-## 2.6 Praktikum: Route & Controller
+## 3.6 Praktikum: Route & Controller
 
-Pada praktikum ini, kita akan menggunakan project Laravel yang sudah dibuat pada BAB 1. Jika belum memiliki project, buat terlebih dahulu dengan perintah:
+Pada praktikum ini, kita akan menggunakan project Laravel yang sudah dibuat pada BAB 2. Jika belum memiliki project, buat terlebih dahulu dengan perintah:
 
 ```bash
 composer create-project laravel/laravel belajar-laravel
@@ -467,7 +467,7 @@ cd belajar-laravel
 php artisan serve
 ```
 
-### 2.6.1 Route Dasar
+### 3.6.1 Route Dasar
 
 Buka file `routes/web.php` dan tambahkan beberapa route berikut:
 
@@ -485,7 +485,7 @@ Route::get('/admin', function () {
 });
 ```
 
-### 2.6.2 Membuat Controller
+### 3.6.2 Membuat Controller
 
 Buat Controller baru menggunakan Artisan:
 
@@ -531,7 +531,7 @@ class ArtikelController extends Controller
 }
 ```
 
-### 2.6.3 Menghubungkan Controller ke Route
+### 3.6.3 Menghubungkan Controller ke Route
 
 Di `routes/web.php`, tambahkan:
 
@@ -543,7 +543,7 @@ Route::get('/artikel/{id}', [ArtikelController::class, 'show']);
 Route::get('/artikel/kategori/{kategori}', [ArtikelController::class, 'kategori']);
 ```
 
-### 2.6.4 Menggunakan Named Route
+### 3.6.4 Menggunakan Named Route
 
 Ubah route artikel menjadi named route:
 
@@ -552,7 +552,7 @@ Route::get('/artikel', [ArtikelController::class, 'index'])->name('artikel.index
 Route::get('/artikel/{id}', [ArtikelController::class, 'show'])->name('artikel.show');
 ```
 
-### 2.6.5 Uji Coba
+### 3.6.5 Uji Coba
 
 Jalankan server (`php artisan serve`), lalu akses URL berikut di browser:
 
@@ -567,7 +567,7 @@ Jalankan server (`php artisan serve`), lalu akses URL berikut di browser:
 
 ---
 
-## 2.7 Rangkuman
+## 3.7 Rangkuman
 
 | Konsep | Intinya |
 |--------|---------|
@@ -582,7 +582,7 @@ Jalankan server (`php artisan serve`), lalu akses URL berikut di browser:
 
 ---
 
-## 2.8 Referensi
+## 3.8 Referensi
 
 - [Laravel Routing](https://laravel.com/docs/13.x/routing)
 - [Laravel Controllers](https://laravel.com/docs/13.x/controllers)
@@ -591,6 +591,6 @@ Jalankan server (`php artisan serve`), lalu akses URL berikut di browser:
 
 ---
 
-**Lanjut ke:** [BAB 3 — Blade Templating](../BAB-03-Blade-Templating/README.md)
+**Lanjut ke:** [BAB 4 — Blade Templating](../BAB-04-Blade-Templating/README.md)
 
-**Kembali ke:** [BAB 1 — Pengantar Laravel & MVC](../BAB-01-Pengantar-Laravel-dan-MVC/README.md)
+**Kembali ke:** [BAB 2 — Pengantar Laravel & MVC](../BAB-02-Pengantar-Laravel-dan-MVC/README.md)

@@ -1,4 +1,4 @@
-# Video Pembelajaran — BAB 5
+# Video Pembelajaran — BAB 6
 
 > Bagian ini dapat diisi dengan link video pembelajaran (YouTube, Google Drive, atau platform lain) sesuai ketersediaan.
 

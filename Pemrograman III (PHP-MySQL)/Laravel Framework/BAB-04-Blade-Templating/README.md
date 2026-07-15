@@ -1,10 +1,10 @@
-# BAB 3 — Blade Templating
+# BAB 4 — Blade Templating
 
 ---
 
-## 3.1 Tujuan Pembelajaran
+## 4.1 Tujuan Pembelajaran
 
-Setelah menyelesaikan BAB 3 ini, teman-teman diharapkan mampu:
+Setelah menyelesaikan BAB 4 ini, teman-teman diharapkan mampu:
 
 - Memahami konsep dan sintaks dasar Blade
 - Membuat layout utama dan mewariskannya ke halaman lain
@@ -16,15 +16,15 @@ Setelah menyelesaikan BAB 3 ini, teman-teman diharapkan mampu:
 
 ---
 
-## 3.2 Pendahuluan
+## 4.2 Pendahuluan
 
-Pada BAB 2, kita belajar bagaimana route mengarahkan request ke Controller, dan Controller bisa mengembalikan teks atau view. Namun, aplikasi web yang sesungguhnya membutuhkan tampilan yang rapi dan terstruktur. Di sinilah **Blade** berperan.
+Pada BAB 3, kita belajar bagaimana route mengarahkan request ke Controller, dan Controller bisa mengembalikan teks atau view. Namun, aplikasi web yang sesungguhnya membutuhkan tampilan yang rapi dan terstruktur. Di sinilah **Blade** berperan.
 
 Blade adalah **template engine** bawaan Laravel. Yang membedakan Blade dari template engine lain adalah: **Blade tidak membatasi kita untuk menggunakan kode PHP biasa** di dalam template. Artinya, kita bisa menggunakan sintaks Blade yang bersih, namun tetap memiliki fleksibilitas penuh jika diperlukan.
 
 File Blade menggunakan ekstensi `.blade.php` dan disimpan di folder `resources/views/`.
 
-### 3.2.1 Keunggulan Blade
+### 4.2.1 Keunggulan Blade
 
 - **Ringan** — tidak ada overhead yang berarti, semua template di-cache menjadi kode PHP biasa
 - **Layout inheritance** — kita bisa membuat satu layout utama dan mewariskannya ke halaman lain
@@ -34,9 +34,9 @@ File Blade menggunakan ekstensi `.blade.php` dan disimpan di folder `resources/v
 
 ---
 
-## 3.3 Sintaks Dasar Blade
+## 4.3 Sintaks Dasar Blade
 
-### 3.3.1 Menampilkan Data
+### 4.3.1 Menampilkan Data
 
 ```blade
 {{ $nama }}                         {{-- Escape otomatis, aman dari XSS --}}
@@ -48,7 +48,7 @@ File Blade menggunakan ekstensi `.blade.php` dan disimpan di folder `resources/v
 
 > **Catatan:** Gunakan `{{ }}` hampir di semua situasi karena Blade akan meng-escape karakter berbahaya (XSS). Gunakan `{!! !!}` hanya jika benar-benar yakin kontennya aman.
 
-### 3.3.2 Komentar Blade
+### 4.3.2 Komentar Blade
 
 Komentar di Blade tidak akan muncul di source HTML yang dikirim ke browser:
 
@@ -56,7 +56,7 @@ Komentar di Blade tidak akan muncul di source HTML yang dikirim ke browser:
 {{-- Ini komentar Blade, tidak akan tampak di HTML --}}
 ```
 
-### 3.3.3 PHP Native di Blade
+### 4.3.3 PHP Native di Blade
 
 Jika perlu menulis kode PHP biasa di dalam template:
 
@@ -72,9 +72,9 @@ Jika perlu menulis kode PHP biasa di dalam template:
 
 ---
 
-## 3.4 Control Structures
+## 4.4 Control Structures
 
-### 3.4.1 Kondisional
+### 4.4.1 Kondisional
 
 ```blade
 @if($nilai >= 80)
@@ -98,7 +98,7 @@ Jika perlu menulis kode PHP biasa di dalam template:
 @endempty
 ```
 
-### 3.4.2 Looping
+### 4.4.2 Looping
 
 ```blade
 @for($i = 0; $i < 10; $i++)
@@ -123,7 +123,7 @@ Jika perlu menulis kode PHP biasa di dalam template:
 @endwhile
 ```
 
-### 3.4.3 Loop Variables
+### 4.4.3 Loop Variables
 
 Dalam setiap perulangan `@foreach`, Blade menyediakan variabel `$loop` yang berisi informasi tentang perulangan saat ini:
 
@@ -152,11 +152,11 @@ Dalam setiap perulangan `@foreach`, Blade menyediakan variabel `$loop` yang beri
 
 ---
 
-## 3.5 Layout dengan Template Inheritance
+## 4.5 Layout dengan Template Inheritance
 
 Salah satu fitur terkuat Blade adalah **template inheritance**. Kita bisa membuat satu layout utama yang berisi kerangka halaman (header, navbar, sidebar, footer), lalu setiap halaman bisa mewarisi layout tersebut dan mengisi bagian-bagian tertentu.
 
-### 3.5.1 Membuat Layout Utama
+### 4.5.1 Membuat Layout Utama
 
 Buat file `resources/views/layouts/app.blade.php`:
 
@@ -191,7 +191,7 @@ Buat file `resources/views/layouts/app.blade.php`:
 </html>
 ```
 
-### 3.5.2 Halaman yang Menggunakan Layout
+### 4.5.2 Halaman yang Menggunakan Layout
 
 Buat file `resources/views/posts/index.blade.php`:
 
@@ -221,7 +221,7 @@ Buat file `resources/views/posts/index.blade.php`:
 @endpush
 ```
 
-### 3.5.3 Perbedaan @yield, @section, dan @show
+### 4.5.3 Perbedaan @yield, @section, dan @show
 
 ```blade
 {{-- Di layout --}}
@@ -242,11 +242,11 @@ Buat file `resources/views/posts/index.blade.php`:
 
 ---
 
-## 3.6 Komponen Blade
+## 4.6 Komponen Blade
 
 Komponen adalah potongan UI yang bisa digunakan di berbagai halaman.
 
-### 3.6.1 Anonymous Component (tanpa class)
+### 4.6.1 Anonymous Component (tanpa class)
 
 Buat file `resources/views/components/alert.blade.php`:
 
@@ -268,7 +268,7 @@ Gunakan di view:
 </x-alert>
 ```
 
-### 3.6.2 Komponen dengan Props dan Slot
+### 4.6.2 Komponen dengan Props dan Slot
 
 Buat file `resources/views/components/card.blade.php`:
 
@@ -299,7 +299,7 @@ Penggunaan di view:
 
 ---
 
-## 3.7 Include & Subview
+## 4.7 Include & Subview
 
 Selain layout inheritance, kita juga bisa menyertakan file view lain ke dalam view:
 
@@ -323,9 +323,9 @@ Selain layout inheritance, kita juga bisa menyertakan file view lain ke dalam vi
 
 ---
 
-## 3.8 Form & CSRF
+## 4.8 Form & CSRF
 
-### 3.8.1 CSRF Protection
+### 4.8.1 CSRF Protection
 
 Laravel melindungi aplikasi dari serangan **CSRF (Cross-Site Request Forgery)**. Setiap form POST harus menyertakan token CSRF:
 
@@ -338,7 +338,7 @@ Laravel melindungi aplikasi dari serangan **CSRF (Cross-Site Request Forgery)**.
 </form>
 ```
 
-### 3.8.2 Method Spoofing
+### 4.8.2 Method Spoofing
 
 HTML form hanya mendukung method GET dan POST. Untuk method PUT, PATCH, atau DELETE, kita menggunakan **method spoofing**:
 
@@ -359,7 +359,7 @@ HTML form hanya mendukung method GET dan POST. Untuk method PUT, PATCH, atau DEL
 </form>
 ```
 
-### 3.8.3 Old Input & Error Messages
+### 4.8.3 Old Input & Error Messages
 
 Saat validasi form gagal, Laravel akan mengembalikan input sebelumnya dan pesan error. Blade menyediakan helper untuk menampilkannya:
 
@@ -390,7 +390,7 @@ Saat validasi form gagal, Laravel akan mengembalikan input sebelumnya dan pesan 
 
 ---
 
-## 3.9 Stacks
+## 4.9 Stacks
 
 Stacks memungkinkan halaman anak menambahkan konten CSS atau JavaScript ke layout utama secara terstruktur:
 
@@ -420,25 +420,25 @@ Stacks memungkinkan halaman anak menambahkan konten CSS atau JavaScript ke layou
 
 ---
 
-## 3.10 Vite & Asset
+## 4.10 Vite & Asset
 
 Laravel 13 menggunakan **Vite** sebagai bundler untuk CSS dan JavaScript.
 
-### 3.10.1 Di Layout
+### 4.10.1 Di Layout
 
 ```blade
 {{-- Di bagian <head> --}}
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 ```
 
-### 3.10.2 Di Terminal
+### 4.10.2 Di Terminal
 
 ```bash
 npm install && npm run build     # Untuk production
 npm run dev                      # Untuk development (hot reload)
 ```
 
-### 3.10.3 Menyertakan Asset dari Public
+### 4.10.3 Menyertakan Asset dari Public
 
 ```blade
 <img src="{{ asset('images/logo.png') }}" alt="Logo">
@@ -448,11 +448,11 @@ npm run dev                      # Untuk development (hot reload)
 
 ---
 
-## 3.11 Praktikum: Membuat Layout dan Halaman
+## 4.11 Praktikum: Membuat Layout dan Halaman
 
 Pada praktikum ini, kita akan membuat layout utama dan beberapa halaman menggunakan Blade. Pastikan project Laravel sudah siap dan server berjalan.
 
-### 3.11.1 Membuat Layout Utama
+### 4.11.1 Membuat Layout Utama
 
 Buat folder `resources/views/layouts/` jika belum ada. Lalu buat file `resources/views/layouts/app.blade.php`:
 
@@ -483,7 +483,7 @@ Buat folder `resources/views/layouts/` jika belum ada. Lalu buat file `resources
 </html>
 ```
 
-### 3.11.2 Membuat Halaman Beranda
+### 4.11.2 Membuat Halaman Beranda
 
 Buat file `resources/views/home.blade.php`:
 
@@ -498,7 +498,7 @@ Buat file `resources/views/home.blade.php`:
 @endsection
 ```
 
-### 3.11.3 Membuat Halaman Tentang
+### 4.11.3 Membuat Halaman Tentang
 
 Buat file `resources/views/about.blade.php`:
 
@@ -519,7 +519,7 @@ Buat file `resources/views/about.blade.php`:
 @endsection
 ```
 
-### 3.11.4 Menambahkan Route
+### 4.11.4 Menambahkan Route
 
 Buka `routes/web.php` dan tambahkan:
 
@@ -545,7 +545,7 @@ Route::get('/posts', function () {
 })->name('posts.index');
 ```
 
-### 3.11.5 Membuat View Daftar Artikel
+### 4.11.5 Membuat View Daftar Artikel
 
 Buat folder `resources/views/posts/` jika belum ada. Lalu buat file `resources/views/posts/index.blade.php`:
 
@@ -568,7 +568,7 @@ Buat folder `resources/views/posts/` jika belum ada. Lalu buat file `resources/v
 @endsection
 ```
 
-### 3.11.6 Uji Coba
+### 4.11.6 Uji Coba
 
 Jalankan server (`php artisan serve`), lalu akses URL berikut:
 
@@ -580,7 +580,7 @@ Jalankan server (`php artisan serve`), lalu akses URL berikut:
 
 ---
 
-## 3.12 Rangkuman
+## 4.12 Rangkuman
 
 | Konsep | Sintaks |
 |--------|---------|
@@ -600,7 +600,7 @@ Jalankan server (`php artisan serve`), lalu akses URL berikut:
 
 ---
 
-## 3.13 Referensi
+## 4.13 Referensi
 
 - [Blade Templates](https://laravel.com/docs/13.x/blade)
 - [Blade Components](https://laravel.com/docs/13.x/blade#components)
@@ -608,6 +608,6 @@ Jalankan server (`php artisan serve`), lalu akses URL berikut:
 
 ---
 
-**Lanjut ke:** [BAB 4 — Migration & Eloquent ORM](../BAB-04-Migration-dan-Eloquent-ORM/README.md)
+**Lanjut ke:** [BAB 5 — Migration & Eloquent ORM](../BAB-05-Migration-dan-Eloquent-ORM/README.md)
 
-**Kembali ke:** [BAB 2 — Routing & Controller](../BAB-02-Routing-dan-Controller/README.md)
+**Kembali ke:** [BAB 3 — Routing & Controller](../BAB-03-Routing-dan-Controller/README.md)
