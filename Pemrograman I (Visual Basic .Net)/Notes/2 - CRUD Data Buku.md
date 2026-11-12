@@ -86,19 +86,6 @@ txtKode.Focus()
                 LoadData()
                 ClearForm()
             End Using
-
-        Catch ex As MySqlException
-            Select Case ex.Number
-                Case 1062
-                    MessageBox.Show("Kode buku '" & txtKode.Text & "' sudah dipakai.",
-                                    "Duplikat", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Case 3819
-                    MessageBox.Show("Nilai stok melanggar aturan CHECK (stok >= 0).",
-                                    "Validasi", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                Case Else
-                    MessageBox.Show("Error database #" & ex.Number & ": " & ex.Message,
-                                    "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Select
         Catch ex As Exception
             MessageBox.Show("Error: " & ex.Message,
                             "Gagal", MessageBoxButtons.OK, MessageBoxIcon.Error)
